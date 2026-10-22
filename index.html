@@ -837,7 +837,16 @@ async function renderShareCard(results, version, formatKey = "story") {
 
   /* 1. Fundo chapado com geometria simples */
   x.fillStyle = T.bg; x.fillRect(0, 0, W, H);
-  if (copy.theme === "flavio") {
+  if (copy.theme === "lula") {
+    // estrela gigante em contorno, saindo pela direita: só parte dela aparece
+    const sc = story ? { cx: W * 0.86, cy: H * 0.33, R: W * 0.52 } : { cx: W * 0.88, cy: H * 0.36, R: W * 0.44 };
+    const rot = -Math.PI / 2 + 0.16;
+    starPath(x, sc.cx, sc.cy, sc.R, sc.R * 0.4, rot);
+    x.fillStyle = "rgba(110,0,6,.22)"; x.fill();
+    x.lineWidth = story ? 10 : 8; x.lineJoin = "miter"; x.miterLimit = 10; x.strokeStyle = "rgba(255,255,255,.38)"; x.stroke();
+    starPath(x, sc.cx, sc.cy, sc.R * 0.84, sc.R * 0.84 * 0.4, rot);
+    x.lineWidth = 2.5; x.strokeStyle = "rgba(255,255,255,.18)"; x.stroke();
+  } else if (copy.theme === "flavio") {
     x.fillStyle = T.green;
     x.beginPath(); x.moveTo(0, 0); x.lineTo(W * 0.2, 0); x.lineTo(0, H * 0.24); x.closePath(); x.fill();
     x.fillStyle = T.accent;
