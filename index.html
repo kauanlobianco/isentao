@@ -10,7 +10,7 @@
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%2316141D'/%3E%3Cg transform='translate(11.5 4) scale(1)'%3E%3Cpath d='M8 17C8 9.5 13.5 5 20.5 5S32.5 9.5 32.5 16c0 5.5-3.5 8.2-7.3 10.6-3 1.9-4.7 3.6-4.7 7.4v3' fill='none' stroke='%23fff' stroke-width='7' stroke-linecap='round'/%3E%3Cpath d='M20.5 42.8a5.2 5.2 0 0 0 0 10.4z' fill='%23D93025'/%3E%3Cpath d='M20.5 42.8a5.2 5.2 0 0 1 0 10.4z' fill='%231A73E8'/%3E%3C/g%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,400..800&family=IBM+Plex+Mono:wght@500;600&family=Source+Sans+3:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,400..800&family=Newsreader:ital,opsz,wght@0,6..72,400..800;1,6..72,400..700&family=IBM+Plex+Mono:wght@500;600&family=Source+Sans+3:wght@400;500;600;700&display=swap">
 <style>
   /* Layout: cédula limpa — conteúdo alinhado à esquerda num papel frio, com os dois polos (vermelho/azul) como única cor forte; teclas de resposta inspiradas na urna. */
   :root {
@@ -40,7 +40,11 @@
     --ans-d: #F3A585;  --ans-d-fg: #3B1305;
     --ans-sd: #B3261E; --ans-sd-fg: #FFFFFF;
     --shadow: 0 1px 2px rgba(22,20,29,.06), 0 10px 28px -14px rgba(42,21,112,.22);
-    --font-display: "Bricolage Grotesque", "Arial Narrow", "Helvetica Neue", Arial, sans-serif;
+    --font-display: "Newsreader", Georgia, "Times New Roman", serif;
+    --font-brand: "Bricolage Grotesque", "Arial Narrow", "Helvetica Neue", Arial, sans-serif;
+    /* capa (faixa escura no estilo revista) e o roxo profundo usado só como fundo */
+    --cover-bg: #15131C; --cover-ink: #F5F3F9; --cover-muted: #ABA6BB; --cover-line: #2E2A3A;
+    --violet-deep: #251A4A; --violet-line: #3A2C6B;
     --font-body: "Source Sans 3", "Segoe UI", system-ui, -apple-system, sans-serif;
     --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Consolas, monospace;
   }
@@ -48,6 +52,8 @@
     :root:not([data-theme="light"]) {
       --bg: #0F0E14; --surface: #18161F; --surface-2: #221F2B; --ink: #EFEDF5; --muted: #A9A4B9; --line: #2F2B3B;
       --brand: #9B7BFF; --brand-ink: #120A2B; --brand-soft: #261D45; --brand-deep: #D9CCFF;
+      --cover-bg: #07060A; --cover-ink: #F5F3F9; --cover-muted: #A9A4B9; --cover-line: #26222F;
+      --violet-deep: #22184A; --violet-line: #3A2C6B;
       --lula: #D93025; --flavio: #1A73E8; --lula-ink: #F2766B; --flavio-ink: #74A9F5;
       --lula-soft: #3A1D1B; --flavio-soft: #172A45; --focus: #9B7BFF;
       --ans-sa: #2C9A5E; --ans-sa-fg: #FFFFFF; --ans-a: #5FA874; --ans-a-fg: #07160C;
@@ -60,6 +66,8 @@
   :root[data-theme="dark"] {
     --bg: #0F0E14; --surface: #18161F; --surface-2: #221F2B; --ink: #EFEDF5; --muted: #A9A4B9; --line: #2F2B3B;
     --brand: #9B7BFF; --brand-ink: #120A2B; --brand-soft: #261D45; --brand-deep: #D9CCFF;
+    --cover-bg: #07060A; --cover-ink: #F5F3F9; --cover-muted: #A9A4B9; --cover-line: #26222F;
+    --violet-deep: #22184A; --violet-line: #3A2C6B;
     --lula: #D93025; --flavio: #1A73E8; --lula-ink: #F2766B; --flavio-ink: #74A9F5;
     --lula-soft: #3A1D1B; --flavio-soft: #172A45; --focus: #9B7BFF;
     --ans-sa: #2C9A5E; --ans-sa-fg: #FFFFFF; --ans-a: #5FA874; --ans-a-fg: #07160C;
@@ -71,15 +79,20 @@
   html { -webkit-text-size-adjust: 100%; }
   body { background: var(--bg); color: var(--ink); font-family: var(--font-body); font-size: 16px; line-height: 1.55; -webkit-font-smoothing: antialiased; }
   .gutter { padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
-  .display { font-family: var(--font-display); font-stretch: 90%; letter-spacing: -0.025em; text-wrap: balance; }
-  .wordmark { font-family: var(--font-display); font-weight: 800; letter-spacing: -0.045em; font-stretch: 88%; display: inline-flex; align-items: baseline; line-height: 1; }
+  .display { font-family: var(--font-display); font-optical-sizing: auto; letter-spacing: -0.02em; text-wrap: balance; }
+  .kicker { font-family: var(--font-body); font-size: .74rem; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; }
+  .rule { border-top: 1px solid var(--ink); }
+  .btn-light { background: var(--cover-ink); color: var(--cover-bg); }
+  .btn-light:hover { filter: brightness(.94); }
+  .numeral { font-family: var(--font-display); font-weight: 700; font-variant-numeric: lining-nums tabular-nums; letter-spacing: -0.03em; }
+  .wordmark { font-family: var(--font-brand); font-weight: 800; letter-spacing: -0.045em; font-stretch: 88%; display: inline-flex; align-items: baseline; line-height: 1; }
   .qmark-hook { fill: none; stroke: currentColor; stroke-width: 7; stroke-linecap: round; stroke-linejoin: round; }
   .swing { transform-box: view-box; transform-origin: 20.5px 37px; animation: swing 3.4s cubic-bezier(.45,0,.55,1) infinite alternate; }
   @keyframes swing { from { transform: rotate(34deg); } to { transform: rotate(-34deg); } }
   .brand-text { color: var(--brand); }
   .btn-brand { background: var(--brand); color: var(--brand-ink); box-shadow: 0 6px 18px -8px var(--brand); }
   .btn-brand:hover { filter: brightness(1.08); }
-  .tilt { display: inline-block; transform: rotate(-3deg); }
+
   .mono { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
   .eyebrow { font-family: var(--font-body); font-size: .75rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
   .card { background: var(--surface); border: 1px solid var(--line); border-radius: 18px; box-shadow: var(--shadow); }
@@ -148,7 +161,8 @@
           "lula-soft": "var(--lula-soft)", "flavio-soft": "var(--flavio-soft)",
         },
         fontFamily: {
-          display: ['"Bricolage Grotesque"', "Arial Narrow", "Arial", "sans-serif"],
+          display: ['"Newsreader"', "Georgia", "serif"],
+          brand: ['"Bricolage Grotesque"', "Arial Narrow", "Arial", "sans-serif"],
           sans: ['"Source Sans 3"', "Segoe UI", "system-ui", "sans-serif"],
           mono: ['"IBM Plex Mono"', "ui-monospace", "Consolas", "monospace"],
         },
@@ -323,8 +337,10 @@ const BRAND = {
 /* O "?" da marca: gancho desenhado + pingo dividido entre os dois polos */
 const QMARK_HOOK = "M8 17C8 9.5 13.5 5 20.5 5S32.5 9.5 32.5 16c0 5.5-3.5 8.2-7.3 10.6-3 1.9-4.7 3.6-4.7 7.4v3";
 function QMark({ height = 24, swing = false, className = "", title }) {
+  const rel = typeof height === "string"; // ex.: "0.98em" acompanha o tamanho do texto em volta
   return (
-    <svg viewBox="0 0 41 56" height={height} width={(height * 41) / 56} className={className} role={title ? "img" : undefined} aria-label={title} aria-hidden={title ? undefined : "true"} style={{ overflow: "visible" }}>
+    <svg viewBox="0 0 41 56" height={rel ? undefined : height} width={rel ? undefined : (height * 41) / 56} className={className} role={title ? "img" : undefined} aria-label={title} aria-hidden={title ? undefined : "true"}
+      style={{ overflow: "visible", ...(rel ? { height, width: `calc(${height} * 0.732)` } : {}) }}>
       <path d={QMARK_HOOK} className="qmark-hook" />
       <g className={swing ? "swing" : undefined}>
         {swing && <line x1="20.5" y1="37" x2="20.5" y2="42.8" stroke="currentColor" strokeWidth="1.4" strokeDasharray="1.2 1.4" opacity=".5" />}
@@ -336,10 +352,11 @@ function QMark({ height = 24, swing = false, className = "", title }) {
 }
 
 function Wordmark({ size = 22 }) {
+  const rel = typeof size === "string";
   return (
     <span className="wordmark" style={{ fontSize: size }}>
       {BRAND.name}
-      <QMark height={size * 0.98} className="ml-[0.06em] translate-y-[0.04em]" />
+      <QMark height={rel ? "0.98em" : size * 0.98} className="ml-[0.06em] translate-y-[0.04em]" />
     </span>
   );
 }
@@ -363,15 +380,15 @@ function ResultPreview() {
         <span className="eyebrow">Assim fica o seu resultado</span>
         <span className="chip">exemplo</span>
       </div>
-      <p className="display mt-3 text-3xl font-extrabold leading-none"><span className="brand-text tilt">Isentão nada.</span></p>
+      <p className="display mt-3 text-3xl font-semibold leading-none">Isentão nada.</p>
       <div className="mt-4 flex items-end justify-between gap-3">
         <div>
           <div className="text-sm font-semibold" style={{ color: "var(--lula-ink)" }}>Lula</div>
-          <div className="display text-5xl font-extrabold leading-none" style={{ color: "var(--lula)" }}>{l}<span className="text-[0.5em]">%</span></div>
+          <div className="display text-5xl font-semibold leading-none" style={{ color: "var(--lula)" }}>{l}<span className="text-[0.5em]">%</span></div>
         </div>
         <div className="text-right">
           <div className="text-sm font-semibold" style={{ color: "var(--flavio-ink)" }}>Flávio</div>
-          <div className="display text-5xl font-extrabold leading-none" style={{ color: "var(--flavio)" }}>{f}<span className="text-[0.5em]">%</span></div>
+          <div className="display text-5xl font-semibold leading-none" style={{ color: "var(--flavio)" }}>{f}<span className="text-[0.5em]">%</span></div>
         </div>
       </div>
       <div className="mt-3"><SplitBar lula={avg} height={10} showText={false} label={`Exemplo: Lula ${l}%, Flávio ${f}%`} /></div>
@@ -421,159 +438,239 @@ function SplitBar({ lula, height = 36, showText = true, animate = true, label })
   );
 }
 
-/* ───────────────────────── Tela 1: Início ───────────────────────── */
+/* ───────────────────────── Tela 1: Capa ───────────────────────── */
 
-function VersionCard({ v, icon, desc, onStart }) {
+/* Cabeçalho de seção no estilo revista: número, rubrica e fio */
+function SectionHead({ n, kicker, title, id, aside }) {
   return (
-    <button
-      type="button"
-      onClick={onStart}
-      className="card group flex flex-col gap-4 p-5 text-left transition-transform hover:-translate-y-0.5 sm:p-6"
-    >
-      <div className="flex items-center justify-between">
-        <span className="eyebrow">{v.label}</span>
-        <Ico n={icon} size={20} className="text-muted" />
+    <div className="flex flex-col gap-3">
+      <div className="rule flex items-center gap-3 pt-3">
+        <span className="mono text-sm font-semibold">{n}</span>
+        <span className="kicker text-muted">{kicker}</span>
       </div>
-      <div className="flex items-baseline gap-2">
-        <span className="display text-6xl font-black leading-none">{v.count}</span>
-        <span className="text-lg font-semibold">afirmações</span>
+      <div className="flex flex-wrap items-end justify-between gap-3">
+        <h2 id={id} className="display text-4xl font-semibold leading-tight sm:text-5xl">{title}</h2>
+        {aside && <span className="max-w-[40ch] text-sm text-muted">{aside}</span>}
       </div>
-      <p className="text-[0.95rem] text-muted">{desc}</p>
-      <div className="mt-auto flex items-center justify-between border-t hairline pt-4">
-        <span className="mono text-sm text-muted">≈ {v.minutes} min</span>
-        <span className="brand-text inline-flex items-center gap-1.5 font-bold">
-          Começar <Ico n="ArrowRight" size={18} className="transition-transform group-hover:translate-x-1" />
-        </span>
-      </div>
-    </button>
+    </div>
   );
 }
+
+const CONTENTS = [
+  ["01", "O veredito", "Seu placar geral entre os dois planos"],
+  ["02", "Os 5 eixos", "Pra que lado você puxa em cada tema"],
+  ["03", "Seus destaques", "As respostas que mais definiram o resultado"],
+  ["04", "Raio-X das propostas", "Cada afirmação, sua resposta e a proposta real"],
+  ["05", "Sua arte", "Um pôster pronto para Stories e feed"],
+];
 
 function Home({ onStart, saved, onResume, onDiscard, onViewLast }) {
   const savedQuiz = saved && saved.screen === "quiz";
   const savedResult = saved && saved.screen === "results";
+  const coverText = { color: "var(--cover-ink)" };
+  const coverMuted = { color: "var(--cover-muted)" };
   return (
     <>
-      <TopBar onHome={() => {}}>
-        <span className="hidden sm:inline">2º turno · 25 de outubro de 2026</span>
-      </TopBar>
-      <main className="gutter">
-        <div className="mx-auto grid max-w-6xl gap-10 py-10 md:py-14 lg:grid-cols-[1.15fr_.85fr] lg:gap-14">
-          <section className="flex min-w-0 flex-col gap-7">
-            <div className="flex flex-col gap-5">
-              <span className="chip self-start" style={{ background: "var(--brand-soft)", color: "var(--brand)" }}>{BRAND.sub}</span>
-              <h1 className="display text-[3.1rem] font-extrabold leading-[0.95] sm:text-7xl lg:text-[5.2rem]">
-                <span style={{ color: "var(--lula)" }}>Lula</span>, <span style={{ color: "var(--flavio)" }}>Flávio</span>
-                {" "}<br />ou <span className="brand-text tilt">isentão?</span>
+      {/* Capa */}
+      <div style={{ background: "var(--cover-bg)" }}>
+        <header className="gutter">
+          <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-4 border-b" style={{ borderColor: "var(--cover-line)", ...coverText }}>
+            <Wordmark size={26} />
+            <span className="kicker hidden sm:inline" style={coverMuted}>Edição do 2º turno · 25 de outubro de 2026</span>
+          </div>
+        </header>
+        <section className="gutter">
+          <div className="mx-auto grid max-w-6xl gap-12 pb-16 pt-12 md:pb-20 md:pt-16 lg:grid-cols-[1.35fr_.65fr] lg:items-end">
+            <div className="flex min-w-0 flex-col gap-7">
+              <span className="kicker" style={coverMuted}>Teste de afinidade eleitoral · Presidência 2026</span>
+              <h1 className="display text-[3.3rem] font-semibold leading-[0.98] sm:text-7xl lg:text-[6.2rem]" style={coverText}>
+                Lula, Flávio ou{" "}
+                <span className="whitespace-nowrap"><Wordmark size="1em" /></span>
               </h1>
-              <p className="display text-2xl font-bold sm:text-3xl">Suas ideias respondem.</p>
-              <p className="max-w-[58ch] text-lg text-muted">
-                Diga o que você pensa sobre propostas reais, sem saber de quem é cada uma. No fim, você vê com qual plano
-                de governo suas ideias mais combinam, tema por tema: o de{" "}
-                <strong className="font-semibold" style={{ color: "var(--lula-ink)" }}>Lula (PT)</strong> ou o de{" "}
-                <strong className="font-semibold" style={{ color: "var(--flavio-ink)" }}>Flávio Bolsonaro (PL)</strong>.
-                Ou se você fica mesmo no meio.
+              <p className="display text-2xl italic sm:text-3xl" style={coverText}>Suas ideias respondem.</p>
+              <p className="max-w-[56ch] text-lg" style={coverMuted}>
+                Diga o que você pensa sobre propostas reais dos planos de governo, sem saber de quem é cada uma.
+                No fim, você vê com qual plano suas ideias mais combinam, tema por tema.
               </p>
-            </div>
-
-            {(savedQuiz || savedResult) && (
-              <div className="card flex flex-col gap-3 p-4 sm:flex-row sm:items-center sm:justify-between">
-                <div className="flex items-center gap-3">
-                  <Ico n={savedQuiz ? "History" : "ChartNoAxesColumn"} size={20} className="text-muted" />
-                  <span className="text-[0.95rem]">
-                    {savedQuiz
-                      ? <>Você parou na pergunta <span className="mono">{saved.index + 1}</span> de <span className="mono">{saved.order.length}</span> ({VERSIONS[saved.version].label.toLowerCase()}).</>
-                      : <>Seu último resultado ({VERSIONS[saved.version].label.toLowerCase()}) está salvo neste navegador.</>}
-                  </span>
-                </div>
-                <div className="flex gap-2">
-                  <button type="button" className="btn btn-ghost text-sm" onClick={onDiscard}>Descartar</button>
-                  <button type="button" className="btn btn-brand text-sm" onClick={savedQuiz ? onResume : onViewLast}>
-                    {savedQuiz ? "Continuar" : "Ver resultado"}
+              <div className="flex flex-wrap items-center gap-x-5 gap-y-3">
+                <button type="button" className="btn btn-light group px-7 py-4 text-lg" onClick={onStart}>
+                  Faça o teste <Ico n="ArrowRight" size={20} className="transition-transform group-hover:translate-x-1" />
+                </button>
+                {savedQuiz && (
+                  <button type="button" className="text-sm font-semibold underline underline-offset-4" style={coverText} onClick={onResume}>
+                    Continuar de onde parei (pergunta {saved.index + 1} de {saved.order.length})
                   </button>
-                </div>
+                )}
+                {savedResult && (
+                  <button type="button" className="text-sm font-semibold underline underline-offset-4" style={coverText} onClick={onViewLast}>
+                    Ver meu último resultado
+                  </button>
+                )}
               </div>
-            )}
-
-            <div className="grid gap-4 sm:grid-cols-2">
-              <VersionCard
-                v={VERSIONS.short}
-                icon="Timer"
-                desc="6 afirmações por eixo, 3 de cada lado. Pra quem quer o veredito rápido."
-                onStart={() => onStart("short")}
-              />
-              <VersionCard
-                v={VERSIONS.long}
-                icon="Layers"
-                desc="10 afirmações por eixo. Pra quem quer o raio-x completo, tema por tema."
-                onStart={() => onStart("long")}
-              />
-            </div>
-
-            <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm">
-              {EDITED && (
-                <span className="inline-flex flex-wrap items-center gap-2 text-muted">
-                  <span className="chip">Usando suas edições</span>
-                  <button
-                    type="button"
-                    className="underline underline-offset-4 hover:text-ink"
-                    onClick={() => { try { localStorage.removeItem(EDITS_KEY); localStorage.removeItem(STORE_KEY); } catch (e) {} location.reload(); }}
-                  >
-                    voltar às originais
-                  </button>
-                </span>
+              <ul className="grid max-w-md grid-cols-2 gap-x-6 gap-y-2 text-sm" style={coverMuted}>
+                {["Gratuito", "Anônimo", "Sem cadastro", "Baseado nos planos do TSE"].map((t) => (
+                  <li key={t} className="flex items-center gap-2"><span className="dot" style={{ background: "var(--cover-muted)" }} />{t}</li>
+                ))}
+              </ul>
+              {(savedQuiz || savedResult) && (
+                <button type="button" className="self-start text-xs underline underline-offset-4" style={coverMuted} onClick={onDiscard}>
+                  Apagar o teste salvo neste navegador
+                </button>
               )}
             </div>
-          </section>
 
-          <ResultPreview />
-        </div>
-
-        <section className="mx-auto max-w-6xl border-t hairline py-10 md:py-12" aria-labelledby="eixos-title">
-          <div className="flex flex-wrap items-baseline justify-between gap-2">
-            <h2 id="eixos-title" className="display text-3xl font-extrabold">5 eixos, 10 polos</h2>
-            <span className="text-sm text-muted">Em cada tema, uma régua entre duas visões de país.</span>
+            <aside className="min-w-0 border-t pt-4" style={{ borderColor: "var(--cover-line)" }} aria-labelledby="sumario-title">
+              <h2 id="sumario-title" className="kicker" style={coverMuted}>No seu resultado</h2>
+              <ol className="mt-3 flex flex-col">
+                {CONTENTS.map(([n, t, d]) => (
+                  <li key={n} className="flex gap-4 border-b py-3" style={{ borderColor: "var(--cover-line)" }}>
+                    <span className="mono pt-1 text-sm" style={coverMuted}>{n}</span>
+                    <span className="flex min-w-0 flex-col">
+                      <span className="display text-xl font-semibold" style={coverText}>{t}</span>
+                      <span className="text-sm" style={coverMuted}>{d}</span>
+                    </span>
+                  </li>
+                ))}
+              </ol>
+            </aside>
           </div>
-          <ol className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
+        </section>
+      </div>
+
+      <main className="gutter">
+        <section className="mx-auto grid max-w-6xl gap-10 py-14 md:py-16 lg:grid-cols-[1fr_1fr] lg:gap-14" aria-labelledby="exemplo-title">
+          <div className="flex min-w-0 flex-col gap-5">
+            <SectionHead n="01" kicker="O resultado" id="exemplo-title" title="Um retrato das suas ideias, não um rótulo" />
+            <p className="max-w-[58ch] text-lg text-muted">
+              Você recebe um placar geral e uma régua para cada um dos 5 grandes temas do país. É comum ficar perto de um
+              candidato na economia e do outro na segurança, e o resultado mostra exatamente isso.
+            </p>
+            <p className="max-w-[58ch] text-lg text-muted">
+              Cada afirmação vem de uma proposta real dos planos de governo de{" "}
+              <strong className="font-semibold text-ink">Lula (PT)</strong> e{" "}
+              <strong className="font-semibold text-ink">Flávio Bolsonaro (PL)</strong>, com a fonte para conferir.
+            </p>
+            <button type="button" className="btn btn-ink group self-start px-6 py-3.5" onClick={onStart}>
+              Faça o teste <Ico n="ArrowRight" size={18} className="transition-transform group-hover:translate-x-1" />
+            </button>
+          </div>
+          <ResultPreview />
+        </section>
+
+        <section className="mx-auto max-w-6xl pb-14 md:pb-16" aria-labelledby="eixos-title">
+          <SectionHead n="02" kicker="Os temas" id="eixos-title" title="5 eixos, 10 polos" aside="Em cada tema, uma régua entre duas visões de país." />
+          <ol className="mt-8 grid gap-x-8 gap-y-6 sm:grid-cols-2 lg:grid-cols-5">
             {AXES.map((a) => (
-              <li key={a.id} className="card flex min-w-0 flex-col gap-4 p-4">
-                <div className="flex items-center gap-2.5">
+              <li key={a.id} className="flex min-w-0 flex-col gap-3 border-t hairline pt-4">
+                <span className="flex items-center gap-2.5">
                   <span className="grid h-9 w-9 flex-none place-items-center rounded-xl" style={{ background: "var(--brand-soft)", color: "var(--brand)" }}>
                     <Ico n={a.icon} size={18} />
                   </span>
-                  <span className="font-bold leading-tight">{a.name}</span>
-                </div>
-                <div className="mt-auto flex flex-col gap-1.5 text-sm">
+                  <span className="display text-xl font-semibold leading-tight">{a.name}</span>
+                </span>
+                <span className="flex flex-col gap-1 text-sm">
                   <span className="flex items-center gap-2" style={{ color: "var(--lula-ink)" }}><span className="dot" style={{ background: "var(--lula)" }} />{a.lulaPole}</span>
-                  <span className="ml-[0.27rem] h-3 w-px" style={{ background: "var(--line)" }} aria-hidden="true" />
                   <span className="flex items-center gap-2" style={{ color: "var(--flavio-ink)" }}><span className="dot" style={{ background: "var(--flavio)" }} />{a.flavioPole}</span>
-                </div>
+                </span>
               </li>
             ))}
           </ol>
         </section>
 
-        <section className="mx-auto max-w-6xl border-t hairline py-10 md:py-12" aria-labelledby="como-title">
-          <h2 id="como-title" className="display text-3xl font-extrabold">Como funciona</h2>
-          <div className="mt-6 grid gap-6 md:grid-cols-3">
-            <div className="flex flex-col gap-2">
-              <Ico n="EyeOff" size={22} className="brand-text" />
-              <h3 className="font-bold">Sem saber de quem é</h3>
-              <p className="text-[0.95rem] text-muted">Nenhuma afirmação diz de qual plano saiu. Você responde pela ideia, não pelo candidato.</p>
-            </div>
-            <div className="flex flex-col gap-2">
-              <Ico n="Scale" size={22} className="brand-text" />
-              <h3 className="font-bold">Jogo limpo para os dois lados</h3>
-              <p className="text-[0.95rem] text-muted">Cada tema tem o mesmo número de afirmações de cada plano. O teste não empurra ninguém para lado nenhum.</p>
-            </div>
-            <div className="flex flex-col gap-2">
-              <Ico n="ChartBarBig" size={22} className="brand-text" />
-              <h3 className="font-bold">Resultado tema por tema</h3>
-              <p className="text-[0.95rem] text-muted">Além do placar geral, você vê onde concorda com cada plano. Muita gente fica com um na economia e com o outro na segurança.</p>
-            </div>
+        <section className="mx-auto max-w-6xl pb-14 md:pb-16" aria-labelledby="como-title">
+          <SectionHead n="03" kicker="Método" id="como-title" title="Como funciona" />
+          <div className="mt-8 grid gap-8 md:grid-cols-3">
+            {[
+              ["EyeOff", "Sem saber de quem é", "Nenhuma afirmação diz de qual plano saiu. Você responde pela ideia, não pelo candidato."],
+              ["Scale", "Jogo limpo para os dois lados", "Cada tema tem o mesmo número de afirmações de cada plano. O teste não empurra ninguém para lado nenhum."],
+              ["BookOpen", "Com fonte para conferir", "As afirmações resumem os planos registrados no TSE, a partir de reportagens que você pode abrir no resultado."],
+            ].map(([icon, t, d]) => (
+              <div key={t} className="flex flex-col gap-2">
+                <Ico n={icon} size={22} className="text-muted" />
+                <h3 className="display text-2xl font-semibold">{t}</h3>
+                <p className="text-[0.95rem] text-muted">{d}</p>
+              </div>
+            ))}
           </div>
+          {EDITED && (
+            <p className="mt-8 flex flex-wrap items-center gap-2 text-sm text-muted">
+              <span className="chip">Usando suas edições</span>
+              <button
+                type="button"
+                className="underline underline-offset-4 hover:text-ink"
+                onClick={() => { try { localStorage.removeItem(EDITS_KEY); localStorage.removeItem(STORE_KEY); } catch (e) {} location.reload(); }}
+              >
+                voltar às originais
+              </button>
+            </p>
+          )}
         </section>
         <Footer />
+      </main>
+    </>
+  );
+}
+
+/* ───────────────────────── Escolha do formato ───────────────────────── */
+
+function FormatCard({ v, featured, desc, cta, onPick }) {
+  const fg = featured ? { color: "var(--cover-ink)" } : undefined;
+  const muted = featured ? { color: "var(--cover-muted)" } : undefined;
+  return (
+    <div
+      className={"flex flex-col gap-4 rounded-[22px] p-6 sm:p-7 " + (featured ? "" : "card")}
+      style={featured ? { background: "var(--violet-deep)", border: "1px solid var(--violet-line)", boxShadow: "var(--shadow)" } : undefined}
+    >
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <div className="flex items-center gap-3">
+          <span className="kicker" style={muted}>{featured ? "Completa" : "Curta"}</span>
+          {featured && <span className="rounded-full px-3 py-1 text-xs font-bold" style={{ background: "var(--cover-ink)", color: "var(--violet-deep)" }}>Recomendada</span>}
+        </div>
+        <span className="inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-sm" style={featured ? { borderColor: "var(--violet-line)", color: "var(--cover-muted)" } : { borderColor: "var(--line)", color: "var(--muted)" }}>
+          <Ico n="Clock" size={15} /> Cerca de {v.minutes} min
+        </span>
+      </div>
+      <div className="flex items-baseline gap-3" style={fg}>
+        <span className="numeral text-7xl leading-none">{v.count}</span>
+        <span className="display text-2xl">afirmações</span>
+      </div>
+      <p className="text-[1rem]" style={muted || { color: "var(--muted)" }}>{desc}</p>
+      <button type="button" className={"btn group mt-1 w-full py-3.5 text-base " + (featured ? "btn-light" : "btn-ink")} onClick={onPick}>
+        {cta} <Ico n="ArrowRight" size={18} className="transition-transform group-hover:translate-x-1" />
+      </button>
+    </div>
+  );
+}
+
+function Choose({ onPick, onBack }) {
+  return (
+    <>
+      <TopBar onHome={onBack}>
+        <button type="button" className="btn btn-ghost px-3 text-sm" onClick={onBack}>
+          <Ico n="ArrowLeft" size={16} /> Voltar ao início
+        </button>
+      </TopBar>
+      <main className="gutter">
+        <div className="mx-auto flex max-w-2xl flex-col gap-6 py-10 md:py-14">
+          <div className="flex flex-col gap-3">
+            <span className="kicker text-muted">Escolha o formato</span>
+            <h1 className="display text-5xl font-semibold leading-[1.02] sm:text-6xl">Rapidez ou <em>profundidade</em>?</h1>
+            <p className="text-lg text-muted">As duas versões seguem as mesmas regras. A completa ouve você sobre mais propostas e dá um retrato mais fiel de cada tema.</p>
+          </div>
+          <FormatCard
+            v={VERSIONS.long}
+            featured
+            desc="10 afirmações por tema. O raio-x completo, com mais precisão em cada um dos 5 eixos."
+            cta="Começar a versão completa"
+            onPick={() => onPick("long")}
+          />
+          <FormatCard
+            v={VERSIONS.short}
+            desc="6 afirmações por tema. Um primeiro retrato rápido das suas ideias."
+            cta="Começar a versão curta"
+            onPick={() => onPick("short")}
+          />
+        </div>
       </main>
     </>
   );
@@ -623,7 +720,7 @@ function Quiz({ version, order, answers, index, onAnswer, onBack, onExit }) {
         <div className="gutter">
           <div className="mx-auto flex h-14 max-w-3xl items-center justify-between gap-3">
             <button type="button" className="btn btn-ghost -ml-3 px-3 text-sm" onClick={onBack}>
-              <Ico n="ArrowLeft" size={18} /> {index === 0 ? "Início" : "Voltar"}
+              <Ico n="ArrowLeft" size={18} /> {index === 0 ? "Formatos" : "Voltar"}
             </button>
             <span className="text-sm text-muted" aria-live="polite">
               Pergunta <span className="mono font-semibold text-ink">{index + 1}</span> de <span className="mono">{total}</span>
@@ -1064,7 +1161,7 @@ function ShareModal({ results, version, onClose, initialFormat = "story" }) {
         }}
       >
         <div className="flex items-center justify-between gap-3">
-          <h2 id="share-title" className="display text-2xl font-extrabold">Sua arte</h2>
+          <h2 id="share-title" className="display text-2xl font-semibold">Sua arte</h2>
           <div className="flex items-center gap-2">
             <div className="inline-flex rounded-full border hairline p-1" role="radiogroup" aria-label="Formato da arte">
               {Object.values(CARD_FORMATS).map((f) => (
@@ -1133,7 +1230,7 @@ function ShareTeaser({ results, version, onOpen }) {
       </button>
       <div className="flex min-w-0 flex-col gap-3">
         <span className="eyebrow">Sua arte está pronta</span>
-        <h2 id="teaser-title" className="display text-3xl font-extrabold leading-tight">
+        <h2 id="teaser-title" className="display text-3xl font-semibold leading-tight">
           {copy.theme === "meio" ? "Isentão confirmado. Agora mostra pra galera." : "Isentão nada. Mostra de que lado você está."}
         </h2>
         <p className="text-[0.95rem] text-muted">Um pôster com o seu resultado e os 5 eixos, em tamanho de Stories e de feed.</p>
@@ -1329,7 +1426,7 @@ function Highlights({ results, answers }) {
   const pct = (n) => (n / all.length) * 100;
   const Column = ({ items, k, who }) => (
     <div className="flex min-w-0 flex-col gap-3 rounded-2xl p-4 sm:p-5" style={{ background: `var(--${k}-soft)` }}>
-      <h3 className="display text-xl font-extrabold" style={{ color: `var(--${k}-ink)` }}>Onde você fica com {who}</h3>
+      <h3 className="display text-xl font-semibold" style={{ color: `var(--${k}-ink)` }}>Onde você fica com {who}</h3>
       {items.length === 0
         ? <p className="text-[0.95rem] text-muted">Nenhuma resposta sua puxou para esse lado.</p>
         : (
@@ -1351,7 +1448,7 @@ function Highlights({ results, answers }) {
   );
   return (
     <section className="card p-5 sm:p-8" aria-labelledby="destaques-title">
-      <h2 id="destaques-title" className="display text-3xl font-extrabold">Seus destaques</h2>
+      <h2 id="destaques-title" className="display text-3xl font-semibold">Seus destaques</h2>
       <p className="mt-2 text-[0.95rem] text-muted">As respostas que mais levaram você para cada lado.</p>
 
       <div className="mt-5">
@@ -1430,19 +1527,19 @@ function Results({ version, answers, onRestart, onHome }) {
               <span className="eyebrow" id="placar-title">O veredito</span>
               <span className="chip">{VERSIONS[version].label} · <span className="mono">{VERSIONS[version].count}</span> afirmações</span>
             </div>
-            <p className="display mt-3 text-5xl font-extrabold leading-none sm:text-6xl">
-              <span className="tilt brand-text">{verdict}</span>
+            <p className="display mt-3 text-5xl font-semibold leading-none sm:text-6xl">
+              {verdict}
             </p>
             <div className="mt-6 grid grid-cols-2 items-end gap-4">
               <div className="min-w-0">
                 <div className="text-[0.95rem] font-semibold sm:text-lg" style={{ color: "var(--lula-ink)" }}>Lula <span className="font-normal">(PT)</span></div>
-                <div className="display text-[3.6rem] font-black leading-none sm:text-8xl" style={{ color: "var(--lula)" }}>
+                <div className="display text-[3.6rem] font-bold leading-none sm:text-8xl" style={{ color: "var(--lula)" }}>
                   {gl}<span className="text-[0.5em]">%</span>
                 </div>
               </div>
               <div className="min-w-0 text-right">
                 <div className="text-[0.95rem] font-semibold sm:text-lg" style={{ color: "var(--flavio-ink)" }}>Flávio Bolsonaro <span className="font-normal">(PL)</span></div>
-                <div className="display text-[3.6rem] font-black leading-none sm:text-8xl" style={{ color: "var(--flavio)" }}>
+                <div className="display text-[3.6rem] font-bold leading-none sm:text-8xl" style={{ color: "var(--flavio)" }}>
                   {gf}<span className="text-[0.5em]">%</span>
                 </div>
               </div>
@@ -1451,7 +1548,7 @@ function Results({ version, answers, onRestart, onHome }) {
             <p className="mt-5 text-lg font-semibold">{headline}</p>
             <p className="mt-1 text-[0.95rem] text-muted">Média simples dos cinco eixos abaixo. O resultado mede proximidade com as propostas escritas nos planos, não é uma recomendação de voto.</p>
             <div className="mt-6 flex flex-wrap gap-2 border-t hairline pt-5">
-              <button type="button" className="btn btn-brand" onClick={() => setShareOpen("story")}>
+              <button type="button" className="btn btn-ink" onClick={() => setShareOpen("story")}>
                 <Ico n="Image" size={18} /> Criar minha arte
               </button>
               <button type="button" className="btn btn-line" onClick={copySummary}>
@@ -1474,7 +1571,7 @@ function Results({ version, answers, onRestart, onHome }) {
           {/* 5 eixos */}
           <section className="card p-5 sm:p-8" aria-labelledby="eixos-res-title">
             <div className="flex flex-wrap items-baseline justify-between gap-2">
-              <h2 id="eixos-res-title" className="display text-3xl font-extrabold">Os 5 eixos</h2>
+              <h2 id="eixos-res-title" className="display text-3xl font-semibold">Os 5 eixos</h2>
               <div className="flex items-center gap-4 text-sm">
                 <span className="flex items-center gap-1.5"><span className="dot" style={{ background: "var(--lula)" }} />Polo Lula</span>
                 <span className="flex items-center gap-1.5"><span className="dot" style={{ background: "var(--flavio)" }} />Polo Flávio</span>
@@ -1502,7 +1599,7 @@ function Results({ version, answers, onRestart, onHome }) {
 
           {/* Raio-X */}
           <section className="card p-5 sm:p-8" aria-labelledby="raiox-title">
-            <h2 id="raiox-title" className="display text-3xl font-extrabold">Raio-X das propostas</h2>
+            <h2 id="raiox-title" className="display text-3xl font-semibold">Raio-X das propostas</h2>
             <p className="mt-2 max-w-[65ch] text-[0.95rem] text-muted">
               Cada quadradinho é uma resposta sua, na cor do lado para onde ela puxou. Abra um tema para ver afirmação por afirmação.
             </p>
@@ -1591,7 +1688,7 @@ function App() {
 
   const onBack = useCallback(() => {
     setState((prev) => {
-      if (prev.index === 0) return { ...prev, screen: "home" };
+      if (prev.index === 0) return { ...prev, screen: "choose" };
       const s = { ...prev, index: prev.index - 1 };
       persist(s); setSaved(s);
       return s;
@@ -1604,12 +1701,15 @@ function App() {
     return <Quiz {...state} onAnswer={onAnswer} onBack={onBack} onExit={goHome} />;
   }
   if (state.screen === "results") {
-    return <Results version={state.version} answers={state.answers} onRestart={() => setState((p) => ({ ...p, screen: "home" }))} onHome={goHome} />;
+    return <Results version={state.version} answers={state.answers} onRestart={() => setState((p) => ({ ...p, screen: "choose" }))} onHome={goHome} />;
+  }
+  if (state.screen === "choose") {
+    return <Choose onPick={start} onBack={goHome} />;
   }
   return (
     <Home
       saved={saved}
-      onStart={start}
+      onStart={() => setState((p) => ({ ...p, screen: "choose" }))}
       onResume={() => saved && setState({ ...saved, screen: "quiz" })}
       onViewLast={() => saved && setState({ ...saved, screen: "results" })}
       onDiscard={() => save(null)}
