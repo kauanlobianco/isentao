@@ -1,0 +1,1627 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<!-- ARTIFACT-START -->
+<title>Isentão?</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Acha que é isentão? Prove. Compare o que você pensa com os planos de governo de Lula (PT) e Flávio Bolsonaro (PL) no 2º turno de 2026.">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%2316141D'/%3E%3Cg transform='translate(11.5 4) scale(1)'%3E%3Cpath d='M8 17C8 9.5 13.5 5 20.5 5S32.5 9.5 32.5 16c0 5.5-3.5 8.2-7.3 10.6-3 1.9-4.7 3.6-4.7 7.4v3' fill='none' stroke='%23fff' stroke-width='7' stroke-linecap='round'/%3E%3Cpath d='M20.5 42.8a5.2 5.2 0 0 0 0 10.4z' fill='%23D93025'/%3E%3Cpath d='M20.5 42.8a5.2 5.2 0 0 1 0 10.4z' fill='%231A73E8'/%3E%3C/g%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,400..800&family=IBM+Plex+Mono:wght@500;600&family=Source+Sans+3:wght@400;500;600;700&display=swap">
+<style>
+  /* Layout: cédula limpa — conteúdo alinhado à esquerda num papel frio, com os dois polos (vermelho/azul) como única cor forte; teclas de resposta inspiradas na urna. */
+  :root {
+    /* neutros com leve viés violeta (a cor do meio entre os dois polos) */
+    --bg: #F4F3F7;
+    --surface: #FFFFFF;
+    --surface-2: #ECEAF2;
+    --ink: #16141D;
+    --muted: #5D596B;
+    --line: #DDDAE6;
+    /* marca */
+    --brand: #5B2EE0;
+    --brand-ink: #FFFFFF;
+    --brand-soft: #ECE6FD;
+    --brand-deep: #2A1570;
+    /* polos */
+    --lula: #D93025;
+    --flavio: #1A73E8;
+    --lula-ink: #B3261E;
+    --flavio-ink: #1559B8;
+    --lula-soft: #FBE7E5;
+    --flavio-soft: #E3EEFD;
+    --focus: #5B2EE0;
+    --ans-sa: #1E7B4A; --ans-sa-fg: #FFFFFF;
+    --ans-a: #8ACB9A;  --ans-a-fg: #0E2A17;
+    --ans-n: #D9D8DF;  --ans-n-fg: #23212B;
+    --ans-d: #F3A585;  --ans-d-fg: #3B1305;
+    --ans-sd: #B3261E; --ans-sd-fg: #FFFFFF;
+    --shadow: 0 1px 2px rgba(22,20,29,.06), 0 10px 28px -14px rgba(42,21,112,.22);
+    --font-display: "Bricolage Grotesque", "Arial Narrow", "Helvetica Neue", Arial, sans-serif;
+    --font-body: "Source Sans 3", "Segoe UI", system-ui, -apple-system, sans-serif;
+    --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Consolas, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0F0E14; --surface: #18161F; --surface-2: #221F2B; --ink: #EFEDF5; --muted: #A9A4B9; --line: #2F2B3B;
+      --brand: #9B7BFF; --brand-ink: #120A2B; --brand-soft: #261D45; --brand-deep: #D9CCFF;
+      --lula: #D93025; --flavio: #1A73E8; --lula-ink: #F2766B; --flavio-ink: #74A9F5;
+      --lula-soft: #3A1D1B; --flavio-soft: #172A45; --focus: #9B7BFF;
+      --ans-sa: #2C9A5E; --ans-sa-fg: #FFFFFF; --ans-a: #5FA874; --ans-a-fg: #07160C;
+      --ans-n: #3A3745; --ans-n-fg: #EFEDF5; --ans-d: #E58560; --ans-d-fg: #220A02;
+      --ans-sd: #D2453A; --ans-sd-fg: #FFFFFF;
+      --shadow: 0 1px 2px rgba(0,0,0,.4), 0 12px 30px -14px rgba(0,0,0,.65);
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0F0E14; --surface: #18161F; --surface-2: #221F2B; --ink: #EFEDF5; --muted: #A9A4B9; --line: #2F2B3B;
+    --brand: #9B7BFF; --brand-ink: #120A2B; --brand-soft: #261D45; --brand-deep: #D9CCFF;
+    --lula: #D93025; --flavio: #1A73E8; --lula-ink: #F2766B; --flavio-ink: #74A9F5;
+    --lula-soft: #3A1D1B; --flavio-soft: #172A45; --focus: #9B7BFF;
+    --ans-sa: #2C9A5E; --ans-sa-fg: #FFFFFF; --ans-a: #5FA874; --ans-a-fg: #07160C;
+    --ans-n: #3A3745; --ans-n-fg: #EFEDF5; --ans-d: #E58560; --ans-d-fg: #220A02;
+    --ans-sd: #D2453A; --ans-sd-fg: #FFFFFF;
+    --shadow: 0 1px 2px rgba(0,0,0,.4), 0 12px 30px -14px rgba(0,0,0,.65);
+    color-scheme: dark;
+  }
+  html { -webkit-text-size-adjust: 100%; }
+  body { background: var(--bg); color: var(--ink); font-family: var(--font-body); font-size: 16px; line-height: 1.55; -webkit-font-smoothing: antialiased; }
+  .gutter { padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+  .display { font-family: var(--font-display); font-stretch: 90%; letter-spacing: -0.025em; text-wrap: balance; }
+  .wordmark { font-family: var(--font-display); font-weight: 800; letter-spacing: -0.045em; font-stretch: 88%; display: inline-flex; align-items: baseline; line-height: 1; }
+  .qmark-hook { fill: none; stroke: currentColor; stroke-width: 7; stroke-linecap: round; stroke-linejoin: round; }
+  .swing { transform-box: view-box; transform-origin: 20.5px 37px; animation: swing 3.4s cubic-bezier(.45,0,.55,1) infinite alternate; }
+  @keyframes swing { from { transform: rotate(34deg); } to { transform: rotate(-34deg); } }
+  .brand-text { color: var(--brand); }
+  .btn-brand { background: var(--brand); color: var(--brand-ink); box-shadow: 0 6px 18px -8px var(--brand); }
+  .btn-brand:hover { filter: brightness(1.08); }
+  .tilt { display: inline-block; transform: rotate(-3deg); }
+  .mono { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+  .eyebrow { font-family: var(--font-body); font-size: .75rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+  .card { background: var(--surface); border: 1px solid var(--line); border-radius: 18px; box-shadow: var(--shadow); }
+  .hairline { border-color: var(--line); }
+  :focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; border-radius: 10px; }
+  .sticky-top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; }
+
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: .5rem; font-weight: 600; border-radius: 999px; padding: .65rem 1.1rem; transition: background-color .15s, color .15s, transform .15s, border-color .15s; }
+  .btn:active { transform: translateY(1px); }
+  .btn-ink { background: var(--ink); color: var(--bg); }
+  .btn-ink:hover { opacity: .9; }
+  .btn-line { border: 1px solid var(--line); background: var(--surface); color: var(--ink); }
+  .btn-line:hover { border-color: var(--muted); }
+  .btn-ghost { color: var(--muted); }
+  .btn-ghost:hover { color: var(--ink); background: var(--surface-2); }
+
+  .ans { position: relative; width: 100%; display: flex; align-items: center; gap: .9rem; padding: .95rem 1.1rem; border-radius: 14px; font-weight: 600; font-size: 1.05rem; text-align: left; transition: transform .14s, filter .14s, box-shadow .14s; box-shadow: inset 0 -3px 0 rgba(0,0,0,.14); }
+  .ans:hover { transform: translateY(-1px); filter: brightness(1.04) saturate(1.05); }
+  .ans:active { transform: translateY(1px); box-shadow: inset 0 -1px 0 rgba(0,0,0,.14); }
+  .ans[aria-pressed="true"] { outline: 3px solid var(--ink); outline-offset: 3px; }
+  .ans .key { font-family: var(--font-mono); font-size: .8rem; width: 1.6rem; height: 1.6rem; display: inline-grid; place-items: center; border-radius: 6px; background: rgba(255,255,255,.22); flex: none; }
+  .tone-sa { background: var(--ans-sa); color: var(--ans-sa-fg); }
+  .tone-a  { background: var(--ans-a);  color: var(--ans-a-fg); }
+  .tone-n  { background: var(--ans-n);  color: var(--ans-n-fg); }
+  .tone-d  { background: var(--ans-d);  color: var(--ans-d-fg); }
+  .tone-sd { background: var(--ans-sd); color: var(--ans-sd-fg); }
+  .tone-a .key, .tone-n .key, .tone-d .key { background: rgba(0,0,0,.08); }
+
+  .bar { position: relative; display: flex; overflow: hidden; border-radius: 999px; background: var(--flavio); }
+  .bar-l { background: var(--lula); transition: width .9s cubic-bezier(.2,.7,.2,1); }
+  .bar-mid { position: absolute; top: 0; bottom: 0; left: 50%; width: 2px; margin-left: -1px; background: var(--surface); opacity: .85; }
+  .bar-txt { position: absolute; top: 0; bottom: 0; display: flex; align-items: center; color: #FFFFFF; font-family: var(--font-mono); font-weight: 600; font-size: .85rem; }
+
+  .chip { display: inline-flex; align-items: center; gap: .35rem; font-size: .78rem; font-weight: 600; padding: .2rem .6rem; border-radius: 999px; background: var(--surface-2); color: var(--ink); white-space: nowrap; }
+  .chip-lula { background: var(--lula-soft); color: var(--lula-ink); }
+  .chip-flavio { background: var(--flavio-soft); color: var(--flavio-ink); }
+  .dot { width: .55rem; height: .55rem; border-radius: 999px; flex: none; }
+
+  @keyframes qIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  .q-in { animation: qIn .3s cubic-bezier(.2,.7,.2,1) both; }
+  .q-out { opacity: 0; transform: translateY(-10px); transition: opacity .2s ease, transform .2s ease; }
+  .fade-in { animation: fadeIn .25s ease both; }
+  .progress-fill { transition: width .35s cubic-bezier(.2,.7,.2,1); }
+  @media (prefers-reduced-motion: reduce) {
+    .q-in, .fade-in, .swing { animation: none; }
+    .q-out, .bar-l, .progress-fill, .ans, .btn { transition: none; }
+  }
+</style>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.3.1/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.3.1/umd/react-dom.production.min.js"></script>
+<script>window.react = window.React; /* o UMD do lucide-react procura o global "react" */</script>
+<script src="https://unpkg.com/lucide-react@0.460.0/dist/umd/lucide-react.js"></script>
+<script src="https://unpkg.com/@babel/standalone@7.26.4/babel.min.js"></script>
+<script src="https://cdn.tailwindcss.com/3.4.17"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          bg: "var(--bg)", surface: "var(--surface)", "surface-2": "var(--surface-2)",
+          ink: "var(--ink)", muted: "var(--muted)", line: "var(--line)",
+          lula: "var(--lula)", flavio: "var(--flavio)", brand: "var(--brand)", "brand-soft": "var(--brand-soft)",
+          "lula-ink": "var(--lula-ink)", "flavio-ink": "var(--flavio-ink)",
+          "lula-soft": "var(--lula-soft)", "flavio-soft": "var(--flavio-soft)",
+        },
+        fontFamily: {
+          display: ['"Bricolage Grotesque"', "Arial Narrow", "Arial", "sans-serif"],
+          sans: ['"Source Sans 3"', "Segoe UI", "system-ui", "sans-serif"],
+          mono: ['"IBM Plex Mono"', "ui-monospace", "Consolas", "monospace"],
+        },
+      },
+    },
+  };
+</script>
+<script src="data.js"></script>
+<!-- ARTIFACT-HEAD-END -->
+</head>
+<body>
+<!-- ARTIFACT-BODY-START -->
+<div id="root"></div>
+
+<script type="text/babel" data-presets="react">
+const { useState, useEffect, useMemo, useRef, useCallback } = React;
+const { AXES, SCALE, SOURCES } = window.AFINIDADE_DATA;
+
+/* Edições feitas no editor.html ficam neste navegador e substituem as afirmações do data.js */
+const EDITS_KEY = "afinidade2026:edits-v3"; // muda a cada nova versão do data.js para não misturar edições antigas
+function loadEdits() {
+  try {
+    const raw = localStorage.getItem(EDITS_KEY);
+    if (!raw) return null;
+    const list = JSON.parse(raw);
+    const ok = Array.isArray(list) && list.length > 0 && list.every((q) =>
+      Number.isInteger(q.id) && AXES.some((a) => a.id === q.axis) && (q.tier === "core" || q.tier === "extra") &&
+      (q.direction === 1 || q.direction === -1) && (q.weight === 1 || q.weight === 1.5) && typeof q.text === "string" && q.text.trim());
+    return ok ? list : null;
+  } catch (e) { return null; }
+}
+const EDITED = loadEdits();
+const QUESTIONS = EDITED || window.AFINIDADE_DATA.QUESTIONS;
+const refsOf = (q) => (Array.isArray(q.refs) ? q.refs : q.ref ? [q.ref] : []).filter((n) => SOURCES[n]);
+
+/* ───────────────────────── Utilidades ───────────────────────── */
+
+function Ico({ n, size = 18, className = "", strokeWidth = 2 }) {
+  const C = window.LucideReact && window.LucideReact[n];
+  if (!C) return <span className={"inline-block " + className} style={{ width: size, height: size }} aria-hidden="true" />;
+  return <C size={size} strokeWidth={strokeWidth} className={className} aria-hidden="true" />;
+}
+
+const STORE_KEY = "afinidade2026:v1";
+function loadSaved() {
+  try {
+    const raw = localStorage.getItem(STORE_KEY);
+    if (!raw) return null;
+    const s = JSON.parse(raw);
+    const ids = new Set(QUESTIONS.map((q) => q.id));
+    if (!s || !Array.isArray(s.order) || !s.order.every((id) => ids.has(id))) return null;
+    return s;
+  } catch (e) { return null; }
+}
+function persist(state) {
+  try {
+    if (state) localStorage.setItem(STORE_KEY, JSON.stringify(state));
+    else localStorage.removeItem(STORE_KEY);
+  } catch (e) { /* armazenamento indisponível: segue sem salvar */ }
+}
+
+const prefersReducedMotion = () => {
+  try { return window.matchMedia("(prefers-reduced-motion: reduce)").matches; } catch (e) { return false; }
+};
+
+function shuffle(arr) {
+  const a = arr.slice();
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function questionSet(version) {
+  return QUESTIONS.filter((q) => version === "long" || q.tier === "core");
+}
+
+const VERSIONS = {
+  short: { key: "short", label: "Versão curta", count: questionSet("short").length },
+  long: { key: "long", label: "Versão aprofundada", count: questionSet("long").length },
+};
+Object.values(VERSIONS).forEach((v) => { v.minutes = Math.max(1, Math.round(v.count / 7)); });
+
+/*
+ * Embaralhamento estratificado: blocos de 5 afirmações com exatamente uma de cada eixo,
+ * alternando a direção (Polo Lula / Polo Flávio) ao longo de toda a sequência
+ * e evitando o mesmo eixo duas vezes seguidas na virada de bloco.
+ */
+function buildOrder(version) {
+  const set = questionSet(version);
+  const pools = {};
+  AXES.forEach((a) => {
+    pools[a.id] = {
+      "1": shuffle(set.filter((q) => q.axis === a.id && q.direction === 1)),
+      "-1": shuffle(set.filter((q) => q.axis === a.id && q.direction === -1)),
+    };
+  });
+  const left = (a) => pools[a]["1"].length + pools[a]["-1"].length;
+  const seq = [];
+  let want = Math.random() < 0.5 ? 1 : -1;
+  let last = null;
+  while (AXES.some((a) => left(a.id))) {
+    let remaining = shuffle(AXES.map((a) => a.id).filter((a) => left(a)));
+    while (remaining.length) {
+      const notLast = remaining.filter((a) => a !== last);
+      const pickFrom = notLast.length ? notLast : remaining;
+      let dir = want;
+      let cands = pickFrom.filter((a) => pools[a][String(dir)].length);
+      if (!cands.length) { dir = -want; cands = pickFrom.filter((a) => pools[a][String(dir)].length); }
+      const max = Math.max(...cands.map((a) => pools[a][String(dir)].length));
+      const best = cands.filter((a) => pools[a][String(dir)].length === max);
+      const ax = best[Math.floor(Math.random() * best.length)];
+      const q = pools[ax][String(dir)].pop();
+      seq.push(q.id);
+      remaining = remaining.filter((a) => a !== ax);
+      last = ax;
+      want = -q.direction;
+    }
+  }
+  return seq;
+}
+
+/*
+ * Afinidade_Lula_Eixo = 50 + 50 × ( Σ(resposta × peso × direção) / (2 × Σ peso) )
+ * Afinidade_Flávio_Eixo = 100 − Afinidade_Lula_Eixo
+ * Resultado global = média simples dos 5 eixos
+ */
+function computeResults(version, answers) {
+  const set = questionSet(version);
+  const axes = AXES.map((a) => {
+    const qs = set.filter((q) => q.axis === a.id);
+    let num = 0, den = 0;
+    qs.forEach((q) => {
+      const v = typeof answers[q.id] === "number" ? answers[q.id] : 0;
+      num += v * q.weight * q.direction;
+      den += q.weight;
+    });
+    const lula = den ? 50 + 50 * (num / (2 * den)) : 50;
+    return { ...a, lula, flavio: 100 - lula, questions: qs };
+  });
+  const lula = axes.reduce((s, a) => s + a.lula, 0) / axes.length;
+  return { axes, lula, flavio: 100 - lula };
+}
+
+const pct = (x) => Math.round(x);
+const split = (lula) => { const l = pct(lula); return [l, 100 - l]; };
+const fmtWeight = (w) => (w === 1 ? "1×" : "1,5×");
+
+function lean(lula) {
+  const d = lula - 50;
+  const m = Math.abs(d);
+  if (m < 10) return { side: 0, label: "Equilíbrio" };
+  const label = m < 25 ? "Inclinação moderada" : m < 40 ? "Inclinação forte" : "Inclinação muito forte";
+  return { side: d > 0 ? 1 : -1, label };
+}
+
+function scaleOf(value) { return SCALE.find((s) => s.value === value) || SCALE[2]; }
+
+function inIframe() { try { return window.self !== window.top; } catch (e) { return true; } }
+
+/* ───────────────────────── Componentes base ───────────────────────── */
+
+/* Marca: o nome fica centralizado aqui para trocar com facilidade */
+const BRAND = {
+  name: "isentão",
+  tagline: "Lula, Flávio ou isentão? Suas ideias respondem.",
+  sub: "Teste do 2º turno 2026",
+  hashtag: "#isentão",
+};
+
+/* O "?" da marca: gancho desenhado + pingo dividido entre os dois polos */
+const QMARK_HOOK = "M8 17C8 9.5 13.5 5 20.5 5S32.5 9.5 32.5 16c0 5.5-3.5 8.2-7.3 10.6-3 1.9-4.7 3.6-4.7 7.4v3";
+function QMark({ height = 24, swing = false, className = "", title }) {
+  return (
+    <svg viewBox="0 0 41 56" height={height} width={(height * 41) / 56} className={className} role={title ? "img" : undefined} aria-label={title} aria-hidden={title ? undefined : "true"} style={{ overflow: "visible" }}>
+      <path d={QMARK_HOOK} className="qmark-hook" />
+      <g className={swing ? "swing" : undefined}>
+        {swing && <line x1="20.5" y1="37" x2="20.5" y2="42.8" stroke="currentColor" strokeWidth="1.4" strokeDasharray="1.2 1.4" opacity=".5" />}
+        <path d="M20.5 42.8a5.2 5.2 0 0 0 0 10.4z" fill="var(--lula)" />
+        <path d="M20.5 42.8a5.2 5.2 0 0 1 0 10.4z" fill="var(--flavio)" />
+      </g>
+    </svg>
+  );
+}
+
+function Wordmark({ size = 22 }) {
+  return (
+    <span className="wordmark" style={{ fontSize: size }}>
+      {BRAND.name}
+      <QMark height={size * 0.98} className="ml-[0.06em] translate-y-[0.04em]" />
+    </span>
+  );
+}
+
+function Brand({ onClick }) {
+  return (
+    <button type="button" onClick={onClick} className="flex items-center rounded-lg" aria-label={`${BRAND.name}? Voltar ao início`}>
+      <Wordmark size={24} />
+    </button>
+  );
+}
+
+/* Prévia da abertura: mostra como o resultado aparece (valores de exemplo) */
+const PREVIEW_SAMPLE = [66, 74, 38, 62, 50]; // média 58: acima de 55%, o veredito é "Isentão nada."
+function ResultPreview() {
+  const avg = PREVIEW_SAMPLE.reduce((s, v) => s + v, 0) / PREVIEW_SAMPLE.length;
+  const [l, f] = split(avg);
+  return (
+    <aside className="card min-w-0 self-start p-5 sm:p-6" aria-label="Exemplo de como o resultado aparece">
+      <div className="flex items-center justify-between gap-2">
+        <span className="eyebrow">Assim fica o seu resultado</span>
+        <span className="chip">exemplo</span>
+      </div>
+      <p className="display mt-3 text-3xl font-extrabold leading-none"><span className="brand-text tilt">Isentão nada.</span></p>
+      <div className="mt-4 flex items-end justify-between gap-3">
+        <div>
+          <div className="text-sm font-semibold" style={{ color: "var(--lula-ink)" }}>Lula</div>
+          <div className="display text-5xl font-extrabold leading-none" style={{ color: "var(--lula)" }}>{l}<span className="text-[0.5em]">%</span></div>
+        </div>
+        <div className="text-right">
+          <div className="text-sm font-semibold" style={{ color: "var(--flavio-ink)" }}>Flávio</div>
+          <div className="display text-5xl font-extrabold leading-none" style={{ color: "var(--flavio)" }}>{f}<span className="text-[0.5em]">%</span></div>
+        </div>
+      </div>
+      <div className="mt-3"><SplitBar lula={avg} height={10} showText={false} label={`Exemplo: Lula ${l}%, Flávio ${f}%`} /></div>
+      <div className="mt-5 flex flex-col gap-3">
+        {AXES.map((a, i) => (
+          <div key={a.id} className="flex flex-col gap-1.5">
+            <span className="flex items-center gap-2 text-sm font-semibold"><Ico n={a.icon} size={15} className="text-muted" />{a.name}</span>
+            <SplitBar lula={PREVIEW_SAMPLE[i]} height={22} label={`Exemplo: ${a.name}`} />
+          </div>
+        ))}
+      </div>
+      <p className="mt-4 text-sm text-muted">Cada barra mostra pra que lado suas respostas puxam naquele tema.</p>
+    </aside>
+  );
+}
+
+function TopBar({ onHome, children }) {
+  return (
+    <header className="gutter sticky-top border-b hairline" style={{ background: "var(--bg)" }}>
+      <div className="mx-auto flex h-14 max-w-6xl items-center justify-between gap-4">
+        <Brand onClick={onHome} />
+        <div className="flex items-center gap-2 text-sm text-muted">{children}</div>
+      </div>
+    </header>
+  );
+}
+
+function SplitBar({ lula, height = 36, showText = true, animate = true, label }) {
+  const [w, setW] = useState(animate && !prefersReducedMotion() ? 50 : lula);
+  useEffect(() => {
+    if (!animate || prefersReducedMotion()) { setW(lula); return; }
+    const t = requestAnimationFrame(() => requestAnimationFrame(() => setW(lula)));
+    return () => cancelAnimationFrame(t);
+  }, [lula, animate]);
+  const [l, f] = split(lula);
+  return (
+    <div className="bar" style={{ height }} role="img" aria-label={label || `Lula ${l}%, Flávio Bolsonaro ${f}%`}>
+      <div className="bar-l h-full" style={{ width: w + "%" }} />
+      <div className="bar-mid" />
+      {showText && (
+        <>
+          <span className="bar-txt left-3">{l}%</span>
+          <span className="bar-txt right-3">{f}%</span>
+        </>
+      )}
+    </div>
+  );
+}
+
+/* ───────────────────────── Tela 1: Início ───────────────────────── */
+
+function VersionCard({ v, icon, desc, onStart }) {
+  return (
+    <button
+      type="button"
+      onClick={onStart}
+      className="card group flex flex-col gap-4 p-5 text-left transition-transform hover:-translate-y-0.5 sm:p-6"
+    >
+      <div className="flex items-center justify-between">
+        <span className="eyebrow">{v.label}</span>
+        <Ico n={icon} size={20} className="text-muted" />
+      </div>
+      <div className="flex items-baseline gap-2">
+        <span className="display text-6xl font-black leading-none">{v.count}</span>
+        <span className="text-lg font-semibold">afirmações</span>
+      </div>
+      <p className="text-[0.95rem] text-muted">{desc}</p>
+      <div className="mt-auto flex items-center justify-between border-t hairline pt-4">
+        <span className="mono text-sm text-muted">≈ {v.minutes} min</span>
+        <span className="brand-text inline-flex items-center gap-1.5 font-bold">
+          Começar <Ico n="ArrowRight" size={18} className="transition-transform group-hover:translate-x-1" />
+        </span>
+      </div>
+    </button>
+  );
+}
+
+function Home({ onStart, saved, onResume, onDiscard, onViewLast }) {
+  const savedQuiz = saved && saved.screen === "quiz";
+  const savedResult = saved && saved.screen === "results";
+  return (
+    <>
+      <TopBar onHome={() => {}}>
+        <span className="hidden sm:inline">2º turno · 25 de outubro de 2026</span>
+      </TopBar>
+      <main className="gutter">
+        <div className="mx-auto grid max-w-6xl gap-10 py-10 md:py-14 lg:grid-cols-[1.15fr_.85fr] lg:gap-14">
+          <section className="flex min-w-0 flex-col gap-7">
+            <div className="flex flex-col gap-5">
+              <span className="chip self-start" style={{ background: "var(--brand-soft)", color: "var(--brand)" }}>{BRAND.sub}</span>
+              <h1 className="display text-[3.1rem] font-extrabold leading-[0.95] sm:text-7xl lg:text-[5.2rem]">
+                <span style={{ color: "var(--lula)" }}>Lula</span>, <span style={{ color: "var(--flavio)" }}>Flávio</span>
+                {" "}<br />ou <span className="brand-text tilt">isentão?</span>
+              </h1>
+              <p className="display text-2xl font-bold sm:text-3xl">Suas ideias respondem.</p>
+              <p className="max-w-[58ch] text-lg text-muted">
+                Diga o que você pensa sobre propostas reais, sem saber de quem é cada uma. No fim, você vê com qual plano
+                de governo suas ideias mais combinam, tema por tema: o de{" "}
+                <strong className="font-semibold" style={{ color: "var(--lula-ink)" }}>Lula (PT)</strong> ou o de{" "}
+                <strong className="font-semibold" style={{ color: "var(--flavio-ink)" }}>Flávio Bolsonaro (PL)</strong>.
+                Ou se você fica mesmo no meio.
+              </p>
+            </div>
+
+            {(savedQuiz || savedResult) && (
+              <div className="card flex flex-col gap-3 p-4 sm:flex-row sm:items-center sm:justify-between">
+                <div className="flex items-center gap-3">
+                  <Ico n={savedQuiz ? "History" : "ChartNoAxesColumn"} size={20} className="text-muted" />
+                  <span className="text-[0.95rem]">
+                    {savedQuiz
+                      ? <>Você parou na pergunta <span className="mono">{saved.index + 1}</span> de <span className="mono">{saved.order.length}</span> ({VERSIONS[saved.version].label.toLowerCase()}).</>
+                      : <>Seu último resultado ({VERSIONS[saved.version].label.toLowerCase()}) está salvo neste navegador.</>}
+                  </span>
+                </div>
+                <div className="flex gap-2">
+                  <button type="button" className="btn btn-ghost text-sm" onClick={onDiscard}>Descartar</button>
+                  <button type="button" className="btn btn-brand text-sm" onClick={savedQuiz ? onResume : onViewLast}>
+                    {savedQuiz ? "Continuar" : "Ver resultado"}
+                  </button>
+                </div>
+              </div>
+            )}
+
+            <div className="grid gap-4 sm:grid-cols-2">
+              <VersionCard
+                v={VERSIONS.short}
+                icon="Timer"
+                desc="6 afirmações por eixo, 3 de cada lado. Pra quem quer o veredito rápido."
+                onStart={() => onStart("short")}
+              />
+              <VersionCard
+                v={VERSIONS.long}
+                icon="Layers"
+                desc="10 afirmações por eixo. Pra quem quer o raio-x completo, tema por tema."
+                onStart={() => onStart("long")}
+              />
+            </div>
+
+            <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm">
+              <a href="editor.html" className="inline-flex items-center gap-1.5 font-semibold underline decoration-[var(--line)] underline-offset-4 hover:decoration-current">
+                <Ico n="Table2" size={16} /> Ver todas as afirmações em tabela
+              </a>
+              {EDITED && (
+                <span className="inline-flex flex-wrap items-center gap-2 text-muted">
+                  <span className="chip">Usando suas edições</span>
+                  <button
+                    type="button"
+                    className="underline underline-offset-4 hover:text-ink"
+                    onClick={() => { try { localStorage.removeItem(EDITS_KEY); localStorage.removeItem(STORE_KEY); } catch (e) {} location.reload(); }}
+                  >
+                    voltar às originais
+                  </button>
+                </span>
+              )}
+            </div>
+          </section>
+
+          <ResultPreview />
+        </div>
+
+        <section className="mx-auto max-w-6xl border-t hairline py-10 md:py-12" aria-labelledby="eixos-title">
+          <div className="flex flex-wrap items-baseline justify-between gap-2">
+            <h2 id="eixos-title" className="display text-3xl font-extrabold">5 eixos, 10 polos</h2>
+            <span className="text-sm text-muted">Em cada tema, uma régua entre duas visões de país.</span>
+          </div>
+          <ol className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
+            {AXES.map((a) => (
+              <li key={a.id} className="card flex min-w-0 flex-col gap-4 p-4">
+                <div className="flex items-center gap-2.5">
+                  <span className="grid h-9 w-9 flex-none place-items-center rounded-xl" style={{ background: "var(--brand-soft)", color: "var(--brand)" }}>
+                    <Ico n={a.icon} size={18} />
+                  </span>
+                  <span className="font-bold leading-tight">{a.name}</span>
+                </div>
+                <div className="mt-auto flex flex-col gap-1.5 text-sm">
+                  <span className="flex items-center gap-2" style={{ color: "var(--lula-ink)" }}><span className="dot" style={{ background: "var(--lula)" }} />{a.lulaPole}</span>
+                  <span className="ml-[0.27rem] h-3 w-px" style={{ background: "var(--line)" }} aria-hidden="true" />
+                  <span className="flex items-center gap-2" style={{ color: "var(--flavio-ink)" }}><span className="dot" style={{ background: "var(--flavio)" }} />{a.flavioPole}</span>
+                </div>
+              </li>
+            ))}
+          </ol>
+        </section>
+
+        <section className="mx-auto max-w-6xl border-t hairline py-10 md:py-12" aria-labelledby="como-title">
+          <h2 id="como-title" className="display text-3xl font-extrabold">Como funciona</h2>
+          <div className="mt-6 grid gap-6 md:grid-cols-3">
+            <div className="flex flex-col gap-2">
+              <Ico n="EyeOff" size={22} className="brand-text" />
+              <h3 className="font-bold">Sem saber de quem é</h3>
+              <p className="text-[0.95rem] text-muted">Nenhuma afirmação diz de qual plano saiu. Você responde pela ideia, não pelo candidato.</p>
+            </div>
+            <div className="flex flex-col gap-2">
+              <Ico n="Scale" size={22} className="brand-text" />
+              <h3 className="font-bold">Jogo limpo para os dois lados</h3>
+              <p className="text-[0.95rem] text-muted">Cada tema tem o mesmo número de afirmações de cada plano. O teste não empurra ninguém para lado nenhum.</p>
+            </div>
+            <div className="flex flex-col gap-2">
+              <Ico n="ChartBarBig" size={22} className="brand-text" />
+              <h3 className="font-bold">Resultado tema por tema</h3>
+              <p className="text-[0.95rem] text-muted">Além do placar geral, você vê onde concorda com cada plano. Muita gente fica com um na economia e com o outro na segurança.</p>
+            </div>
+          </div>
+        </section>
+        <Footer />
+      </main>
+    </>
+  );
+}
+
+/* ───────────────────────── Tela 2: Questionário ───────────────────────── */
+
+function Quiz({ version, order, answers, index, onAnswer, onBack, onExit }) {
+  const total = order.length;
+  const q = useMemo(() => QUESTIONS.find((x) => x.id === order[index]), [order, index]);
+  const axis = AXES.find((a) => a.id === q.axis);
+  const [phase, setPhase] = useState("in");
+  const [picked, setPicked] = useState(null);
+  const busy = useRef(false);
+
+  useEffect(() => { setPhase("in"); setPicked(null); busy.current = false; }, [index]);
+
+  const choose = useCallback((value) => {
+    if (busy.current) return;
+    busy.current = true;
+    setPicked(value);
+    const delay = prefersReducedMotion() ? 0 : 230;
+    setTimeout(() => setPhase("out"), prefersReducedMotion() ? 0 : 90);
+    setTimeout(() => onAnswer(q.id, value), delay);
+  }, [q.id, onAnswer]);
+
+  useEffect(() => {
+    const onKey = (e) => {
+      if (e.metaKey || e.ctrlKey || e.altKey) return;
+      const s = SCALE.find((x) => x.key === e.key);
+      if (s) { e.preventDefault(); choose(s.value); return; }
+      if (e.key === "Backspace" || e.key === "ArrowLeft") { e.preventDefault(); if (!busy.current) onBack(); }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [choose, onBack]);
+
+  const current = picked !== null ? picked : answers[q.id];
+  const progress = (index / total) * 100;
+
+  return (
+    <>
+      <header className="sticky-top" style={{ background: "var(--bg)" }}>
+        <div className="h-1.5 w-full" style={{ background: "var(--surface-2)" }}>
+          <div className="progress-fill h-full" style={{ width: progress + "%", background: "var(--ink)" }} />
+        </div>
+        <div className="gutter">
+          <div className="mx-auto flex h-14 max-w-3xl items-center justify-between gap-3">
+            <button type="button" className="btn btn-ghost -ml-3 px-3 text-sm" onClick={onBack}>
+              <Ico n="ArrowLeft" size={18} /> {index === 0 ? "Início" : "Voltar"}
+            </button>
+            <span className="text-sm text-muted" aria-live="polite">
+              Pergunta <span className="mono font-semibold text-ink">{index + 1}</span> de <span className="mono">{total}</span>
+            </span>
+            <button type="button" className="btn btn-ghost -mr-3 px-3 text-sm" onClick={onExit} aria-label="Sair e salvar progresso">
+              <span className="hidden sm:inline">Sair</span> <Ico n="X" size={18} />
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <main className="gutter">
+        <div className="mx-auto flex max-w-3xl flex-col gap-8 pb-12 pt-6 md:pt-12">
+          <div key={q.id} className={phase === "out" ? "q-out" : "q-in"}>
+            <div className="flex items-center gap-2 text-sm text-muted">
+              <Ico n={axis.icon} size={16} />
+              <span className="font-semibold">{axis.name}</span>
+            </div>
+            <h1 className="display mt-4 text-[1.75rem] font-bold leading-[1.18] sm:text-[2.15rem]" style={{ fontStretch: "92%" }}>
+              {q.text}
+            </h1>
+          </div>
+
+          <div className="flex flex-col gap-2.5" role="group" aria-label="Sua resposta">
+            {SCALE.map((s) => (
+              <button
+                key={s.value}
+                type="button"
+                className={"ans tone-" + s.tone}
+                aria-pressed={current === s.value}
+                onClick={() => choose(s.value)}
+              >
+                <span className="key" aria-hidden="true">{s.key}</span>
+                <span className="flex-1">{s.label}</span>
+                {current === s.value && <Ico n="Check" size={20} />}
+              </button>
+            ))}
+          </div>
+
+          <p className="hidden items-center gap-2 text-sm text-muted md:flex">
+            <Ico n="Keyboard" size={16} /> Teclas <span className="mono">1</span>–<span className="mono">5</span> respondem · <span className="mono">←</span> volta
+          </p>
+        </div>
+      </main>
+    </>
+  );
+}
+
+/* ───────────────────────── Tela 3: Resultados ───────────────────────── */
+
+function buildSummaryText(results, version) {
+  const blocks = (lula) => {
+    const n = Math.round(lula / 10);
+    return "🟥".repeat(n) + "🟦".repeat(10 - n);
+  };
+  const [gl, gf] = split(results.lula);
+  const lines = [
+    `${BRAND.name}? · ${BRAND.sub.toLowerCase()}`,
+    cardCopy(results).theme === "meio" ? "Isentão confirmado." : "Isentão nada.",
+    `${VERSIONS[version].label} (${VERSIONS[version].count} afirmações)`,
+    "",
+    `Afinidade geral: Lula (PT) ${gl}% × ${gf}% Flávio Bolsonaro (PL)`,
+    blocks(results.lula),
+    "",
+  ];
+  results.axes.forEach((a) => {
+    const [l, f] = split(a.lula);
+    lines.push(`${a.name}: ${l}% ${a.lulaPole} × ${f}% ${a.flavioPole}`);
+    lines.push(blocks(a.lula));
+  });
+  lines.push("", "Comparação com os planos de governo registrados no TSE em 2026.", `${BRAND.tagline} ${BRAND.hashtag}`);
+  return lines.join("\n");
+}
+
+/* ───────────── Arte de compartilhamento (pôster temático) ───────────── */
+
+const CARD_FORMATS = {
+  story: { key: "story", label: "Stories", ratio: "9:16", W: 1080, H: 1920 },
+  feed: { key: "feed", label: "Feed", ratio: "4:5", W: 1080, H: 1350 },
+};
+
+const CARD_THEMES = {
+  lula: {
+    bgA: "#EE3A24", bgB: "#8A0B14", ink: "#FFF4E4", accent: "#FFC93C", shadow: "#4E040A",
+    panel: "#FFF4E4", panelInk: "#24100E", panelMuted: "#7A5A55", numeral: "13",
+  },
+  flavio: {
+    bgA: "#2A7DF0", bgB: "#05235C", ink: "#F3F8FF", accent: "#FFD400", green: "#00A651", shadow: "#021638",
+    panel: "#F3F8FF", panelInk: "#0A1A33", panelMuted: "#55657D", numeral: "22",
+  },
+  meio: {
+    bgA: "#D93025", bgB: "#1A73E8", ink: "#FFFFFF", accent: "#FFFFFF", shadow: "rgba(10,12,20,.45)",
+    panel: "#FFFFFF", panelInk: "#15171C", panelMuted: "#5B606A", numeral: "",
+  },
+};
+
+function cardCopy(results) {
+  const [l, f] = split(results.lula);
+  const tag = (p) => (p >= 80 ? "Combinação muito forte" : p >= 65 ? "Combinação forte" : "Meu pensamento puxa");
+  if (l >= 55) return { theme: "lula", kicker: "ISENTÃO NADA:", big: `${l}%`, name: "LULA", line: `${tag(l)} com o plano do PT` };
+  if (f >= 55) return { theme: "flavio", kicker: "ISENTÃO NADA:", big: `${f}%`, name: "FLÁVIO", line: `${tag(f)} com o plano do PL` };
+  return { theme: "meio", kicker: "ISENTÃO", big: "CONFIRMADO", name: "", line: `Lula ${l}% · ${f}% Flávio: no meio mesmo` };
+}
+
+function seeded(seed) {
+  let a = seed >>> 0;
+  return () => {
+    a = (a + 0x6d2b79f5) | 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+function roundRect(ctx, x, y, w, h, r) {
+  const rr = Math.min(r, h / 2, w / 2);
+  ctx.beginPath();
+  ctx.moveTo(x + rr, y);
+  ctx.arcTo(x + w, y, x + w, y + h, rr);
+  ctx.arcTo(x + w, y + h, x, y + h, rr);
+  ctx.arcTo(x, y + h, x, y, rr);
+  ctx.arcTo(x, y, x + w, y, rr);
+  ctx.closePath();
+}
+
+function starPath(ctx, cx, cy, R, r, rot = -Math.PI / 2) {
+  ctx.beginPath();
+  for (let i = 0; i < 10; i++) {
+    const rad = i % 2 ? r : R;
+    const a = rot + (i * Math.PI) / 5;
+    const px = cx + Math.cos(a) * rad, py = cy + Math.sin(a) * rad;
+    if (i) ctx.lineTo(px, py); else ctx.moveTo(px, py);
+  }
+  ctx.closePath();
+}
+
+async function renderShareCard(results, version, formatKey = "story") {
+  const fmt = CARD_FORMATS[formatKey] || CARD_FORMATS.story;
+  const { W, H } = fmt;
+  const story = fmt.key === "story";
+  const copy = cardCopy(results);
+  const T = CARD_THEMES[copy.theme];
+  const [gl, gf] = split(results.lula);
+  const rnd = seeded(gl * 131 + results.axes.reduce((s, a) => s + Math.round(a.lula), 0) * 7 + (story ? 1 : 2));
+
+  const c = document.createElement("canvas");
+  c.width = W; c.height = H;
+  const x = c.getContext("2d");
+  try {
+    await Promise.all([
+      '800 300px "Bricolage Grotesque"', '700 30px "Bricolage Grotesque"',
+      '700 26px "Source Sans 3"', '600 30px "Source Sans 3"', '600 24px "IBM Plex Mono"',
+    ].map((f) => document.fonts.load(f)));
+  } catch (e) { /* segue com as fontes de reserva */ }
+
+  const DISPLAY = '"Bricolage Grotesque", "Arial Narrow", Arial, sans-serif';
+  const BODY = '"Source Sans 3", "Segoe UI", Arial, sans-serif';
+  const MONO = '"IBM Plex Mono", Consolas, monospace';
+  const font = (weight, size, family, stretch = "normal", spacing = "0px") => {
+    x.font = `${weight} ${size}px ${family}`;
+    if ("fontStretch" in x) x.fontStretch = stretch;
+    if ("letterSpacing" in x) x.letterSpacing = spacing;
+  };
+  const fit = (text, maxW, maxSize, weight, family, stretch) => {
+    let s = maxSize;
+    font(weight, s, family, stretch);
+    while (s > 20 && x.measureText(text).width > maxW) { s -= 4; font(weight, s, family, stretch); }
+    return s;
+  };
+
+  // Layout por formato
+  const P = 84;
+  const Lyt = story
+    ? { eyebrow: 200, motif: { cx: W * 0.79, cy: 360, R: 300 }, kicker: 650, bigMax: 400, nameMax: 210, gap: 26, lineGap: 70, panelH: 440, panelBottom: H - 190, footer: H - 112 }
+    : { eyebrow: 104, motif: { cx: W * 0.81, cy: 196, R: 214 }, kicker: 404, bigMax: 286, nameMax: 140, gap: 14, lineGap: 50, panelH: 372, panelBottom: H - 92, footer: H - 40 };
+  const panelTop = Lyt.panelBottom - Lyt.panelH;
+
+  /* 1. Fundo */
+  if (copy.theme === "meio") {
+    x.fillStyle = T.bgB; x.fillRect(0, 0, W, H);
+    x.beginPath(); x.moveTo(0, 0); x.lineTo(W * 0.92, 0); x.lineTo(W * 0.08, H); x.lineTo(0, H); x.closePath();
+    x.fillStyle = T.bgA; x.fill();
+    const g = x.createLinearGradient(0, 0, 0, H);
+    g.addColorStop(0, "rgba(0,0,0,0)"); g.addColorStop(1, "rgba(0,0,0,.35)");
+    x.fillStyle = g; x.fillRect(0, 0, W, H);
+  } else {
+    const g = x.createRadialGradient(Lyt.motif.cx, Lyt.motif.cy, 40, W * 0.5, H * 0.55, H * 0.95);
+    g.addColorStop(0, T.bgA); g.addColorStop(1, T.bgB);
+    x.fillStyle = g; x.fillRect(0, 0, W, H);
+  }
+
+  /* 2. Raios de sol a partir do motivo */
+  x.save();
+  x.translate(Lyt.motif.cx, Lyt.motif.cy);
+  const rays = 28;
+  for (let i = 0; i < rays; i += 2) {
+    const a0 = (i / rays) * Math.PI * 2, a1 = ((i + 1) / rays) * Math.PI * 2;
+    x.beginPath(); x.moveTo(0, 0);
+    x.arc(0, 0, H * 1.4, a0, a1); x.closePath();
+    x.fillStyle = "rgba(255,255,255,.055)"; x.fill();
+  }
+  x.restore();
+
+  /* 3. Numeral gigante vazado (13 / 22) */
+  if (T.numeral) {
+    x.save();
+    font(900, story ? 980 : 760, DISPLAY, "extra-condensed", "-10px");
+    x.textAlign = "right"; x.textBaseline = "alphabetic";
+    x.lineWidth = 5; x.strokeStyle = "rgba(255,255,255,.13)";
+    x.strokeText(T.numeral, W + 30, panelTop + (story ? 120 : 90));
+    x.restore();
+  }
+
+  /* 4. Retícula de pontos no canto */
+  x.save();
+  const step = 26;
+  for (let gy = panelTop - 360; gy < H; gy += step) {
+    for (let gx = 0; gx < W * 0.55; gx += step) {
+      const d = Math.hypot(gx / (W * 0.55), (H - gy) / 520);
+      const r = Math.max(0, 6.5 * (1 - d));
+      if (r < 0.6) continue;
+      x.beginPath(); x.arc(gx + (Math.floor(gy / step) % 2 ? step / 2 : 0), gy, r, 0, Math.PI * 2);
+      x.fillStyle = "rgba(255,255,255,.10)"; x.fill();
+    }
+  }
+  x.restore();
+
+  /* 5. Motivo do candidato */
+  const m = Lyt.motif;
+  if (copy.theme === "lula") {
+    // estrela com sombra deslocada e contorno de eco
+    x.save();
+    starPath(x, m.cx + 22, m.cy + 22, m.R, m.R * 0.4, -Math.PI / 2 + 0.18); x.fillStyle = T.shadow; x.fill();
+    starPath(x, m.cx, m.cy, m.R, m.R * 0.4, -Math.PI / 2 + 0.18); x.fillStyle = T.ink; x.fill();
+    starPath(x, m.cx, m.cy, m.R * 0.62, m.R * 0.25, -Math.PI / 2 + 0.18); x.fillStyle = T.accent; x.fill();
+    x.lineWidth = 4; x.strokeStyle = "rgba(255,244,228,.35)";
+    starPath(x, m.cx, m.cy, m.R * 1.28, m.R * 0.52, -Math.PI / 2 + 0.18); x.stroke();
+    x.restore();
+  } else if (copy.theme === "flavio") {
+    // bandeira estilizada: retângulo verde, losango amarelo, círculo azul com faixa e estrelas
+    x.save();
+    x.translate(m.cx, m.cy); x.rotate(-0.22);
+    const fw = m.R * 2.3, fh = m.R * 1.6;
+    x.fillStyle = T.shadow; roundRect(x, -fw / 2 + 20, -fh / 2 + 20, fw, fh, 28); x.fill();
+    x.fillStyle = T.green; roundRect(x, -fw / 2, -fh / 2, fw, fh, 28); x.fill();
+    x.beginPath(); x.moveTo(0, -fh / 2 + 30); x.lineTo(fw / 2 - 40, 0); x.lineTo(0, fh / 2 - 30); x.lineTo(-fw / 2 + 40, 0); x.closePath();
+    x.fillStyle = T.accent; x.fill();
+    const cr = fh * 0.3;
+    x.beginPath(); x.arc(0, 0, cr, 0, Math.PI * 2); x.fillStyle = "#0B2E7A"; x.fill();
+    x.save(); x.beginPath(); x.arc(0, 0, cr, 0, Math.PI * 2); x.clip();
+    x.beginPath(); x.arc(-cr * 0.35, cr * 2.2, cr * 2.25, Math.PI * 1.25, Math.PI * 1.85); x.lineWidth = cr * 0.24; x.strokeStyle = T.ink; x.stroke();
+    for (let i = 0; i < 16; i++) {
+      const sx = (rnd() - 0.5) * cr * 1.6, sy = cr * 0.05 + rnd() * cr * 0.8;
+      if (Math.hypot(sx, sy) > cr * 0.9) continue;
+      starPath(x, sx, sy, 6 + rnd() * 5, 2.6, -Math.PI / 2); x.fillStyle = T.ink; x.fill();
+    }
+    x.restore();
+    x.restore();
+  } else {
+    // meio: estrela e losango discretos, um de cada lado
+    x.save(); x.globalAlpha = 0.9;
+    starPath(x, W * 0.24, Lyt.motif.cy - 20, m.R * 0.55, m.R * 0.22); x.fillStyle = "rgba(255,255,255,.22)"; x.fill();
+    x.translate(W * 0.8, Lyt.motif.cy + 40); x.rotate(-0.22);
+    x.beginPath(); x.moveTo(0, -m.R * 0.5); x.lineTo(m.R * 0.75, 0); x.lineTo(0, m.R * 0.5); x.lineTo(-m.R * 0.75, 0); x.closePath();
+    x.fillStyle = "rgba(255,255,255,.22)"; x.fill();
+    x.restore();
+  }
+
+  /* 6. Confete de estrelinhas perto do título */
+  for (let i = 0; i < (story ? 16 : 11); i++) {
+    const sx = W * (0.64 + rnd() * 0.32), sy = Lyt.kicker - 40 + rnd() * (Lyt.bigMax + Lyt.nameMax);
+    const s = 7 + rnd() * 13;
+    starPath(x, sx, sy, s, s * 0.42, -Math.PI / 2 + rnd());
+    x.fillStyle = i % 3 === 0 ? T.ink : T.accent; x.globalAlpha = 0.55 + rnd() * 0.4; x.fill(); x.globalAlpha = 1;
+  }
+
+  /* 7. Granulado */
+  for (let i = 0; i < (story ? 14000 : 10000); i++) {
+    x.fillStyle = i % 2 ? "rgba(255,255,255,.045)" : "rgba(0,0,0,.05)";
+    x.fillRect(rnd() * W, rnd() * H, 1.6, 1.6);
+  }
+
+  /* 8. Marca no topo */
+  x.textBaseline = "alphabetic"; x.textAlign = "left";
+  // wordmark "isentão" + o "?" com pingo dividido
+  const wmSize = story ? 56 : 46;
+  font(800, wmSize, DISPLAY, "semi-condensed", "-2px");
+  x.fillStyle = T.ink; x.fillText(BRAND.name, P, Lyt.eyebrow);
+  const wmW = x.measureText(BRAND.name).width;
+  x.save();
+  const qh = wmSize * 0.98, qs = qh / 56;
+  x.translate(P + wmW + wmSize * 0.06, Lyt.eyebrow - qh + qh * 0.04); x.scale(qs, qs);
+  x.strokeStyle = T.ink; x.lineWidth = 7; x.lineCap = "round"; x.lineJoin = "round";
+  x.stroke(new Path2D(QMARK_HOOK));
+  x.beginPath(); x.arc(20.5, 48, 7.4, 0, Math.PI * 2); x.fillStyle = T.ink; x.fill(); // anel claro: o pingo aparece em qualquer fundo
+  x.fillStyle = "#D93025"; x.fill(new Path2D("M20.5 42.8a5.2 5.2 0 0 0 0 10.4z"));
+  x.fillStyle = "#1A73E8"; x.fill(new Path2D("M20.5 42.8a5.2 5.2 0 0 1 0 10.4z"));
+  x.restore();
+  font(700, story ? 24 : 21, BODY, "normal", "3px");
+  x.globalAlpha = 0.82; x.fillText(BRAND.sub.toUpperCase(), P, Lyt.eyebrow + (story ? 46 : 40)); x.globalAlpha = 1;
+
+  /* 9. Título em pôster */
+  const poster = (text, y, size, weight, color, stretch) => {
+    font(weight, size, DISPLAY, stretch, "-2px");
+    x.fillStyle = T.shadow; x.fillText(text, P + (story ? 10 : 8), y + (story ? 10 : 8));
+    x.fillStyle = color; x.fillText(text, P, y);
+  };
+  const maxTextW = W - P * 2;
+  font(800, story ? 84 : 62, DISPLAY, "condensed", "4px");
+  const kickerSize = story ? 84 : 62;
+  // etiqueta do kicker
+  const kw = x.measureText(copy.kicker).width;
+  const kickerY = Lyt.kicker + (copy.name ? 0 : Math.round(Lyt.nameMax * 0.7)); // sem a linha do nome, desce o bloco
+  x.save(); x.translate(P, kickerY); x.rotate(-0.04);
+  x.fillStyle = T.accent; roundRect(x, -10, -kickerSize * 0.86, kw + 34, kickerSize * 1.02, 14); x.fill();
+  x.fillStyle = copy.theme === "meio" ? T.panelInk : T.shadow; x.fillText(copy.kicker, 8, -4);
+  x.restore();
+
+  let y = kickerY + Lyt.gap;
+  const bigSize = fit(copy.big, maxTextW, Lyt.bigMax, 900, DISPLAY, "extra-condensed");
+  y += bigSize * 0.8;
+  poster(copy.big, y, bigSize, 900, T.ink, "extra-condensed");
+  if (copy.name) {
+    const nameSize = fit(copy.name, maxTextW, Lyt.nameMax, 900, DISPLAY, "condensed");
+    y += Lyt.gap + nameSize * 0.82;
+    poster(copy.name, y, nameSize, 900, T.accent, "condensed");
+  }
+  y += Lyt.lineGap;
+  font(600, story ? 40 : 32, BODY);
+  x.fillStyle = T.ink; x.fillText(copy.line, P, y, maxTextW);
+
+  /* 10. Painel com placar e os 5 eixos */
+  const px = P - 20, pw = W - (P - 20) * 2;
+  x.save();
+  x.fillStyle = "rgba(0,0,0,.25)"; roundRect(x, px + 10, panelTop + 14, pw, Lyt.panelH, 34); x.fill();
+  x.fillStyle = T.panel; roundRect(x, px, panelTop, pw, Lyt.panelH, 34); x.fill();
+  x.restore();
+  const ix = px + 36, iw = pw - 72;
+  const bar = (bx, by, bw, bh, lula, withText) => {
+    x.save();
+    roundRect(x, bx, by, bw, bh, bh / 2); x.clip();
+    x.fillStyle = "#1A73E8"; x.fillRect(bx, by, bw, bh);
+    x.fillStyle = "#D93025"; x.fillRect(bx, by, (bw * lula) / 100, bh);
+    x.fillStyle = "rgba(255,255,255,.9)"; x.fillRect(bx + bw / 2 - 1.5, by, 3, bh);
+    x.restore();
+    if (withText) {
+      const [l, f] = split(lula);
+      font(600, story ? 21 : 19, MONO); x.fillStyle = "#FFFFFF"; x.textBaseline = "middle";
+      x.textAlign = "left"; x.fillText(l + "%", bx + 12, by + bh / 2 + 1);
+      x.textAlign = "right"; x.fillText(f + "%", bx + bw - 12, by + bh / 2 + 1);
+      x.textAlign = "left"; x.textBaseline = "alphabetic";
+    }
+  };
+  let py = panelTop + (story ? 62 : 52);
+  font(800, story ? 32 : 28, DISPLAY, "condensed");
+  x.fillStyle = "#C1271D"; x.textAlign = "left"; x.fillText(`LULA ${gl}%`, ix, py);
+  x.fillStyle = "#1559B8"; x.textAlign = "right"; x.fillText(`${gf}% FLÁVIO`, ix + iw, py);
+  x.textAlign = "left";
+  bar(ix, py + 16, iw, story ? 20 : 16, results.lula, false);
+  py += story ? 92 : 76;
+  const rowH = story ? 62 : 50;
+  const labelW = iw * 0.5;
+  results.axes.forEach((a) => {
+    font(700, story ? 25 : 21, BODY);
+    x.fillStyle = T.panelInk; x.fillText(a.name, ix, py, labelW - 12);
+    bar(ix + labelW, py - (story ? 27 : 23), iw - labelW, story ? 34 : 28, a.lula, true);
+    py += rowH;
+  });
+
+  /* 11. Rodapé */
+  font(700, story ? 30 : 24, BODY);
+  x.fillStyle = T.ink; x.textAlign = "center";
+  x.fillText("Lula, Flávio ou isentão? Faça o teste e descubra o seu.", W / 2, Lyt.footer, W - P * 2);
+  x.textAlign = "left";
+
+  const url = c.toDataURL("image/png");
+  const blob = await new Promise((res) => c.toBlob(res, "image/png"));
+  return { url, blob, W, H };
+}
+
+function ShareModal({ results, version, onClose, initialFormat = "story" }) {
+  const [format, setFormat] = useState(initialFormat);
+  const [img, setImg] = useState(null);
+  const [status, setStatus] = useState("");
+  const closeRef = useRef(null);
+  const framed = inIframe();
+  const fileName = `afinidade-2026-${format}.png`;
+  const canShareFile = (() => {
+    try { return !framed && !!(img && navigator.canShare && navigator.canShare({ files: [new File([img.blob], fileName, { type: "image/png" })] })); }
+    catch (e) { return false; }
+  })();
+
+  useEffect(() => {
+    let alive = true;
+    setImg(null); setStatus("");
+    renderShareCard(results, version, format).then((r) => { if (alive) setImg(r); });
+    return () => { alive = false; };
+  }, [results, version, format]);
+
+  useEffect(() => {
+    const onKey = (e) => { if (e.key === "Escape") onClose(); };
+    window.addEventListener("keydown", onKey);
+    closeRef.current && closeRef.current.focus();
+    return () => window.removeEventListener("keydown", onKey);
+  }, [onClose]);
+
+  const copyImage = async () => {
+    try {
+      if (!img || !img.blob || !window.ClipboardItem) throw new Error("sem suporte");
+      await navigator.clipboard.write([new ClipboardItem({ "image/png": img.blob })]);
+      setStatus("Imagem copiada. Cole no WhatsApp, Instagram ou onde quiser.");
+    } catch (e) {
+      setStatus("Este navegador não permite copiar a imagem. Toque e segure (ou clique com o botão direito) sobre ela para salvar.");
+    }
+  };
+  const download = () => {
+    if (!img) return;
+    const a = document.createElement("a");
+    a.href = img.url; a.download = fileName;
+    document.body.appendChild(a); a.click(); a.remove();
+    setStatus("Download iniciado.");
+  };
+  const share = async () => {
+    try {
+      await navigator.share({ files: [new File([img.blob], fileName, { type: "image/png" })], title: `Meu resultado no ${BRAND.name}?` });
+    } catch (e) { /* o usuário cancelou ou o navegador recusou */ }
+  };
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-end justify-center sm:items-center" role="dialog" aria-modal="true" aria-labelledby="share-title">
+      <div className="fade-in absolute inset-0" style={{ background: "rgba(10,12,15,.6)" }} onClick={onClose} />
+      <div
+        className="card fade-in relative flex max-h-[94vh] w-full max-w-xl flex-col gap-4 overflow-y-auto p-5"
+        style={{
+          paddingBottom: "max(20px, env(safe-area-inset-bottom, 0px))",
+          paddingLeft: "max(20px, env(safe-area-inset-left, 0px))",
+          paddingRight: "max(20px, env(safe-area-inset-right, 0px))",
+        }}
+      >
+        <div className="flex items-center justify-between gap-3">
+          <h2 id="share-title" className="display text-2xl font-extrabold">Sua arte</h2>
+          <div className="flex items-center gap-2">
+            <div className="inline-flex rounded-full border hairline p-1" role="radiogroup" aria-label="Formato da arte">
+              {Object.values(CARD_FORMATS).map((f) => (
+                <button
+                  key={f.key}
+                  type="button"
+                  role="radio"
+                  aria-checked={format === f.key}
+                  onClick={() => setFormat(f.key)}
+                  className="rounded-full px-3 py-1 text-sm font-semibold transition-colors"
+                  style={format === f.key ? { background: "var(--ink)", color: "var(--bg)" } : { color: "var(--muted)" }}
+                >
+                  {f.label} <span className="mono text-xs opacity-70">{f.ratio}</span>
+                </button>
+              ))}
+            </div>
+            <button ref={closeRef} type="button" className="btn btn-ghost px-2.5" onClick={onClose} aria-label="Fechar">
+              <Ico n="X" size={20} />
+            </button>
+          </div>
+        </div>
+        <div className="grid place-items-center rounded-xl" style={{ background: "var(--surface-2)", minHeight: "40vh" }}>
+          {img
+            ? <img src={img.url} alt="Arte com seu resultado de afinidade" className="block rounded-lg" style={{ maxHeight: "62vh", width: "auto", maxWidth: "100%" }} />
+            : <div className="text-sm text-muted">Criando sua arte…</div>}
+        </div>
+        <div className="flex flex-wrap gap-2">
+          {canShareFile && (
+            <button type="button" className="btn btn-ink" onClick={share} disabled={!img}>
+              <Ico n="Share2" size={18} /> Compartilhar
+            </button>
+          )}
+          <button type="button" className={canShareFile ? "btn btn-line" : "btn btn-ink"} onClick={copyImage} disabled={!img}>
+            <Ico n="Copy" size={18} /> Copiar imagem
+          </button>
+          {!framed && (
+            <button type="button" className="btn btn-line" onClick={download} disabled={!img}>
+              <Ico n="Download" size={18} /> Baixar PNG
+            </button>
+          )}
+        </div>
+        <p className="text-sm text-muted" aria-live="polite">
+          {status || (format === "story"
+            ? "1080 × 1920, no tamanho certo para Stories e Status do WhatsApp."
+            : "1080 × 1350, no tamanho certo para o feed do Instagram e do Facebook.")}
+        </p>
+      </div>
+    </div>
+  );
+}
+
+function ShareTeaser({ results, version, onOpen }) {
+  const [thumb, setThumb] = useState(null);
+  const copy = cardCopy(results);
+  useEffect(() => {
+    let alive = true;
+    renderShareCard(results, version, "feed").then((r) => { if (alive) setThumb(r.url); });
+    return () => { alive = false; };
+  }, [results, version]);
+  return (
+    <section className="card flex flex-col gap-5 overflow-hidden p-5 sm:flex-row sm:items-center sm:p-6" aria-labelledby="teaser-title">
+      <button type="button" onClick={() => onOpen("feed")} className="mx-auto block w-44 flex-none overflow-hidden rounded-xl shadow-lg transition-transform hover:-rotate-1 hover:scale-[1.02] sm:mx-0" aria-label="Abrir a arte em tamanho grande">
+        {thumb
+          ? <img src={thumb} alt="Prévia da sua arte" className="block w-full" />
+          : <div className="grid aspect-[4/5] w-full place-items-center text-sm text-muted" style={{ background: "var(--surface-2)" }}>…</div>}
+      </button>
+      <div className="flex min-w-0 flex-col gap-3">
+        <span className="eyebrow">Sua arte está pronta</span>
+        <h2 id="teaser-title" className="display text-3xl font-extrabold leading-tight">
+          {copy.theme === "meio" ? "Isentão confirmado. Agora mostra pra galera." : "Isentão nada. Mostra de que lado você está."}
+        </h2>
+        <p className="text-[0.95rem] text-muted">Um pôster com o seu resultado e os 5 eixos, em tamanho de Stories e de feed.</p>
+        <div className="flex flex-wrap gap-2">
+          <button type="button" className="btn btn-ink" onClick={() => onOpen("story")}><Ico n="Smartphone" size={18} /> Stories</button>
+          <button type="button" className="btn btn-line" onClick={() => onOpen("feed")}><Ico n="Square" size={18} /> Feed</button>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function AxisRow({ a }) {
+  const [l, f] = split(a.lula);
+  const ln = lean(a.lula);
+  const tagClass = ln.side > 0 ? "chip chip-lula" : ln.side < 0 ? "chip chip-flavio" : "chip";
+  const tagText = ln.side > 0 ? `${ln.label} · ${a.lulaPole}` : ln.side < 0 ? `${ln.label} · ${a.flavioPole}` : "Equilíbrio entre os polos";
+  return (
+    <div className="flex flex-col gap-2.5 border-t hairline py-5 first:border-t-0 first:pt-0 last:pb-0">
+      <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1.5">
+        <h3 className="flex items-center gap-2 font-bold">
+          <Ico n={a.icon} size={18} className="text-muted" /> {a.name}
+        </h3>
+        <span className={tagClass}>{tagText}</span>
+      </div>
+      <SplitBar lula={a.lula} height={34} label={`${a.name}: ${a.lulaPole} ${l}%, ${a.flavioPole} ${f}%`} />
+      <div className="flex justify-between gap-4 text-sm">
+        <span className="min-w-0" style={{ color: "var(--lula-ink)" }}>{a.lulaPole}</span>
+        <span className="min-w-0 text-right" style={{ color: "var(--flavio-ink)" }}>{a.flavioPole}</span>
+      </div>
+    </div>
+  );
+}
+
+/* ───────────── Raio-X visual ───────────── */
+
+const answerOf = (answers, q) => (typeof answers[q.id] === "number" ? answers[q.id] : 0);
+const effectOf = (answers, q) => answerOf(answers, q) * q.direction; // >0 puxa para Lula, <0 para Flávio
+
+function LeanTag({ effect }) {
+  if (effect > 0) return <span className="chip chip-lula"><span className="dot" style={{ background: "var(--lula)" }} />{effect >= 2 ? "Bem perto de Lula" : "Mais perto de Lula"}</span>;
+  if (effect < 0) return <span className="chip chip-flavio"><span className="dot" style={{ background: "var(--flavio)" }} />{effect <= -2 ? "Bem perto de Flávio" : "Mais perto de Flávio"}</span>;
+  return <span className="chip"><span className="dot" style={{ background: "var(--muted)" }} />Em cima do muro</span>;
+}
+
+/* Régua de 5 pontos com a resposta marcada */
+function AnswerScale({ value }) {
+  const s = scaleOf(value);
+  return (
+    <div className="flex items-center gap-2" role="img" aria-label={`Sua resposta: ${s.label}`}>
+      <span className="text-[0.68rem] font-bold uppercase tracking-wider text-muted">Concordo</span>
+      <span className="relative flex items-center gap-2">
+        <span className="absolute left-1 right-1 top-1/2 h-px -translate-y-1/2" style={{ background: "var(--line)" }} aria-hidden="true" />
+        {SCALE.map((x) => (
+          x.value === value
+            ? <span key={x.value} className={"relative grid h-6 w-6 place-items-center rounded-full tone-" + x.tone} style={{ boxShadow: "0 0 0 3px var(--surface)" }}><Ico n="Check" size={13} /></span>
+            : <span key={x.value} className="relative h-2.5 w-2.5 rounded-full" style={{ background: "var(--line)", boxShadow: "0 0 0 3px var(--surface)" }} />
+        ))}
+      </span>
+      <span className="text-[0.68rem] font-bold uppercase tracking-wider text-muted">Discordo</span>
+    </div>
+  );
+}
+
+/* Mapa de quadradinhos: uma resposta por quadrado, na cor do lado para onde puxou */
+function DotMap({ qs, answers, size = 12 }) {
+  return (
+    <span className="flex flex-wrap gap-1" aria-hidden="true">
+      {qs.map((q) => {
+        const e = effectOf(answers, q);
+        const bg = e > 0 ? "var(--lula)" : e < 0 ? "var(--flavio)" : "var(--line)";
+        return <span key={q.id} title={q.text} className="rounded-[3px]" style={{ width: size, height: size, background: bg, opacity: Math.abs(e) === 1 ? 0.45 : 1 }} />;
+      })}
+    </span>
+  );
+}
+
+function StatementCard({ q, value }) {
+  const [open, setOpen] = useState(false);
+  const effect = value * q.direction;
+  const refs = refsOf(q);
+  const tint = effect > 0 ? "var(--lula-soft)" : effect < 0 ? "var(--flavio-soft)" : "var(--surface-2)";
+  return (
+    <li className="flex min-w-0 flex-col gap-3 rounded-2xl p-4" style={{ background: Math.abs(effect) === 2 ? tint : "var(--surface)", border: "1px solid var(--line)" }}>
+      <div className="flex items-start justify-between gap-3">
+        <p className="min-w-0 font-semibold leading-snug">{q.text}</p>
+      </div>
+      <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-2">
+        <AnswerScale value={value} />
+        <LeanTag effect={effect} />
+      </div>
+      <button type="button" className="inline-flex items-center gap-1 self-start text-sm font-semibold text-muted hover:text-ink" aria-expanded={open} onClick={() => setOpen(!open)}>
+        De onde vem <Ico n="ChevronDown" size={15} className={"transition-transform " + (open ? "rotate-180" : "")} />
+      </button>
+      {open && (
+        <div className="fade-in flex flex-col gap-2 border-t hairline pt-3 text-[0.92rem] text-muted">
+          <p>{q.basis}</p>
+          {q.measures && <p><span className="font-semibold text-ink">O que isso diz sobre você:</span> {q.measures}</p>}
+          {refs.length > 0 && (
+            <p className="flex flex-wrap gap-1.5">
+              {refs.map((n) => (
+                <a key={n} href={SOURCES[n].url} target="_blank" rel="noopener noreferrer" title={SOURCES[n].title} className="chip hover:underline">
+                  Fonte {n}<Ico n="ExternalLink" size={12} />
+                </a>
+              ))}
+            </p>
+          )}
+        </div>
+      )}
+    </li>
+  );
+}
+
+function AxisAccordion({ a, answers, open, onToggle }) {
+  const [l, f] = split(a.lula);
+  const panelId = "raiox-" + a.id;
+  const qs = a.questions.slice().sort((x, y) => effectOf(answers, y) - effectOf(answers, x)); // Lula primeiro, Flávio por último
+  const nL = qs.filter((q) => effectOf(answers, q) > 0).length;
+  const nF = qs.filter((q) => effectOf(answers, q) < 0).length;
+  const nN = qs.length - nL - nF;
+  const [showPlans, setShowPlans] = useState(false);
+  return (
+    <div className="border-t hairline first:border-t-0">
+      <h3>
+        <button type="button" aria-expanded={open} aria-controls={panelId} onClick={onToggle} className="flex w-full items-center gap-3 py-4 text-left">
+          <span className="grid h-10 w-10 flex-none place-items-center rounded-xl" style={{ background: "var(--brand-soft)", color: "var(--brand)" }}>
+            <Ico n={a.icon} size={19} />
+          </span>
+          <span className="flex min-w-0 flex-1 flex-col gap-1.5">
+            <span className="font-bold">{a.name}</span>
+            <DotMap qs={qs} answers={answers} />
+          </span>
+          <span className="hidden w-44 sm:block"><SplitBar lula={a.lula} height={22} /></span>
+          <span className="mono text-sm sm:hidden"><span style={{ color: "var(--lula-ink)" }}>{l}</span><span className="text-muted">·</span><span style={{ color: "var(--flavio-ink)" }}>{f}</span></span>
+          <Ico n="ChevronDown" size={20} className={"flex-none transition-transform " + (open ? "rotate-180" : "")} />
+        </button>
+      </h3>
+      {open && (
+        <div id={panelId} className="fade-in flex flex-col gap-5 pb-6">
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="chip chip-lula">{nL} pro lado de Lula</span>
+            <span className="chip">{nN} em cima do muro</span>
+            <span className="chip chip-flavio">{nF} pro lado de Flávio</span>
+          </div>
+          <ul className="grid gap-3 md:grid-cols-2">
+            {qs.map((q) => <StatementCard key={q.id} q={q} value={answerOf(answers, q)} />)}
+          </ul>
+          <div>
+            <button type="button" className="btn btn-line text-sm" aria-expanded={showPlans} onClick={() => setShowPlans(!showPlans)}>
+              <Ico n="BookOpen" size={16} /> {showPlans ? "Esconder" : "Ver"} o que cada plano propõe neste tema
+            </button>
+            {showPlans && (
+              <div className="fade-in mt-4 flex flex-col gap-3">
+                <p className="max-w-[70ch] text-[0.95rem] text-muted">{a.summary}</p>
+                <div className="grid gap-3 md:grid-cols-2">
+                  {[["lula", "Lula (PT)", a.lulaPoleFull], ["flavio", "Flávio Bolsonaro (PL)", a.flavioPoleFull]].map(([k, who, pole]) => (
+                    <div key={k} className="flex flex-col gap-3 rounded-2xl p-4" style={{ background: `var(--${k}-soft)` }}>
+                      <div>
+                        <div className="font-bold" style={{ color: `var(--${k}-ink)` }}>{who}</div>
+                        <div className="text-sm" style={{ color: `var(--${k}-ink)` }}>{pole}</div>
+                      </div>
+                      <ul className="flex flex-col gap-2.5">
+                        {a.dimensions.map((d) => (
+                          <li key={d.label} className="text-sm">
+                            <span className="font-semibold text-ink">{d.label}.</span> <span className="text-muted">{d[k]}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* ───────────── Seus destaques ───────────── */
+
+function Highlights({ results, answers }) {
+  const all = results.axes.flatMap((a) => a.questions.map((q) => ({ q, a, v: answerOf(answers, q), e: effectOf(answers, q) })));
+  const top = (side) => all
+    .filter((x) => x.e * side > 0)
+    .sort((x, y) => Math.abs(y.e) - Math.abs(x.e) || y.q.weight - x.q.weight)
+    .slice(0, 3);
+  const L = top(1), F = top(-1);
+  const nL = all.filter((x) => x.e > 0).length;
+  const nF = all.filter((x) => x.e < 0).length;
+  const nN = all.length - nL - nF;
+  const pct = (n) => (n / all.length) * 100;
+  const Column = ({ items, k, who }) => (
+    <div className="flex min-w-0 flex-col gap-3 rounded-2xl p-4 sm:p-5" style={{ background: `var(--${k}-soft)` }}>
+      <h3 className="display text-xl font-extrabold" style={{ color: `var(--${k}-ink)` }}>Onde você fica com {who}</h3>
+      {items.length === 0
+        ? <p className="text-[0.95rem] text-muted">Nenhuma resposta sua puxou para esse lado.</p>
+        : (
+          <ol className="flex flex-col gap-3">
+            {items.map(({ q, a, v }) => (
+              <li key={q.id} className="flex gap-3 rounded-xl p-3" style={{ background: "var(--surface)" }}>
+                <span className="grid h-8 w-8 flex-none place-items-center rounded-lg" style={{ background: `var(--${k}-soft)`, color: `var(--${k}-ink)` }}>
+                  <Ico n={a.icon} size={16} />
+                </span>
+                <span className="flex min-w-0 flex-col gap-1">
+                  <span className="text-[0.95rem] font-semibold leading-snug">{q.text}</span>
+                  <span className="text-sm text-muted">Você: {scaleOf(v).label.toLowerCase()}</span>
+                </span>
+              </li>
+            ))}
+          </ol>
+        )}
+    </div>
+  );
+  return (
+    <section className="card p-5 sm:p-8" aria-labelledby="destaques-title">
+      <h2 id="destaques-title" className="display text-3xl font-extrabold">Seus destaques</h2>
+      <p className="mt-2 text-[0.95rem] text-muted">As respostas que mais levaram você para cada lado.</p>
+
+      <div className="mt-5">
+        <div className="flex h-9 overflow-hidden rounded-full" role="img" aria-label={`${nL} respostas pro lado de Lula, ${nN} em cima do muro, ${nF} pro lado de Flávio`}>
+          {nL > 0 && <div className="flex items-center justify-start px-3 text-sm font-bold text-white" style={{ width: pct(nL) + "%", background: "var(--lula)" }}>{nL}</div>}
+          {nN > 0 && <div className="flex items-center justify-center px-2 text-sm font-bold" style={{ width: pct(nN) + "%", background: "var(--surface-2)", color: "var(--muted)" }}>{nN}</div>}
+          {nF > 0 && <div className="flex items-center justify-end px-3 text-sm font-bold text-white" style={{ width: pct(nF) + "%", background: "var(--flavio)" }}>{nF}</div>}
+        </div>
+        <div className="mt-2 flex flex-wrap justify-between gap-2 text-sm">
+          <span style={{ color: "var(--lula-ink)" }}>Pro lado de Lula</span>
+          <span className="text-muted">Em cima do muro</span>
+          <span style={{ color: "var(--flavio-ink)" }}>Pro lado de Flávio</span>
+        </div>
+      </div>
+
+      <div className="mt-6 grid gap-4 md:grid-cols-2">
+        <Column items={L} k="lula" who="Lula" />
+        <Column items={F} k="flavio" who="Flávio" />
+      </div>
+
+      <p className="mt-5 flex items-center gap-2 text-[0.95rem] text-muted">
+        <Ico n="Fence" size={18} />
+        {nN === 0
+          ? "Nenhuma resposta em cima do muro. Isentão passou longe."
+          : nN >= all.length / 2
+            ? `Em cima do muro em ${nN} de ${all.length} afirmações. Isentão de carteirinha.`
+            : `Em cima do muro em ${nN} de ${all.length} afirmações.`}
+      </p>
+    </section>
+  );
+}
+
+function Results({ version, answers, onRestart, onHome }) {
+  const results = useMemo(() => computeResults(version, answers), [version, answers]);
+  const [gl, gf] = split(results.lula);
+  const [openAxis, setOpenAxis] = useState(null);
+  const [shareOpen, setShareOpen] = useState(false); // false | "story" | "feed"
+  const closeShare = useCallback(() => setShareOpen(false), []);
+  const [copyState, setCopyState] = useState("idle");
+  const [fallbackText, setFallbackText] = useState("");
+  const fallbackRef = useRef(null);
+  const summary = useMemo(() => buildSummaryText(results, version), [results, version]);
+
+  useEffect(() => { if (fallbackText && fallbackRef.current) fallbackRef.current.select(); }, [fallbackText]);
+
+  const copySummary = () => {
+    const done = () => { setCopyState("done"); setTimeout(() => setCopyState("idle"), 2200); };
+    try {
+      navigator.clipboard.writeText(summary).then(done, () => setFallbackText(summary));
+    } catch (e) { setFallbackText(summary); }
+  };
+
+  const diff = results.lula - 50;
+  const verdict = cardCopy(results).theme === "meio" ? "Isentão confirmado." : "Isentão nada.";
+  const headline = Math.abs(diff) < 3
+    ? "Suas respostas ficaram praticamente empatadas entre os dois planos."
+    : `Suas respostas estão mais próximas do plano de ${diff > 0 ? "Lula (PT)" : "Flávio Bolsonaro (PL)"}.`;
+
+  const toLula = results.axes.filter((a) => a.lula >= 55);
+  const toFlavio = results.axes.filter((a) => a.lula <= 45);
+  const crossPressured = toLula.length > 0 && toFlavio.length > 0;
+  const list = (arr) => arr.map((a) => a.name).join(", ").replace(/, ([^,]*)$/, " e $1");
+
+  return (
+    <>
+      <TopBar onHome={onHome}>
+        <button type="button" className="btn btn-ghost px-3 text-sm" onClick={onRestart}>
+          <Ico n="RotateCcw" size={16} /> <span className="hidden sm:inline">Refazer teste</span>
+        </button>
+      </TopBar>
+      <main className="gutter">
+        <div className="mx-auto flex max-w-4xl flex-col gap-8 py-8 md:py-12">
+          {/* Placar geral */}
+          <section className="card p-5 sm:p-8" aria-labelledby="placar-title">
+            <div className="flex flex-wrap items-center justify-between gap-2">
+              <span className="eyebrow" id="placar-title">O veredito</span>
+              <span className="chip">{VERSIONS[version].label} · <span className="mono">{VERSIONS[version].count}</span> afirmações</span>
+            </div>
+            <p className="display mt-3 text-5xl font-extrabold leading-none sm:text-6xl">
+              <span className="tilt brand-text">{verdict}</span>
+            </p>
+            <div className="mt-6 grid grid-cols-2 items-end gap-4">
+              <div className="min-w-0">
+                <div className="text-[0.95rem] font-semibold sm:text-lg" style={{ color: "var(--lula-ink)" }}>Lula <span className="font-normal">(PT)</span></div>
+                <div className="display text-[3.6rem] font-black leading-none sm:text-8xl" style={{ color: "var(--lula)" }}>
+                  {gl}<span className="text-[0.5em]">%</span>
+                </div>
+              </div>
+              <div className="min-w-0 text-right">
+                <div className="text-[0.95rem] font-semibold sm:text-lg" style={{ color: "var(--flavio-ink)" }}>Flávio Bolsonaro <span className="font-normal">(PL)</span></div>
+                <div className="display text-[3.6rem] font-black leading-none sm:text-8xl" style={{ color: "var(--flavio)" }}>
+                  {gf}<span className="text-[0.5em]">%</span>
+                </div>
+              </div>
+            </div>
+            <div className="mt-5"><SplitBar lula={results.lula} height={16} showText={false} /></div>
+            <p className="mt-5 text-lg font-semibold">{headline}</p>
+            <p className="mt-1 text-[0.95rem] text-muted">Média simples dos cinco eixos abaixo. O resultado mede proximidade com as propostas escritas nos planos, não é uma recomendação de voto.</p>
+            <div className="mt-6 flex flex-wrap gap-2 border-t hairline pt-5">
+              <button type="button" className="btn btn-brand" onClick={() => setShareOpen("story")}>
+                <Ico n="Image" size={18} /> Criar minha arte
+              </button>
+              <button type="button" className="btn btn-line" onClick={copySummary}>
+                <Ico n={copyState === "done" ? "Check" : "Copy"} size={18} /> {copyState === "done" ? "Resumo copiado" : "Copiar resumo"}
+              </button>
+              <button type="button" className="btn btn-line" onClick={onRestart}>
+                <Ico n="RotateCcw" size={18} /> Refazer teste
+              </button>
+            </div>
+            {fallbackText && (
+              <div className="mt-4 flex flex-col gap-2">
+                <label htmlFor="resumo-texto" className="text-sm text-muted">Não foi possível copiar automaticamente. O texto está selecionado: use Ctrl+C (ou Copiar no celular).</label>
+                <textarea id="resumo-texto" ref={fallbackRef} readOnly value={fallbackText} rows={8} className="mono w-full rounded-xl border hairline p-3 text-sm" style={{ background: "var(--surface-2)", color: "var(--ink)" }} />
+              </div>
+            )}
+          </section>
+
+          <ShareTeaser results={results} version={version} onOpen={(f) => setShareOpen(f)} />
+
+          {/* 5 eixos */}
+          <section className="card p-5 sm:p-8" aria-labelledby="eixos-res-title">
+            <div className="flex flex-wrap items-baseline justify-between gap-2">
+              <h2 id="eixos-res-title" className="display text-3xl font-extrabold">Os 5 eixos</h2>
+              <div className="flex items-center gap-4 text-sm">
+                <span className="flex items-center gap-1.5"><span className="dot" style={{ background: "var(--lula)" }} />Polo Lula</span>
+                <span className="flex items-center gap-1.5"><span className="dot" style={{ background: "var(--flavio)" }} />Polo Flávio</span>
+              </div>
+            </div>
+            <div className="mt-6 flex flex-col">
+              {results.axes.map((a) => <AxisRow key={a.id} a={a} />)}
+            </div>
+          </section>
+
+          <Highlights results={results} answers={answers} />
+
+          {crossPressured && (
+            <section className="flex gap-4 rounded-2xl border hairline p-5 sm:p-6" style={{ background: "var(--surface-2)" }}>
+              <Ico n="Split" size={22} className="mt-0.5 flex-none text-muted" />
+              <div className="flex flex-col gap-1">
+                <h2 className="font-bold">Perfil de pressões cruzadas</h2>
+                <p className="text-[0.95rem] text-muted">
+                  Você ficou mais perto de Lula em <strong className="text-ink">{list(toLula)}</strong> e mais perto de Flávio Bolsonaro em{" "}
+                  <strong className="text-ink">{list(toFlavio)}</strong>. Eleitores com esse perfil costumam decidir o voto pelo tema que pesa mais para eles.
+                </p>
+              </div>
+            </section>
+          )}
+
+          {/* Raio-X */}
+          <section className="card p-5 sm:p-8" aria-labelledby="raiox-title">
+            <h2 id="raiox-title" className="display text-3xl font-extrabold">Raio-X das propostas</h2>
+            <p className="mt-2 max-w-[65ch] text-[0.95rem] text-muted">
+              Cada quadradinho é uma resposta sua, na cor do lado para onde ela puxou. Abra um tema para ver afirmação por afirmação.
+            </p>
+            <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-sm text-muted">
+              <span className="flex items-center gap-1.5"><span className="h-3 w-3 rounded-[3px]" style={{ background: "var(--lula)" }} />Bem perto de Lula</span>
+              <span className="flex items-center gap-1.5"><span className="h-3 w-3 rounded-[3px]" style={{ background: "var(--lula)", opacity: 0.45 }} />Mais perto de Lula</span>
+              <span className="flex items-center gap-1.5"><span className="h-3 w-3 rounded-[3px]" style={{ background: "var(--line)" }} />Em cima do muro</span>
+              <span className="flex items-center gap-1.5"><span className="h-3 w-3 rounded-[3px]" style={{ background: "var(--flavio)", opacity: 0.45 }} />Mais perto de Flávio</span>
+              <span className="flex items-center gap-1.5"><span className="h-3 w-3 rounded-[3px]" style={{ background: "var(--flavio)" }} />Bem perto de Flávio</span>
+            </div>
+            <div className="mt-4">
+              {results.axes.map((a) => (
+                <AxisAccordion
+                  key={a.id}
+                  a={a}
+                  answers={answers}
+                  open={openAxis === a.id}
+                  onToggle={() => setOpenAxis(openAxis === a.id ? null : a.id)}
+                />
+              ))}
+            </div>
+          </section>
+          <Footer compact />
+        </div>
+      </main>
+      {shareOpen && <ShareModal results={results} version={version} initialFormat={shareOpen} onClose={closeShare} />}
+    </>
+  );
+}
+
+/* ───────────────────────── Rodapé ───────────────────────── */
+
+function Footer({ compact }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <footer className={(compact ? "" : "mx-auto max-w-6xl ") + "border-t hairline py-8 text-sm text-muted"}>
+      <p className="max-w-[75ch]">
+        O {BRAND.name}? é uma ferramenta educativa e sem vínculo com partidos ou campanhas. As afirmações resumem propostas dos planos de governo
+        registrados no TSE, conforme o documento-base "Arquitetura de Dados Eleitorais e Mapeamento de Polarização no Segundo
+        Turno Presidencial de 2026" e as reportagens citadas. Suas respostas ficam só neste navegador.
+      </p>
+      <button type="button" className="mt-3 inline-flex items-center gap-1.5 font-semibold text-ink" aria-expanded={open} onClick={() => setOpen(!open)}>
+        <Ico n="BookOpen" size={16} /> Fontes ({Object.keys(SOURCES).length})
+        <Ico n="ChevronDown" size={16} className={"transition-transform " + (open ? "rotate-180" : "")} />
+      </button>
+      {open && (
+        <ol className="fade-in mt-3 grid gap-1.5 md:grid-cols-2">
+          {Object.entries(SOURCES).map(([n, s]) => (
+            <li key={n} className="flex min-w-0 gap-2">
+              <span className="mono flex-none">{n}.</span>
+              <a href={s.url} target="_blank" rel="noopener noreferrer" className="min-w-0 break-words underline decoration-[var(--line)] underline-offset-2 hover:text-ink">{s.title}</a>
+            </li>
+          ))}
+        </ol>
+      )}
+    </footer>
+  );
+}
+
+/* ───────────────────────── App ───────────────────────── */
+
+function App() {
+  const [saved, setSaved] = useState(() => loadSaved());
+  const [state, setState] = useState({ screen: "home", version: "short", order: [], answers: {}, index: 0 });
+
+  useEffect(() => { window.scrollTo(0, 0); }, [state.screen]);
+
+  const save = (s) => { persist(s); setSaved(s); };
+
+  const start = (version) => {
+    const s = { screen: "quiz", version, order: buildOrder(version), answers: {}, index: 0 };
+    setState(s); save(s);
+  };
+
+  const onAnswer = useCallback((id, value) => {
+    setState((prev) => {
+      const answers = { ...prev.answers, [id]: value };
+      const next = prev.index + 1;
+      const s = next >= prev.order.length
+        ? { ...prev, answers, index: prev.order.length - 1, screen: "results" }
+        : { ...prev, answers, index: next };
+      persist(s); setSaved(s);
+      return s;
+    });
+  }, []);
+
+  const onBack = useCallback(() => {
+    setState((prev) => {
+      if (prev.index === 0) return { ...prev, screen: "home" };
+      const s = { ...prev, index: prev.index - 1 };
+      persist(s); setSaved(s);
+      return s;
+    });
+  }, []);
+
+  const goHome = () => { setSaved(loadSaved()); setState((p) => ({ ...p, screen: "home" })); };
+
+  if (state.screen === "quiz") {
+    return <Quiz {...state} onAnswer={onAnswer} onBack={onBack} onExit={goHome} />;
+  }
+  if (state.screen === "results") {
+    return <Results version={state.version} answers={state.answers} onRestart={() => setState((p) => ({ ...p, screen: "home" }))} onHome={goHome} />;
+  }
+  return (
+    <Home
+      saved={saved}
+      onStart={start}
+      onResume={() => saved && setState({ ...saved, screen: "quiz" })}
+      onViewLast={() => saved && setState({ ...saved, screen: "results" })}
+      onDiscard={() => save(null)}
+    />
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+</script>
+<!-- ARTIFACT-BODY-END -->
+</body>
+</html>

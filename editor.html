@@ -1,0 +1,473 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Editor do Isentão</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,400..800&family=IBM+Plex+Mono:wght@500;600&family=Source+Sans+3:wght@400;500;600;700&display=swap">
+<style>
+  /* Layout: mesa de revisão — uma tabela larga e densa com o painel de equilíbrio no topo; mesmos tokens do teste. */
+  :root {
+    --bg: #F3F4F1; --surface: #FFFFFF; --surface-2: #EBECE8; --ink: #15171C; --muted: #5B606A; --line: #DCDDD7;
+    --lula: #D93025; --flavio: #1A73E8; --lula-ink: #B3261E; --flavio-ink: #1559B8; --lula-soft: #FBE7E5; --flavio-soft: #E3EEFD;
+    --ok: #1E7B4A; --ok-soft: #E2F2E8; --warn: #9A5B00; --warn-soft: #FCEFD6; --edit: #7A4CC2; --edit-soft: #EFE8FA; --focus: #15171C;
+    --font-display: "Bricolage Grotesque", "Arial Narrow", Arial, sans-serif;
+    --font-body: "Source Sans 3", "Segoe UI", system-ui, sans-serif;
+    --font-mono: "IBM Plex Mono", ui-monospace, Consolas, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #111317; --surface: #1A1D22; --surface-2: #23272D; --ink: #ECEDEF; --muted: #A2A7B0; --line: #2E333A;
+      --lula: #D93025; --flavio: #1A73E8; --lula-ink: #F2766B; --flavio-ink: #74A9F5; --lula-soft: #3A1D1B; --flavio-soft: #172A45;
+      --ok: #5FC08A; --ok-soft: #173325; --warn: #F0B654; --warn-soft: #3A2A0E; --edit: #B79AF0; --edit-soft: #2A2140; --focus: #ECEDEF;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #111317; --surface: #1A1D22; --surface-2: #23272D; --ink: #ECEDEF; --muted: #A2A7B0; --line: #2E333A;
+    --lula: #D93025; --flavio: #1A73E8; --lula-ink: #F2766B; --flavio-ink: #74A9F5; --lula-soft: #3A1D1B; --flavio-soft: #172A45;
+    --ok: #5FC08A; --ok-soft: #173325; --warn: #F0B654; --warn-soft: #3A2A0E; --edit: #B79AF0; --edit-soft: #2A2140; --focus: #ECEDEF;
+    color-scheme: dark;
+  }
+  body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--font-body); font-size: 15px; line-height: 1.5; -webkit-font-smoothing: antialiased; }
+  .gutter { padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+  .display { font-family: var(--font-display); font-stretch: 90%; letter-spacing: -0.025em; text-wrap: balance; }
+  .mono { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+  .eyebrow { font-size: .72rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+  .card { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; }
+  :focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; border-radius: 8px; }
+  .sticky-top { background: var(--bg); }
+  @media (min-width: 900px) { .sticky-top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 30; } }
+
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: .45rem; font-weight: 600; border-radius: 999px; padding: .5rem .95rem; font-size: .9rem; transition: background-color .15s, border-color .15s; white-space: nowrap; }
+  .btn-ink { background: var(--ink); color: var(--bg); }
+  .btn-line { border: 1px solid var(--line); background: var(--surface); color: var(--ink); }
+  .btn-line:hover { border-color: var(--muted); }
+  .btn-ghost { color: var(--muted); }
+  .btn-ghost:hover { color: var(--ink); background: var(--surface-2); }
+  .btn:disabled { opacity: .5; cursor: not-allowed; }
+
+  .field { width: 100%; background: transparent; color: var(--ink); border: 1px solid transparent; border-radius: 8px; padding: .4rem .5rem; font: inherit; resize: vertical; field-sizing: content; min-height: 2.4rem; }
+  .field:hover { border-color: var(--line); }
+  .field:focus { border-color: var(--ink); background: var(--surface); outline: none; }
+  .field-strong { font-weight: 600; font-size: .98rem; line-height: 1.4; }
+  select.field { resize: none; padding-right: 1.4rem; field-sizing: fixed; cursor: pointer; }
+  .ctrl { background: var(--surface); color: var(--ink); border: 1px solid var(--line); border-radius: 999px; padding: .45rem .9rem; font: inherit; font-size: .9rem; }
+
+  table { border-collapse: separate; border-spacing: 0; width: 100%; }
+  th { position: sticky; top: 0; z-index: 2; background: var(--surface-2); text-align: left; font-size: .75rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); padding: .6rem .6rem; border-bottom: 1px solid var(--line); white-space: nowrap; }
+  td { vertical-align: top; padding: .45rem .35rem; border-bottom: 1px solid var(--line); background: var(--surface); }
+  tr.is-edited td:first-child { box-shadow: inset 3px 0 0 var(--edit); }
+  tr.axis-start td { border-top: 2px solid var(--line); }
+
+  .chip { display: inline-flex; align-items: center; gap: .3rem; font-size: .75rem; font-weight: 600; padding: .15rem .55rem; border-radius: 999px; background: var(--surface-2); white-space: nowrap; }
+  .chip-lula { background: var(--lula-soft); color: var(--lula-ink); }
+  .chip-flavio { background: var(--flavio-soft); color: var(--flavio-ink); }
+  .chip-ok { background: var(--ok-soft); color: var(--ok); }
+  .chip-warn { background: var(--warn-soft); color: var(--warn); }
+  .chip-edit { background: var(--edit-soft); color: var(--edit); }
+  .side-lula { color: var(--lula-ink); font-weight: 700; }
+  .side-flavio { color: var(--flavio-ink); font-weight: 700; }
+  .prev { font-size: .85rem; color: var(--muted); border-left: 2px solid var(--line); padding: .15rem 0 .15rem .55rem; margin: .25rem .5rem .1rem; }
+  .count { font-size: .72rem; padding: 0 .5rem; color: var(--muted); }
+  .count.long { color: var(--warn); font-weight: 600; }
+  @media (prefers-reduced-motion: reduce) { .btn { transition: none; } }
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.3.1/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.3.1/umd/react-dom.production.min.js"></script>
+<script>window.react = window.React; /* o UMD do lucide-react procura o global "react" */</script>
+<script src="https://unpkg.com/lucide-react@0.460.0/dist/umd/lucide-react.js"></script>
+<script src="https://unpkg.com/@babel/standalone@7.26.4/babel.min.js"></script>
+<script src="https://cdn.tailwindcss.com/3.4.17"></script>
+<script>
+  tailwind.config = {
+    corePlugins: { preflight: true },
+    theme: { extend: { colors: { ink: "var(--ink)", muted: "var(--muted)", line: "var(--line)" } } },
+  };
+</script>
+<script src="data.js"></script>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel" data-presets="react">
+const { useState, useEffect, useMemo, useRef } = React;
+const DATA = window.AFINIDADE_DATA;
+const { AXES, SOURCES } = DATA;
+const ORIGINAL = DATA.QUESTIONS.map((q) => ({ ...q, refs: Array.isArray(q.refs) ? q.refs : q.ref ? [q.ref] : [] }));
+const ORIGINAL_BY_ID = Object.fromEntries(ORIGINAL.map((q) => [q.id, q]));
+const EDITS_KEY = "afinidade2026:edits-v3"; // muda a cada nova versão do data.js para não misturar edições antigas
+const LONG_TEXT = 130;
+
+function Ico({ n, size = 16, className = "" }) {
+  const C = window.LucideReact && window.LucideReact[n];
+  if (!C) return <span className={"inline-block " + className} style={{ width: size, height: size }} aria-hidden="true" />;
+  return <C size={size} className={className} aria-hidden="true" />;
+}
+
+function inIframe() { try { return window.self !== window.top; } catch (e) { return true; } }
+
+function loadEdits() {
+  try {
+    const raw = localStorage.getItem(EDITS_KEY);
+    const list = raw ? JSON.parse(raw) : null;
+    return Array.isArray(list) && list.length ? list : null;
+  } catch (e) { return null; }
+}
+
+const FIELDS = ["axis", "tier", "direction", "weight", "from", "text", "measures", "basis", "refs"];
+function isEdited(q) {
+  const o = ORIGINAL_BY_ID[q.id];
+  if (!o) return true;
+  return FIELDS.some((f) => JSON.stringify(q[f] ?? null) !== JSON.stringify(o[f] ?? null));
+}
+
+function balance(list) {
+  return AXES.map((a) => {
+    const row = { axis: a };
+    ["core", "extra"].forEach((t) => {
+      const qs = list.filter((q) => q.axis === a.id && q.tier === t);
+      const L = qs.filter((q) => q.direction === 1), F = qs.filter((q) => q.direction === -1);
+      const wl = L.reduce((s, q) => s + q.weight, 0), wf = F.reduce((s, q) => s + q.weight, 0);
+      row[t] = { nl: L.length, nf: F.length, wl, wf, ok: L.length === F.length && wl === wf };
+    });
+    return row;
+  });
+}
+
+const fmtW = (w) => String(w).replace(".", ",");
+
+function buildDataJs(list) {
+  const stamp = new Date().toLocaleString("pt-BR");
+  const clean = list.map(({ id, axis, tier, direction, weight, from, text, measures, basis, refs, prev }) =>
+    ({ id, axis, tier, direction, weight, from: from || (direction === 1 ? "PT" : "PL"), text, measures: measures || "", basis: basis || "", refs: refs || [], prev: prev ?? null }));
+  const data = { AXES: DATA.AXES, QUESTIONS: clean, SCALE: DATA.SCALE, SOURCES: DATA.SOURCES };
+  return `/*\n * Base de dados do Teste de Afinidade Eleitoral — 2º turno 2026\n * Gerada pelo editor de afirmações em ${stamp}.\n * Campos: id, axis (1-5), tier ("core" | "extra"), direction (1 = Lula, -1 = Flávio),\n * weight (1 | 1.5), from ("PT" | "PL"), text, measures, basis, refs, prev.\n */\nwindow.AFINIDADE_DATA = ${JSON.stringify(data, null, 2)};\n`;
+}
+
+function buildCsv(list) {
+  const esc = (v) => `"${String(v ?? "").replace(/"/g, '""')}"`;
+  const head = ["id", "eixo", "camada", "lado", "peso", "proposta_de", "afirmacao", "o_que_revela", "base_factual", "fontes", "versao_anterior"];
+  const rows = list.map((q) => [
+    q.id, AXES.find((a) => a.id === q.axis)?.name, q.tier === "core" ? "Núcleo (30)" : "Extra (50)",
+    q.direction === 1 ? "Lula (PT)" : "Flávio Bolsonaro (PL)", fmtW(q.weight), q.from || "", q.text, q.measures, q.basis, (q.refs || []).join(", "), q.prev || "",
+  ].map(esc).join(";"));
+  return "﻿" + [head.join(";"), ...rows].join("\r\n");
+}
+
+function download(name, text, type) {
+  const blob = new Blob([text], { type });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url; a.download = name;
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 2000);
+}
+
+function BalancePanel({ list }) {
+  const rows = balance(list);
+  const allOk = rows.every((r) => r.core.ok && r.extra.ok);
+  const Cell = ({ c }) => (
+    <span className={"chip mono " + (c.ok ? "chip-ok" : "chip-warn")} title={`Lula: ${c.nl} afirmações, peso ${fmtW(c.wl)} · Flávio: ${c.nf} afirmações, peso ${fmtW(c.wf)}`}>
+      {c.ok ? <Ico n="Check" size={13} /> : <Ico n="TriangleAlert" size={13} />}
+      {c.nl}×{c.nf} · {fmtW(c.wl)}×{fmtW(c.wf)}
+    </span>
+  );
+  return (
+    <section className="card p-4 sm:p-5" aria-labelledby="eq-title">
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <h2 id="eq-title" className="display text-xl font-extrabold">Equilíbrio entre os lados</h2>
+        <span className={"chip " + (allOk ? "chip-ok" : "chip-warn")}>
+          {allOk ? "Tudo equilibrado: quem concorda com tudo fica em 50%" : "Há eixos desequilibrados: o resultado fica enviesado"}
+        </span>
+      </div>
+      <p className="mt-1 text-sm text-muted">Formato: afirmações Lula × Flávio · soma dos pesos Lula × Flávio. Cada eixo precisa empatar nas duas camadas.</p>
+      <div className="mt-3 overflow-x-auto">
+        <table className="min-w-[520px]">
+          <thead><tr><th style={{ position: "static" }}>Eixo</th><th style={{ position: "static" }}>Núcleo (versão curta)</th><th style={{ position: "static" }}>Extra (só na aprofundada)</th></tr></thead>
+          <tbody>
+            {rows.map((r) => (
+              <tr key={r.axis.id}>
+                <td className="text-sm font-semibold">{r.axis.name}</td>
+                <td><Cell c={r.core} /></td>
+                <td><Cell c={r.extra} /></td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
+  );
+}
+
+function Row({ q, showPrev, onChange, onRestore, onRemove, axisStart }) {
+  const edited = isEdited(q);
+  const isNew = !ORIGINAL_BY_ID[q.id];
+  const set = (field) => (e) => {
+    let v = e.target.value;
+    if (field === "axis") v = Number(v);
+    if (field === "direction") v = Number(v);
+    if (field === "weight") v = Number(v);
+    onChange(q.id, field, v);
+  };
+  const refsText = (q.refs || []).join(", ");
+  const from = q.from === "PT" || q.from === "PL" ? q.from : q.direction === 1 ? "PT" : "PL";
+  const reversed = (from === "PT") !== (q.direction === 1);
+  const len = (q.text || "").length;
+  return (
+    <tr className={(edited ? "is-edited " : "") + (axisStart ? "axis-start" : "")}>
+      <td className="mono w-12 text-center text-sm">
+        <div className="pt-2">{q.id}</div>
+        {edited && <span className="chip chip-edit mt-1" title={isNew ? "Afirmação nova" : "Editada"}>{isNew ? "nova" : "edit."}</span>}
+      </td>
+      <td className="min-w-[190px]">
+        <select id={`axis-${q.id}`} aria-label="Eixo" className="field text-sm" value={q.axis} onChange={set("axis")}>
+          {AXES.map((a) => <option key={a.id} value={a.id}>{a.id}. {a.name}</option>)}
+        </select>
+        <select id={`tier-${q.id}`} aria-label="Camada" className="field text-sm text-muted" value={q.tier} onChange={set("tier")}>
+          <option value="core">Núcleo (30)</option>
+          <option value="extra">Extra (50)</option>
+        </select>
+      </td>
+      <td className="w-36">
+        <select id={`dir-${q.id}`} aria-label="Lado que pontua" className={"field text-sm " + (q.direction === 1 ? "side-lula" : "side-flavio")} value={q.direction} onChange={set("direction")}>
+          <option value={1}>Lula (PT)</option>
+          <option value={-1}>Flávio (PL)</option>
+        </select>
+        <select id={`w-${q.id}`} aria-label="Peso" className="field mono text-sm" value={q.weight} onChange={set("weight")}>
+          <option value={1}>Peso 1</option>
+          <option value={1.5}>Peso 1,5</option>
+        </select>
+        <select id={`from-${q.id}`} aria-label="Proposta de" className="field text-sm text-muted" value={from} onChange={set("from")}>
+          <option value="PT">Proposta do PT</option>
+          <option value="PL">Proposta do PL</option>
+        </select>
+        {reversed && <span className="chip mx-1" title="O texto descreve a proposta pelo ângulo contrário: concordar pontua para o outro lado.">invertida</span>}
+      </td>
+      <td className="min-w-[340px]">
+        <textarea id={`text-${q.id}`} aria-label="Afirmação" className="field field-strong" rows={3} value={q.text} onChange={set("text")} />
+        <div className={"count mono " + (len > LONG_TEXT ? "long" : "")}>{len} caracteres{len > LONG_TEXT ? " · longa" : ""}</div>
+        {showPrev && q.prev && <div className="prev"><span className="font-semibold">Antes:</span> {q.prev}</div>}
+      </td>
+      <td className="min-w-[200px]">
+        <textarea id={`measures-${q.id}`} aria-label="O que revela" className="field text-sm" rows={3} value={q.measures || ""} onChange={set("measures")} />
+      </td>
+      <td className="min-w-[260px]">
+        <textarea id={`basis-${q.id}`} aria-label="Base factual" className="field text-sm" rows={3} value={q.basis || ""} onChange={set("basis")} />
+      </td>
+      <td className="min-w-[120px]">
+        <input
+          id={`refs-${q.id}`}
+          aria-label="Números das fontes"
+          className="field mono text-sm"
+          value={refsText}
+          onChange={(e) => onChange(q.id, "refs", e.target.value.split(/[^0-9]+/).filter(Boolean).map(Number))}
+        />
+        <div className="flex flex-wrap gap-1 px-1">
+          {(q.refs || []).filter((n) => SOURCES[n]).map((n) => (
+            <a key={n} href={SOURCES[n].url} target="_blank" rel="noopener noreferrer" title={SOURCES[n].title} className="chip hover:underline">{n}<Ico n="ExternalLink" size={11} /></a>
+          ))}
+        </div>
+      </td>
+      <td className="w-10">
+        <div className="flex flex-col items-center gap-1 pt-1">
+          {edited && !isNew && (
+            <button type="button" className="btn btn-ghost px-2 py-1.5" title="Desfazer edições desta linha" aria-label={`Desfazer edições da afirmação ${q.id}`} onClick={() => onRestore(q.id)}>
+              <Ico n="Undo2" size={16} />
+            </button>
+          )}
+          <button type="button" className="btn btn-ghost px-2 py-1.5" title="Remover afirmação" aria-label={`Remover afirmação ${q.id}`} onClick={() => onRemove(q.id)}>
+            <Ico n="Trash2" size={16} />
+          </button>
+        </div>
+      </td>
+    </tr>
+  );
+}
+
+function Editor() {
+  const [list, setList] = useState(() => loadEdits() || ORIGINAL.map((q) => ({ ...q })));
+  const [query, setQuery] = useState("");
+  const [axis, setAxis] = useState("all");
+  const [tier, setTier] = useState("all");
+  const [side, setSide] = useState("all");
+  const [onlyEdited, setOnlyEdited] = useState(false);
+  const [showPrev, setShowPrev] = useState(false);
+  const [status, setStatus] = useState("");
+  const [confirmReset, setConfirmReset] = useState(false);
+  const [confirmRemove, setConfirmRemove] = useState(null);
+  const [fallback, setFallback] = useState("");
+  const fallbackRef = useRef(null);
+  const framed = inIframe();
+
+  const editedCount = list.filter(isEdited).length + ORIGINAL.filter((o) => !list.some((q) => q.id === o.id)).length;
+
+  const firstRun = useRef(true);
+  useEffect(() => {
+    if (firstRun.current) { firstRun.current = false; return; }
+    const t = setTimeout(() => {
+      try {
+        if (editedCount === 0) localStorage.removeItem(EDITS_KEY);
+        else localStorage.setItem(EDITS_KEY, JSON.stringify(list));
+        // um teste em andamento com as afirmações antigas deixaria de bater: recomeça do zero
+        localStorage.removeItem("afinidade2026:v1");
+        setStatus(editedCount ? "Edições salvas neste navegador" : "");
+      } catch (e) { setStatus("Não foi possível salvar neste navegador. Exporte o data.js para não perder as edições."); }
+    }, 400);
+    return () => clearTimeout(t);
+  }, [list, editedCount]);
+
+  useEffect(() => { if (fallback && fallbackRef.current) fallbackRef.current.select(); }, [fallback]);
+
+  const onChange = (id, field, value) => setList((l) => l.map((q) => (q.id === id ? { ...q, [field]: value } : q)));
+  const onRestore = (id) => setList((l) => l.map((q) => (q.id === id ? { ...ORIGINAL_BY_ID[id] } : q)));
+  const onRemove = (id) => {
+    if (confirmRemove !== id) { setConfirmRemove(id); setTimeout(() => setConfirmRemove((c) => (c === id ? null : c)), 4000); setStatus(`Clique de novo na lixeira da afirmação ${id} para remover.`); return; }
+    setList((l) => l.filter((q) => q.id !== id)); setConfirmRemove(null); setStatus(`Afirmação ${id} removida.`);
+  };
+  const add = () => {
+    const id = Math.max(0, ...list.map((q) => q.id), ...ORIGINAL.map((q) => q.id)) + 1;
+    const ax = axis === "all" ? 1 : Number(axis);
+    setList((l) => [...l, { id, axis: ax, tier: "extra", direction: 1, weight: 1, from: "PT", text: "Nova afirmação", measures: "", basis: "", refs: [], prev: null }]);
+    setQuery(""); setOnlyEdited(false);
+    setTimeout(() => { const el = document.getElementById(`text-${id}`); if (el) { el.focus(); el.select(); } }, 60);
+  };
+
+  const filtered = useMemo(() => {
+    const qn = query.trim().toLowerCase();
+    return list
+      .filter((q) => axis === "all" || q.axis === Number(axis))
+      .filter((q) => tier === "all" || q.tier === tier)
+      .filter((q) => side === "all" || q.direction === Number(side))
+      .filter((q) => !onlyEdited || isEdited(q))
+      .filter((q) => !qn || [q.text, q.measures, q.basis, q.prev].some((s) => (s || "").toLowerCase().includes(qn)))
+      .slice()
+      .sort((a, b) => a.axis - b.axis || a.id - b.id);
+  }, [list, query, axis, tier, side, onlyEdited]);
+
+  const copy = (text, label) => {
+    try {
+      navigator.clipboard.writeText(text).then(() => setStatus(`${label} copiado.`), () => setFallback(text));
+    } catch (e) { setFallback(text); }
+  };
+
+  return (
+    <>
+      <header className="sticky-top gutter border-b" style={{ borderColor: "var(--line)" }}>
+        <div className="mx-auto flex min-h-14 max-w-[1500px] flex-wrap items-center justify-between gap-3 py-2">
+          <div className="flex items-center gap-3">
+            <a href="index.html" className="btn btn-ghost -ml-3 px-3"><Ico n="ArrowLeft" size={18} /> Teste</a>
+            <h1 className="display text-xl font-extrabold">isentão? <span style={{ color: "var(--muted)", fontWeight: 600 }}>· editor de afirmações</span></h1>
+            <span className="chip mono">{list.length} afirmações</span>
+            {editedCount > 0 && <span className="chip chip-edit">{editedCount} alteradas</span>}
+          </div>
+          <div className="flex flex-wrap items-center gap-2">
+            <a href="index.html" className="btn btn-ink"><Ico n="Play" size={16} /> Testar no questionário</a>
+            {!framed && <button type="button" className="btn btn-line" onClick={() => download("data.js", buildDataJs(list), "text/javascript")}><Ico n="Download" size={16} /> Baixar data.js</button>}
+            <button type="button" className="btn btn-line" onClick={() => copy(buildDataJs(list), "data.js")}><Ico n="Copy" size={16} /> Copiar data.js</button>
+            {!framed
+              ? <button type="button" className="btn btn-line" onClick={() => download("afirmacoes.csv", buildCsv(list), "text/csv")}><Ico n="Sheet" size={16} /> Planilha (CSV)</button>
+              : <button type="button" className="btn btn-line" onClick={() => copy(buildCsv(list).slice(1), "CSV")}><Ico n="Sheet" size={16} /> Copiar CSV</button>}
+          </div>
+        </div>
+      </header>
+
+      <main className="gutter">
+        <div className="mx-auto flex max-w-[1500px] flex-col gap-5 py-6">
+          <p className="max-w-[90ch] text-muted">
+            Clique em qualquer célula para editar. As edições ficam salvas neste navegador e o questionário já passa a usá-las.
+            Para torná-las definitivas, use <strong className="text-ink">Baixar data.js</strong> e substitua o arquivo da pasta do projeto.
+            Linhas com a faixa roxa foram alteradas.
+          </p>
+
+          <BalancePanel list={list} />
+
+          {fallback && (
+            <div className="card flex flex-col gap-2 p-4">
+              <label htmlFor="fallback" className="text-sm text-muted">Não foi possível copiar automaticamente. O conteúdo está selecionado: use Ctrl+C.</label>
+              <textarea id="fallback" ref={fallbackRef} readOnly value={fallback} rows={6} className="ctrl mono w-full text-xs" style={{ borderRadius: 12 }} />
+              <button type="button" className="btn btn-ghost self-start" onClick={() => setFallback("")}>Fechar</button>
+            </div>
+          )}
+
+          <div className="flex flex-wrap items-center gap-2">
+            <label className="sr-only" htmlFor="busca">Buscar</label>
+            <input id="busca" className="ctrl min-w-0 flex-1 sm:max-w-xs" placeholder="Buscar no texto, base ou versão anterior" value={query} onChange={(e) => setQuery(e.target.value)} />
+            <select id="f-eixo" aria-label="Filtrar por eixo" className="ctrl" value={axis} onChange={(e) => setAxis(e.target.value)}>
+              <option value="all">Todos os eixos</option>
+              {AXES.map((a) => <option key={a.id} value={a.id}>{a.id}. {a.name}</option>)}
+            </select>
+            <select id="f-camada" aria-label="Filtrar por camada" className="ctrl" value={tier} onChange={(e) => setTier(e.target.value)}>
+              <option value="all">Núcleo e extra</option>
+              <option value="core">Só núcleo (30)</option>
+              <option value="extra">Só extra (50)</option>
+            </select>
+            <select id="f-lado" aria-label="Filtrar por lado" className="ctrl" value={side} onChange={(e) => setSide(e.target.value)}>
+              <option value="all">Os dois lados</option>
+              <option value="1">Só Lula</option>
+              <option value="-1">Só Flávio</option>
+            </select>
+            <label className="ctrl inline-flex cursor-pointer items-center gap-2" htmlFor="f-prev">
+              <input id="f-prev" type="checkbox" checked={showPrev} onChange={(e) => setShowPrev(e.target.checked)} /> Mostrar versão anterior
+            </label>
+            <label className="ctrl inline-flex cursor-pointer items-center gap-2" htmlFor="f-edit">
+              <input id="f-edit" type="checkbox" checked={onlyEdited} onChange={(e) => setOnlyEdited(e.target.checked)} /> Só alteradas
+            </label>
+            <span className="text-sm text-muted">{filtered.length} de {list.length}</span>
+          </div>
+
+          <div className="card overflow-x-auto" style={{ maxHeight: "none" }}>
+            <table>
+              <thead>
+                <tr>
+                  <th>#</th><th>Eixo · Camada</th><th>Lado · Peso · Origem</th><th>Afirmação</th><th>O que revela</th><th>Base factual</th><th>Fontes</th><th><span className="sr-only">Ações</span></th>
+                </tr>
+              </thead>
+              <tbody>
+                {filtered.map((q, i) => (
+                  <Row key={q.id} q={q} showPrev={showPrev} onChange={onChange} onRestore={onRestore} onRemove={onRemove}
+                       axisStart={i > 0 && filtered[i - 1].axis !== q.axis} />
+                ))}
+                {filtered.length === 0 && (
+                  <tr><td colSpan={8} className="p-6 text-center text-muted">Nenhuma afirmação com esses filtros.</td></tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <button type="button" className="btn btn-line" onClick={add}><Ico n="Plus" size={16} /> Adicionar afirmação</button>
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="text-sm text-muted" aria-live="polite">{status}</span>
+              {editedCount > 0 && (confirmReset
+                ? <>
+                    <span className="text-sm">Descartar todas as {editedCount} alterações?</span>
+                    <button type="button" className="btn btn-ink" onClick={() => { setList(ORIGINAL.map((q) => ({ ...q }))); setConfirmReset(false); setStatus("Afirmações originais restauradas."); }}>Sim, descartar</button>
+                    <button type="button" className="btn btn-ghost" onClick={() => setConfirmReset(false)}>Cancelar</button>
+                  </>
+                : <button type="button" className="btn btn-ghost" onClick={() => setConfirmReset(true)}><Ico n="RotateCcw" size={16} /> Voltar às originais</button>)}
+            </div>
+          </div>
+
+          <details className="card p-4 text-sm">
+            <summary className="cursor-pointer font-semibold">Fontes ({Object.keys(SOURCES).length})</summary>
+            <ol className="mt-3 grid gap-1.5 md:grid-cols-2">
+              {Object.entries(SOURCES).map(([n, s]) => (
+                <li key={n} className="flex min-w-0 gap-2">
+                  <span className="mono flex-none text-muted">{n}.</span>
+                  <a href={s.url} target="_blank" rel="noopener noreferrer" className="min-w-0 break-words underline decoration-[var(--line)] underline-offset-2">{s.title}</a>
+                </li>
+              ))}
+            </ol>
+          </details>
+        </div>
+      </main>
+    </>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<Editor />);
+</script>
+</body>
+</html>
