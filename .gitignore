@@ -3,3 +3,6 @@ Thumbs.db
 node_modules/
 .vscode/
 *.log
+
+# ferramenta interna, não publicar
+editor.html

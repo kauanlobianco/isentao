@@ -11,7 +11,6 @@ Teste de afinidade eleitoral para o 2º turno da eleição presidencial de 2026.
 - **Questionário sem distração:** barra de progresso, avanço automático, botão de voltar e atalhos de teclado (1 a 5 respondem, ← volta).
 - **Resultado completo:** veredito ("Isentão nada." ou "Isentão confirmado."), placar geral, barras por eixo, seus destaques e o Raio-X visual de cada afirmação, com a proposta real e as fontes.
 - **Arte para compartilhar:** pôster gerado no navegador nos formatos Stories (1080 × 1920) e Feed (1080 × 1350), com tema vermelho (Lula), azul (Flávio) ou dividido (no meio).
-- **Editor de afirmações** (`editor.html`): tabela para revisar e editar textos, lados, pesos e fontes, com checagem automática de equilíbrio entre os dois lados.
 
 ## Como rodar
 
@@ -27,7 +26,6 @@ Também funciona direto no **GitHub Pages**: em *Settings → Pages*, escolha a 
 | Arquivo | O que é |
 |---|---|
 | `index.html` | O app: início, questionário, resultado e arte de compartilhamento |
-| `editor.html` | Editor das afirmações em tabela |
 | `data.js` | Base de dados: eixos, as 50 afirmações, escala de respostas e fontes |
 
 ## Como o resultado é calculado
@@ -46,9 +44,7 @@ A ordem das perguntas é embaralhada em blocos de 5, com uma afirmação de cada
 
 ## Editando as afirmações
 
-1. Abra `editor.html`.
-2. Edite na tabela. As mudanças ficam salvas no navegador e o questionário já passa a usá-las.
-3. Para tornar definitivo, clique em **Baixar data.js** e substitua o arquivo do projeto.
+As afirmações ficam em `data.js`, no array `QUESTIONS`. Cada uma tem eixo, camada (núcleo ou extra), direção, peso, texto, base factual e fontes. Ao editar, mantenha o mesmo número de afirmações e a mesma soma de pesos para os dois lados em cada eixo.
 
 ## Fontes
 
