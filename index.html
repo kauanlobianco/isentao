@@ -182,7 +182,7 @@ const { useState, useEffect, useMemo, useRef, useCallback } = React;
 const { AXES, SCALE, SOURCES } = window.AFINIDADE_DATA;
 
 /* Edições feitas no editor.html ficam neste navegador e substituem as afirmações do data.js */
-const EDITS_KEY = "afinidade2026:edits-v3"; // muda a cada nova versão do data.js para não misturar edições antigas
+const EDITS_KEY = "afinidade2026:edits-v4"; // muda a cada nova versão do data.js para não misturar edições antigas
 function loadEdits() {
   try {
     const raw = localStorage.getItem(EDITS_KEY);
@@ -457,7 +457,7 @@ function SectionHead({ n, kicker, title, id, aside }) {
 }
 
 const STEPS = [
-  ["Responda", "30 ou 50 frases sobre propostas para o país."],
+  ["Responda", "30 ou 60 frases sobre propostas para o país."],
   ["Sem saber de quem é", "Você julga a ideia, não o candidato."],
   ["Veja o resultado", "Com quem você combina, tema por tema."],
 ];
@@ -616,7 +616,7 @@ function Choose({ onPick, onBack }) {
           <FormatCard
             v={VERSIONS.long}
             featured
-            desc="10 afirmações por tema. O raio-x completo, com mais precisão em cada um dos 5 eixos."
+            desc="12 afirmações por tema. O raio-x completo, com mais precisão em cada um dos 5 eixos."
             cta="Começar a versão completa"
             onPick={() => onPick("long")}
           />

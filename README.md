@@ -6,7 +6,7 @@ Teste de afinidade eleitoral para o 2º turno da eleição presidencial de 2026.
 
 ## O que tem
 
-- **Duas versões:** curta (30 afirmações) e aprofundada (50 afirmações).
+- **Duas versões:** curta (30 afirmações) e completa (60 afirmações).
 - **5 eixos, 10 polos:** Economia e Estado · Trabalho e Social · Segurança e Justiça · Educação e Saúde · Sociedade, Clima e Institucional.
 - **Questionário sem distração:** barra de progresso, avanço automático, botão de voltar e atalhos de teclado (1 a 5 respondem, ← volta).
 - **Resultado completo:** veredito ("Isentão nada." ou "Isentão confirmado."), placar geral, barras por eixo, seus destaques e o Raio-X visual de cada afirmação, com a proposta real e as fontes.
@@ -26,7 +26,7 @@ Também funciona direto no **GitHub Pages**: em *Settings → Pages*, escolha a 
 | Arquivo | O que é |
 |---|---|
 | `index.html` | O app: início, questionário, resultado e arte de compartilhamento |
-| `data.js` | Base de dados: eixos, as 50 afirmações, escala de respostas e fontes |
+| `data.js` | Base de dados: eixos, as 60 afirmações, escala de respostas e fontes |
 
 ## Como o resultado é calculado
 
