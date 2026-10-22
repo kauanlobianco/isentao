@@ -1153,11 +1153,12 @@ function AnswerScale({ value }) {
 /* Mapa de quadradinhos: uma resposta por quadrado, na cor do lado para onde puxou */
 function DotMap({ qs, answers, size = 12 }) {
   return (
-    <span className="flex flex-wrap gap-1" aria-hidden="true">
+    // uma linha só: os quadrados encolhem para caber (até 12px cada), seja qual for o número de afirmações
+    <span className="grid w-full max-w-full gap-[3px]" style={{ gridTemplateColumns: `repeat(${qs.length}, minmax(0, ${size}px))` }} aria-hidden="true">
       {qs.map((q) => {
         const e = effectOf(answers, q);
         const bg = e > 0 ? "var(--lula)" : e < 0 ? "var(--flavio)" : "var(--line)";
-        return <span key={q.id} title={q.text} className="rounded-[3px]" style={{ width: size, height: size, background: bg, opacity: Math.abs(e) === 1 ? 0.45 : 1 }} />;
+        return <span key={q.id} title={q.text} className="block rounded-[3px]" style={{ aspectRatio: "1 / 1", width: "100%", background: bg, opacity: Math.abs(e) === 1 ? 0.45 : 1 }} />;
       })}
     </span>
   );
