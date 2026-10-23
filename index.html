@@ -267,6 +267,44 @@ Object.values(VERSIONS).forEach((v) => {
 });
 
 /*
+ * Comparação com amigos sem banco de dados: as respostas viajam no próprio link.
+ * Formato: ?c=<revisão dos dados><s|l><um dígito por pergunta: resposta+2, ou "-" se não respondeu>&n=<nome>
+ * Mude DATA_REV sempre que as perguntas mudarem, para links antigos não serem lidos errado.
+ */
+const DATA_REV = "4";
+const CODE_ITEMS = [...QUESTIONS].sort((a, b) => a.id - b.id).concat(CHOICES);
+const CHALLENGE_KEY = "afinidade2026:challenge";
+
+function encodeChallenge(version, answers, name) {
+  const digits = CODE_ITEMS.map((it) => (typeof answers[it.id] === "number" ? String(answers[it.id] + 2) : "-")).join("");
+  const params = new URLSearchParams({ c: `${DATA_REV}${version === "long" ? "l" : "s"}${digits}` });
+  const clean = (name || "").trim().slice(0, 24);
+  if (clean) params.set("n", clean);
+  return `https://${SITE_URL}/?${params.toString()}`;
+}
+function decodeChallenge(search) {
+  try {
+    const p = new URLSearchParams(search);
+    const c = p.get("c");
+    if (!c) return null;
+    if (!c.startsWith(DATA_REV)) return { stale: true };
+    const vch = c.charAt(DATA_REV.length);
+    const digits = c.slice(DATA_REV.length + 1);
+    if (!/^[sl]$/.test(vch) || digits.length !== CODE_ITEMS.length) return { stale: true };
+    const answers = {};
+    CODE_ITEMS.forEach((it, i) => { const ch = digits[i]; if (ch >= "0" && ch <= "4") answers[it.id] = Number(ch) - 2; });
+    const name = (p.get("n") || "").trim().slice(0, 24) || "Seu amigo";
+    return { version: vch === "l" ? "long" : "short", answers, name };
+  } catch (e) { return null; }
+}
+function loadChallenge() {
+  try { const raw = localStorage.getItem(CHALLENGE_KEY); return raw ? JSON.parse(raw) : null; } catch (e) { return null; }
+}
+function persistChallenge(ch) {
+  try { if (ch) localStorage.setItem(CHALLENGE_KEY, JSON.stringify(ch)); else localStorage.removeItem(CHALLENGE_KEY); } catch (e) {}
+}
+
+/*
  * Embaralhamento estratificado: blocos de 5 afirmações com exatamente uma de cada eixo,
  * alternando a direção (Polo Lula / Polo Flávio) ao longo de toda a sequência
  * e evitando o mesmo eixo duas vezes seguidas na virada de bloco.
@@ -481,7 +519,7 @@ const STEPS = [
   ["Veja o resultado", "Com quem você combina, tema por tema."],
 ];
 
-function Home({ onStart, saved, onResume, onViewLast }) {
+function Home({ onStart, saved, onResume, onViewLast, challenge, onAcceptChallenge, onDismissChallenge }) {
   const savedQuiz = saved && saved.screen === "quiz";
   const savedResult = saved && saved.screen === "results";
   const coverText = { color: "var(--cover-ink)" };
@@ -504,6 +542,27 @@ function Home({ onStart, saved, onResume, onViewLast }) {
         <section className="gutter">
           <div className="mx-auto grid max-w-6xl gap-12 pb-16 pt-12 md:pb-20 md:pt-16 lg:grid-cols-[1.25fr_.75fr] lg:items-center">
             <div className="flex min-w-0 flex-col gap-7">
+              {challenge && !challenge.stale && (
+                <div className="flex flex-col gap-3 rounded-2xl p-4 sm:flex-row sm:items-center sm:justify-between sm:p-5" style={{ background: "var(--violet-deep)", border: "1px solid var(--violet-line)" }}>
+                  <div className="flex items-start gap-3">
+                    <span className="grid h-10 w-10 flex-none place-items-center rounded-full" style={{ background: "var(--cover-ink)", color: "var(--violet-deep)" }}><Ico n="Users" size={18} /></span>
+                    <p style={coverText}>
+                      <strong>{challenge.name}</strong> fez o teste e quer comparar as ideias com as suas.
+                      <span className="block text-sm" style={coverMuted}>Responda e veja, no final, onde vocês concordam e onde discordam.</span>
+                    </p>
+                  </div>
+                  <div className="flex flex-none items-center gap-3">
+                    <button type="button" className="btn btn-light px-5 py-3" onClick={onAcceptChallenge}>Aceitar e começar <Ico n="ArrowRight" size={18} /></button>
+                    <button type="button" className="text-sm underline underline-offset-4" style={coverMuted} onClick={onDismissChallenge}>Agora não</button>
+                  </div>
+                </div>
+              )}
+              {challenge && challenge.stale && (
+                <p className="rounded-xl p-3 text-sm" style={{ background: "rgba(255,255,255,.06)", ...coverMuted }}>
+                  O link de comparação que você abriu é de uma versão antiga do teste. Faça o teste e mande o seu link para quem te enviou.
+                  <button type="button" className="ml-2 underline underline-offset-4" onClick={onDismissChallenge}>Fechar</button>
+                </p>
+              )}
               <h1 className="display text-[3.3rem] font-semibold leading-[0.98] sm:text-7xl lg:text-[6.2rem]" style={coverText}>
                 Lula, Flávio ou{" "}
                 <span className="whitespace-nowrap"><Wordmark size="1em" /></span>
@@ -1132,7 +1191,7 @@ function ShareModal({ results, version, onClose, initialFormat = "story" }) {
 function shareCaption(results) {
   const copy = cardCopy(results);
   const [l, f] = split(results.lula);
-  const head = copy.theme === "meio" ? `Isentão confirmado: Lula ${l}% × ${f}% Flávio.` : `Isentão nada: ${copy.big} ${copy.name.toLowerCase()}.`;
+  const head = copy.theme === "meio" ? `Isentão confirmado: Lula ${l}% × ${f}% Flávio.` : `Isentão nada: ${copy.big} com ${copy.theme === "lula" ? "Lula" : "Flávio"}.`;
   return `${head} E você? Faça o teste: https://${SITE_URL}`;
 }
 function canShareImage(img, fileName) {
@@ -1147,7 +1206,7 @@ async function shareImage(img, fileName, results) {
 }
 
 /* Tela que abre logo ao terminar o teste: a arte vem primeiro, com o compartilhamento em destaque */
-function Reveal({ version, answers, onContinue, onRestart }) {
+function Reveal({ version, answers, challenge, onContinue, onRestart }) {
   const results = useMemo(() => computeResults(version, answers), [version, answers]);
   const [format, setFormat] = useState("story");
   const [img, setImg] = useState(null);
@@ -1203,43 +1262,61 @@ function Reveal({ version, answers, onContinue, onRestart }) {
         </div>
       </header>
       <main className="gutter">
-        <div className="mx-auto flex max-w-3xl flex-col items-center gap-6 pb-12 pt-6 text-center">
+        <div className="mx-auto flex max-w-3xl flex-col items-center gap-5 pt-5 text-center" style={{ paddingBottom: "calc(230px + env(safe-area-inset-bottom, 0px))" }}>
           <div className="flex flex-col gap-1">
-            <span className="kicker" style={coverMuted}>Seu resultado está pronto</span>
-            <h1 className="display text-3xl font-semibold sm:text-4xl" style={coverText}>Compartilhe a sua arte</h1>
+            <span className="kicker" style={coverMuted}>Passo 1 de 2 · Sua arte</span>
+            <h1 className="display text-3xl font-semibold sm:text-4xl" style={coverText}>Compartilhe o seu resultado</h1>
           </div>
 
-          <div className="grid w-full place-items-center" style={{ minHeight: "52vh" }}>
+          <div className="grid w-full place-items-center" style={{ minHeight: "44vh" }}>
             {img
-              ? <img src={img.url} alt="Arte com o seu resultado no isentão?" className="fade-in block rounded-xl" style={{ maxHeight: "62vh", width: "auto", maxWidth: "100%", boxShadow: "0 30px 60px -24px rgba(0,0,0,.8)" }} />
+              ? <img src={img.url} alt="Arte com o seu resultado no isentão?" className="fade-in block rounded-xl" style={{ maxHeight: "calc(100dvh - 380px)", minHeight: 260, width: "auto", maxWidth: "100%", boxShadow: "0 30px 60px -24px rgba(0,0,0,.8)" }} />
               : <span className="text-sm" style={coverMuted}>Criando sua arte…</span>}
           </div>
+          <p className="text-sm" style={coverMuted} aria-live="polite">
+            {status || (format === "story" ? "No tamanho certo para Stories e Status do WhatsApp." : "No tamanho certo para o feed.")}
+          </p>
+          <button type="button" className="text-sm underline underline-offset-4" style={coverMuted} onClick={onRestart}>Refazer o teste</button>
+        </div>
+      </main>
 
-          <div className="flex w-full max-w-sm flex-col gap-3">
+      {/* Barra fixa: compartilhar e, logo abaixo, a continuação para o resultado completo */}
+      <div
+        className="fixed inset-x-0 bottom-0 z-40 border-t"
+        style={{
+          background: "var(--cover-bg)", borderColor: "var(--cover-line)",
+          paddingTop: 14, paddingBottom: "max(14px, env(safe-area-inset-bottom, 0px))",
+          paddingLeft: "max(16px, env(safe-area-inset-left, 0px))", paddingRight: "max(16px, env(safe-area-inset-right, 0px))",
+          boxShadow: "0 -20px 40px -20px rgba(0,0,0,.7)",
+        }}
+      >
+        <div className="mx-auto flex max-w-md flex-col gap-2.5">
+          <div className="flex gap-2.5">
             {canShare ? (
-              <button type="button" className="btn btn-light w-full py-4 text-lg" disabled={!img} onClick={() => shareImage(img, fileName, results)}>
-                <Ico n="Share2" size={20} /> Compartilhar
+              <button type="button" className="btn btn-light flex-1 py-3.5 text-base" disabled={!img} onClick={() => shareImage(img, fileName, results)}>
+                <Ico n="Share2" size={19} /> Compartilhar
               </button>
             ) : (
-              <button type="button" className="btn btn-light w-full py-4 text-lg" disabled={!img} onClick={framed ? copyImage : download}>
-                <Ico n={framed ? "Copy" : "Download"} size={20} /> {framed ? "Copiar imagem" : "Salvar imagem"}
+              <button type="button" className="btn btn-light flex-1 py-3.5 text-base" disabled={!img} onClick={framed ? copyImage : download}>
+                <Ico n={framed ? "Copy" : "Download"} size={19} /> {framed ? "Copiar imagem" : "Salvar imagem"}
               </button>
             )}
             {canShare && !framed && (
-              <button type="button" className="btn w-full py-3 text-base" style={{ border: "1px solid var(--cover-line)", ...coverText }} disabled={!img} onClick={download}>
-                <Ico n="Download" size={18} /> Salvar imagem
+              <button type="button" className="btn px-4 py-3.5" style={{ border: "1px solid var(--cover-line)", ...coverText }} disabled={!img} onClick={download} aria-label="Salvar imagem">
+                <Ico n="Download" size={19} />
               </button>
             )}
-            <p className="min-h-[1.25rem] text-sm" style={coverMuted} aria-live="polite">
-              {status || (format === "story" ? "No tamanho certo para Stories e Status do WhatsApp." : "No tamanho certo para o feed.")}
-            </p>
-            <button type="button" className="btn w-full py-3 text-base" style={{ background: "transparent", ...coverText }} onClick={onContinue}>
-              Ver meu resultado completo <Ico n="ArrowRight" size={18} />
-            </button>
-            <button type="button" className="text-sm underline underline-offset-4" style={coverMuted} onClick={onRestart}>Refazer o teste</button>
           </div>
+          <button type="button" className="btn group w-full justify-between rounded-2xl px-5 py-3.5 text-left" style={{ background: "var(--violet-deep)", border: "1px solid var(--violet-line)", ...coverText }} onClick={onContinue}>
+            <span className="flex flex-col">
+              <span className="kicker" style={coverMuted}>Passo 2 de 2</span>
+              <span className="text-base font-bold">{challenge && !challenge.stale ? `Ver a comparação com ${challenge.name}` : "Ver meu resultado completo"}</span>
+              <span className="text-xs font-normal" style={coverMuted}>{challenge && !challenge.stale ? "Onde vocês concordam e discordam, tema por tema" : "Placar, os 5 temas e o raio-x de cada resposta"}</span>
+            </span>
+            <Ico n="ArrowRight" size={22} className="flex-none transition-transform group-hover:translate-x-1" />
+          </button>
         </div>
-      </main>
+      </div>
     </div>
   );
 }
@@ -1285,7 +1362,7 @@ function AxisRow({ a }) {
         <h3 className="flex items-center gap-2 font-bold">
           <Ico n={a.icon} size={18} className="text-muted" /> {a.name}
         </h3>
-        <span className={tagClass}>{tagText}</span>
+        <span className={tagClass + " max-w-full"} style={{ whiteSpace: "normal" }}>{tagText}</span>
       </div>
       <SplitBar lula={a.lula} height={34} label={`${a.name}: ${a.lulaPole} ${l}%, ${a.flavioPole} ${f}%`} />
       <div className="flex justify-between gap-4 text-sm">
@@ -1567,7 +1644,142 @@ function Highlights({ results, answers }) {
   );
 }
 
-function Results({ version, answers, onRestart, onHome }) {
+/* ───────────── Comparar com um amigo ───────────── */
+
+function InviteCard({ version, answers, results, friendName }) {
+  const [name, setName] = useState(() => { try { return localStorage.getItem("afinidade2026:myname") || ""; } catch (e) { return ""; } });
+  const [status, setStatus] = useState("");
+  const [fallback, setFallback] = useState("");
+  const fbRef = useRef(null);
+  const url = encodeChallenge(version, answers, name);
+  const copy = cardCopy(results);
+  const text = `${copy.theme === "meio" ? "Deu isentão confirmado pra mim" : `Deu ${copy.big} com ${copy.theme === "lula" ? "Lula" : "Flávio"} pra mim`} no isentão?. Faça o teste e compare suas ideias com as minhas:`;
+  const canShareLink = (() => { try { return !inIframe() && !!navigator.share; } catch (e) { return false; } })();
+
+  useEffect(() => { try { localStorage.setItem("afinidade2026:myname", name); } catch (e) {} }, [name]);
+  useEffect(() => { if (fallback && fbRef.current) fbRef.current.select(); }, [fallback]);
+
+  const share = async () => {
+    try { await navigator.share({ title: "Compare suas ideias comigo no isentão?", text, url }); } catch (e) { /* cancelado */ }
+  };
+  const copyLink = () => {
+    const full = `${text} ${url}`;
+    try { navigator.clipboard.writeText(full).then(() => setStatus("Link copiado. Mande para quem você quiser."), () => setFallback(full)); }
+    catch (e) { setFallback(full); }
+  };
+
+  return (
+    <section className="flex flex-col gap-4 rounded-[22px] p-6 sm:p-8" style={{ background: "var(--violet-deep)", color: "var(--cover-ink)" }} aria-labelledby="convite-title">
+      <span className="kicker" style={{ color: "var(--cover-muted)" }}>Compare com um amigo</span>
+      <h2 id="convite-title" className="display text-3xl font-semibold leading-tight sm:text-4xl">
+        {friendName ? `Mande o seu resultado de volta para ${friendName}` : "Será que seus amigos pensam como você?"}
+      </h2>
+      <p style={{ color: "var(--cover-muted)" }}>
+        Envie o seu link. Quem fizer o teste por ele vê, no final, onde vocês concordam e onde discordam, tema por tema.
+      </p>
+      <label htmlFor="compare-name" className="text-sm font-semibold">Seu nome, para seu amigo saber de quem é o desafio</label>
+      <input
+        id="compare-name"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+        maxLength={24}
+        placeholder="Ex.: Ana"
+        className="w-full rounded-xl px-4 py-3 text-base"
+        style={{ background: "rgba(255,255,255,.08)", border: "1px solid var(--violet-line)", color: "var(--cover-ink)" }}
+      />
+      <div className="flex flex-col gap-2 sm:flex-row">
+        {canShareLink && (
+          <button type="button" className="btn btn-light flex-1 py-3.5 text-base" onClick={share}>
+            <Ico n="Send" size={18} /> Enviar convite
+          </button>
+        )}
+        <button type="button" className={"btn flex-1 py-3.5 text-base " + (canShareLink ? "" : "btn-light")} style={canShareLink ? { border: "1px solid var(--violet-line)", color: "var(--cover-ink)" } : undefined} onClick={copyLink}>
+          <Ico n="Link" size={18} /> Copiar link
+        </button>
+      </div>
+      <p className="text-sm" style={{ color: "var(--cover-muted)" }} aria-live="polite">{status}</p>
+      {fallback && (
+        <textarea ref={fbRef} readOnly value={fallback} rows={3} aria-label="Link para copiar" className="mono w-full rounded-xl p-3 text-xs" style={{ background: "rgba(255,255,255,.08)", color: "var(--cover-ink)", border: "1px solid var(--violet-line)" }} />
+      )}
+    </section>
+  );
+}
+
+function CompareCard({ mine, mineAnswers, challenge, onClear }) {
+  const theirs = useMemo(() => computeResults(challenge.version, challenge.answers), [challenge]);
+  const name = challenge.name;
+  const common = ALL_ITEMS.filter((q) => typeof mineAnswers[q.id] === "number" && typeof challenge.answers[q.id] === "number");
+  const eff = (ans, q) => ans[q.id] * q.direction;
+  const sign = (x) => (x > 0 ? 1 : x < 0 ? -1 : 0);
+  const same = common.filter((q) => sign(eff(mineAnswers, q)) === sign(eff(challenge.answers, q))).length;
+  const agree = common.length ? Math.round((same / common.length) * 100) : 0;
+  const ranked = common.map((q) => ({ q, a: eff(mineAnswers, q), b: eff(challenge.answers, q) }));
+  const disagree = ranked.filter((x) => sign(x.a) !== sign(x.b) && x.a !== 0 && x.b !== 0)
+    .sort((x, y) => Math.abs(y.a - y.b) - Math.abs(x.a - x.b)).slice(0, 3);
+  const together = ranked.filter((x) => sign(x.a) === sign(x.b) && x.a !== 0)
+    .sort((x, y) => Math.abs(y.a + y.b) - Math.abs(x.a + x.b)).slice(0, 3);
+  const [ml, mf] = split(mine.lula), [tl, tf] = split(theirs.lula);
+  const Person = ({ who, l, f, lula }) => (
+    <div className="flex flex-col gap-2">
+      <div className="flex items-baseline justify-between gap-3">
+        <span className="font-bold">{who}</span>
+        <span className="mono text-sm"><span style={{ color: "var(--lula-ink)" }}>Lula {l}%</span> · <span style={{ color: "var(--flavio-ink)" }}>{f}% Flávio</span></span>
+      </div>
+      <SplitBar lula={lula} height={14} showText={false} label={`${who}: Lula ${l}%, Flávio ${f}%`} />
+    </div>
+  );
+  const Pair = ({ x }) => (
+    <li className="flex flex-col gap-1.5 rounded-xl p-3" style={{ background: "var(--surface)", border: "1px solid var(--line)" }}>
+      <span className="text-[0.95rem] font-semibold leading-snug">{x.q.text}</span>
+      <span className="text-sm text-muted">Você: {answerText(x.q, mineAnswers[x.q.id]).toLowerCase()} · {name}: {answerText(x.q, challenge.answers[x.q.id]).toLowerCase()}</span>
+    </li>
+  );
+  return (
+    <section className="card flex flex-col gap-6 p-5 sm:p-8" aria-labelledby="compare-title">
+      <div className="flex flex-wrap items-start justify-between gap-3">
+        <div>
+          <span className="kicker text-muted">Comparação</span>
+          <h2 id="compare-title" className="display mt-1 text-4xl font-semibold">Você × {name}</h2>
+        </div>
+        <button type="button" className="btn btn-ghost px-3 text-sm" onClick={onClear}>Remover comparação</button>
+      </div>
+      <p className="display text-2xl font-semibold leading-snug sm:text-3xl">
+        Vocês concordam em <span className="numeral">{agree}%</span> das respostas.
+      </p>
+      <div className="flex flex-col gap-4">
+        <Person who="Você" l={ml} f={mf} lula={mine.lula} />
+        <Person who={name} l={tl} f={tf} lula={theirs.lula} />
+      </div>
+      <div className="flex flex-col gap-4 border-t hairline pt-5">
+        <h3 className="kicker text-muted">Tema por tema</h3>
+        {mine.axes.map((a, i) => {
+          const t = theirs.axes[i];
+          return (
+            <div key={a.id} className="flex flex-col gap-1.5">
+              <span className="flex items-center gap-2 text-sm font-semibold"><Ico n={a.icon} size={15} className="text-muted" />{a.name}</span>
+              <div className="grid grid-cols-[3.2rem_1fr] items-center gap-x-3 gap-y-1.5 text-xs text-muted">
+                <span>Você</span><SplitBar lula={a.lula} height={12} showText={false} label={`Você em ${a.name}`} />
+                <span className="truncate">{name}</span><SplitBar lula={t.lula} height={12} showText={false} label={`${name} em ${a.name}`} />
+              </div>
+            </div>
+          );
+        })}
+      </div>
+      <div className="grid gap-4 md:grid-cols-2">
+        <div className="flex flex-col gap-2">
+          <h3 className="font-bold">Onde vocês mais discordam</h3>
+          {disagree.length ? <ul className="flex flex-col gap-2">{disagree.map((x) => <Pair key={x.q.id} x={x} />)}</ul> : <p className="text-sm text-muted">Nenhuma discordância forte. Vocês pensam parecido.</p>}
+        </div>
+        <div className="flex flex-col gap-2">
+          <h3 className="font-bold">Onde vocês mais concordam</h3>
+          {together.length ? <ul className="flex flex-col gap-2">{together.map((x) => <Pair key={x.q.id} x={x} />)}</ul> : <p className="text-sm text-muted">Vocês não ficaram do mesmo lado em nenhuma resposta firme.</p>}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Results({ version, answers, onRestart, onHome, challenge, onClearChallenge }) {
   const results = useMemo(() => computeResults(version, answers), [version, answers]);
   const [gl, gf] = split(results.lula);
   const [openAxis, setOpenAxis] = useState(null);
@@ -1653,7 +1865,13 @@ function Results({ version, answers, onRestart, onHome }) {
             )}
           </section>
 
+          {challenge && !challenge.stale && (
+            <CompareCard mine={results} mineAnswers={answers} challenge={challenge} onClear={onClearChallenge} />
+          )}
+
           <ShareTeaser results={results} version={version} onOpen={(f) => setShareOpen(f)} />
+
+          <InviteCard version={version} answers={answers} results={results} friendName={challenge && !challenge.stale ? challenge.name : ""} />
 
           {/* 5 eixos */}
           <section className="card p-5 sm:p-8" aria-labelledby="eixos-res-title">
@@ -1765,6 +1983,17 @@ function Footer({ compact }) {
 
 function App() {
   const [saved, setSaved] = useState(() => loadSaved());
+  // desafio de um amigo: chega pelo link (?c=...) e fica guardado até a pessoa remover
+  const [challenge, setChallenge] = useState(() => {
+    const fromUrl = decodeChallenge(window.location.search);
+    if (fromUrl) {
+      persistChallenge(fromUrl);
+      try { window.history.replaceState(null, "", window.location.pathname); } catch (e) {}
+      return fromUrl;
+    }
+    return loadChallenge();
+  });
+  const clearChallenge = () => { persistChallenge(null); setChallenge(null); };
   const [state, setState] = useState({ screen: "home", version: "short", order: [], answers: {}, index: 0 });
 
   useEffect(() => { window.scrollTo(0, 0); }, [state.screen]);
@@ -1807,10 +2036,10 @@ function App() {
     return <Quiz {...state} onAnswer={onAnswer} onBack={onBack} onExit={goHome} />;
   }
   if (state.screen === "reveal") {
-    return <Reveal version={state.version} answers={state.answers} onContinue={() => setState((p) => ({ ...p, screen: "results" }))} onRestart={() => setState((p) => ({ ...p, screen: "choose" }))} />;
+    return <Reveal version={state.version} answers={state.answers} challenge={challenge} onContinue={() => setState((p) => ({ ...p, screen: "results" }))} onRestart={() => setState((p) => ({ ...p, screen: "choose" }))} />;
   }
   if (state.screen === "results") {
-    return <Results version={state.version} answers={state.answers} onRestart={() => setState((p) => ({ ...p, screen: "choose" }))} onHome={goHome} />;
+    return <Results version={state.version} answers={state.answers} challenge={challenge} onClearChallenge={clearChallenge} onRestart={() => setState((p) => ({ ...p, screen: "choose" }))} onHome={goHome} />;
   }
   if (state.screen === "choose") {
     return <Choose onPick={start} onBack={goHome} />;
@@ -1818,6 +2047,9 @@ function App() {
   return (
     <Home
       saved={saved}
+      challenge={challenge}
+      onAcceptChallenge={() => challenge && !challenge.stale && start(challenge.version)}
+      onDismissChallenge={clearChallenge}
       onStart={() => setState((p) => ({ ...p, screen: "choose" }))}
       onResume={() => saved && setState({ ...saved, screen: "quiz" })}
       onViewLast={() => saved && setState({ ...saved, screen: "results" })}

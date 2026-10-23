@@ -11,6 +11,7 @@ Teste de afinidade eleitoral para o 2º turno da eleição presidencial de 2026.
 - **Questionário sem distração:** barra de progresso, avanço automático, botão de voltar e atalhos de teclado (1 a 5 respondem, ← volta).
 - **Resultado completo:** veredito ("Isentão nada." ou "Isentão confirmado."), placar geral, barras por eixo, seus destaques e o Raio-X visual de cada afirmação, com a proposta real e as fontes.
 - **Arte para compartilhar:** pôster gerado no navegador nos formatos Stories (1080 × 1920) e Feed (1080 × 1350), com tema vermelho (Lula), azul (Flávio) ou dividido (no meio).
+- **Compare com um amigo:** o resultado gera um link com as respostas codificadas (`?c=…&n=Nome`). Quem abre o link faz a mesma versão do teste e vê, no final, a concordância entre os dois, os placares lado a lado e onde mais divergem. Não há banco de dados: tudo viaja no link.
 
 ## Como rodar
 
