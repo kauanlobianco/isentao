@@ -1060,7 +1060,7 @@ function ShareModal({ results, version, onClose, initialFormat = "story" }) {
   };
   const share = async () => {
     try {
-      await navigator.share({ files: [new File([img.blob], fileName, { type: "image/png" })], title: `Meu resultado no ${BRAND.name}?` });
+      await navigator.share({ files: [new File([img.blob], fileName, { type: "image/png" })], title: `Meu resultado no ${BRAND.name}?`, text: shareCaption(results) });
     } catch (e) { /* o usuário cancelou ou o navegador recusou */ }
   };
 
@@ -1124,6 +1124,122 @@ function ShareModal({ results, version, onClose, initialFormat = "story" }) {
             : "1080 × 1350, no tamanho certo para o feed do Instagram e do Facebook.")}
         </p>
       </div>
+    </div>
+  );
+}
+
+/* Texto que acompanha a imagem quando a pessoa compartilha pelo menu do celular */
+function shareCaption(results) {
+  const copy = cardCopy(results);
+  const [l, f] = split(results.lula);
+  const head = copy.theme === "meio" ? `Isentão confirmado: Lula ${l}% × ${f}% Flávio.` : `Isentão nada: ${copy.big} ${copy.name.toLowerCase()}.`;
+  return `${head} E você? Faça o teste: https://${SITE_URL}`;
+}
+function canShareImage(img, fileName) {
+  try { return !inIframe() && !!(img && navigator.canShare && navigator.canShare({ files: [new File([img.blob], fileName, { type: "image/png" })] })); }
+  catch (e) { return false; }
+}
+async function shareImage(img, fileName, results) {
+  try {
+    await navigator.share({ files: [new File([img.blob], fileName, { type: "image/png" })], title: `Meu resultado no ${BRAND.name}?`, text: shareCaption(results) });
+    return true;
+  } catch (e) { return false; } // a pessoa cancelou ou o navegador recusou
+}
+
+/* Tela que abre logo ao terminar o teste: a arte vem primeiro, com o compartilhamento em destaque */
+function Reveal({ version, answers, onContinue, onRestart }) {
+  const results = useMemo(() => computeResults(version, answers), [version, answers]);
+  const [format, setFormat] = useState("story");
+  const [img, setImg] = useState(null);
+  const [status, setStatus] = useState("");
+  const fileName = `isentao-2026-${format}.png`;
+  const canShare = canShareImage(img, fileName);
+  const framed = inIframe();
+  const coverText = { color: "var(--cover-ink)" };
+  const coverMuted = { color: "var(--cover-muted)" };
+
+  useEffect(() => {
+    let alive = true;
+    setImg(null); setStatus("");
+    renderShareCard(results, version, format).then((r) => { if (alive) setImg(r); });
+    return () => { alive = false; };
+  }, [results, version, format]);
+
+  const download = () => {
+    if (!img) return;
+    const a = document.createElement("a");
+    a.href = img.url; a.download = fileName;
+    document.body.appendChild(a); a.click(); a.remove();
+    setStatus("Imagem salva. Agora é só postar.");
+  };
+  const copyImage = async () => {
+    try {
+      if (!img || !window.ClipboardItem) throw new Error("sem suporte");
+      await navigator.clipboard.write([new ClipboardItem({ "image/png": img.blob })]);
+      setStatus("Imagem copiada. Cole no WhatsApp, Instagram ou onde quiser.");
+    } catch (e) { setStatus("Toque e segure a imagem para salvar."); }
+  };
+
+  return (
+    <div style={{ background: "var(--cover-bg)", minHeight: "100dvh" }}>
+      <header className="gutter">
+        <div className="mx-auto flex h-16 max-w-3xl items-center justify-between gap-4 border-b" style={{ borderColor: "var(--cover-line)", ...coverText }}>
+          <Wordmark size={24} />
+          <div className="inline-flex rounded-full border p-1" style={{ borderColor: "var(--cover-line)" }} role="radiogroup" aria-label="Formato da arte">
+            {Object.values(CARD_FORMATS).map((f) => (
+              <button
+                key={f.key}
+                type="button"
+                role="radio"
+                aria-checked={format === f.key}
+                onClick={() => setFormat(f.key)}
+                className="rounded-full px-3 py-1 text-sm font-semibold transition-colors"
+                style={format === f.key ? { background: "var(--cover-ink)", color: "var(--cover-bg)" } : coverMuted}
+              >
+                {f.label}
+              </button>
+            ))}
+          </div>
+        </div>
+      </header>
+      <main className="gutter">
+        <div className="mx-auto flex max-w-3xl flex-col items-center gap-6 pb-12 pt-6 text-center">
+          <div className="flex flex-col gap-1">
+            <span className="kicker" style={coverMuted}>Seu resultado está pronto</span>
+            <h1 className="display text-3xl font-semibold sm:text-4xl" style={coverText}>Compartilhe a sua arte</h1>
+          </div>
+
+          <div className="grid w-full place-items-center" style={{ minHeight: "52vh" }}>
+            {img
+              ? <img src={img.url} alt="Arte com o seu resultado no isentão?" className="fade-in block rounded-xl" style={{ maxHeight: "62vh", width: "auto", maxWidth: "100%", boxShadow: "0 30px 60px -24px rgba(0,0,0,.8)" }} />
+              : <span className="text-sm" style={coverMuted}>Criando sua arte…</span>}
+          </div>
+
+          <div className="flex w-full max-w-sm flex-col gap-3">
+            {canShare ? (
+              <button type="button" className="btn btn-light w-full py-4 text-lg" disabled={!img} onClick={() => shareImage(img, fileName, results)}>
+                <Ico n="Share2" size={20} /> Compartilhar
+              </button>
+            ) : (
+              <button type="button" className="btn btn-light w-full py-4 text-lg" disabled={!img} onClick={framed ? copyImage : download}>
+                <Ico n={framed ? "Copy" : "Download"} size={20} /> {framed ? "Copiar imagem" : "Salvar imagem"}
+              </button>
+            )}
+            {canShare && !framed && (
+              <button type="button" className="btn w-full py-3 text-base" style={{ border: "1px solid var(--cover-line)", ...coverText }} disabled={!img} onClick={download}>
+                <Ico n="Download" size={18} /> Salvar imagem
+              </button>
+            )}
+            <p className="min-h-[1.25rem] text-sm" style={coverMuted} aria-live="polite">
+              {status || (format === "story" ? "No tamanho certo para Stories e Status do WhatsApp." : "No tamanho certo para o feed.")}
+            </p>
+            <button type="button" className="btn w-full py-3 text-base" style={{ background: "transparent", ...coverText }} onClick={onContinue}>
+              Ver meu resultado completo <Ico n="ArrowRight" size={18} />
+            </button>
+            <button type="button" className="text-sm underline underline-offset-4" style={coverMuted} onClick={onRestart}>Refazer o teste</button>
+          </div>
+        </div>
+      </main>
     </div>
   );
 }
@@ -1490,7 +1606,7 @@ function Results({ version, answers, onRestart, onHome }) {
         </button>
       </TopBar>
       <main className="gutter">
-        <div className="mx-auto flex max-w-4xl flex-col gap-8 py-8 md:py-12">
+        <div className="mx-auto flex max-w-4xl flex-col gap-8 pb-28 pt-8 sm:pb-8 md:py-12">
           {/* Placar geral */}
           <section className="card p-5 sm:p-8" aria-labelledby="placar-title">
             <div className="flex flex-wrap items-center justify-between gap-2">
@@ -1517,6 +1633,7 @@ function Results({ version, answers, onRestart, onHome }) {
             <div className="mt-5"><SplitBar lula={results.lula} height={16} showText={false} /></div>
             <p className="mt-5 text-lg font-semibold">{headline}</p>
             <p className="mt-1 text-[0.95rem] text-muted">Média simples dos cinco eixos abaixo. O resultado mede proximidade com as propostas escritas nos planos, não é uma recomendação de voto.</p>
+            <p className="mono mt-3 text-xs text-muted">Faça o seu: {SITE_URL}</p>
             <div className="mt-6 flex flex-wrap gap-2 border-t hairline pt-5">
               <button type="button" className="btn btn-ink" onClick={() => setShareOpen("story")}>
                 <Ico n="Image" size={18} /> Criar minha arte
@@ -1595,6 +1712,21 @@ function Results({ version, answers, onRestart, onHome }) {
           <Footer compact />
         </div>
       </main>
+      {/* Barra fixa no celular: compartilhar a arte sempre à mão */}
+      {!shareOpen && (
+        <div
+          className="fixed inset-x-0 bottom-0 z-40 border-t sm:hidden"
+          style={{
+            background: "var(--cover-bg)", borderColor: "var(--cover-line)",
+            paddingBottom: "max(12px, env(safe-area-inset-bottom, 0px))", paddingTop: 12,
+            paddingLeft: "max(16px, env(safe-area-inset-left, 0px))", paddingRight: "max(16px, env(safe-area-inset-right, 0px))",
+          }}
+        >
+          <button type="button" className="btn btn-light w-full py-3.5 text-base" onClick={() => setShareOpen("story")}>
+            <Ico n="Share2" size={18} /> Compartilhar minha arte
+          </button>
+        </div>
+      )}
       {shareOpen && <ShareModal results={results} version={version} initialFormat={shareOpen} onClose={closeShare} />}
     </>
   );
@@ -1648,9 +1780,13 @@ function App() {
     setState((prev) => {
       const answers = { ...prev.answers, [id]: value };
       const next = prev.index + 1;
-      const s = next >= prev.order.length
-        ? { ...prev, answers, index: prev.order.length - 1, screen: "results" }
-        : { ...prev, answers, index: next };
+      if (next >= prev.order.length) {
+        // terminou: salva como resultado, mas mostra primeiro a arte para compartilhar
+        const done = { ...prev, answers, index: prev.order.length - 1, screen: "results" };
+        persist(done); setSaved(done);
+        return { ...done, screen: "reveal" };
+      }
+      const s = { ...prev, answers, index: next };
       persist(s); setSaved(s);
       return s;
     });
@@ -1669,6 +1805,9 @@ function App() {
 
   if (state.screen === "quiz") {
     return <Quiz {...state} onAnswer={onAnswer} onBack={onBack} onExit={goHome} />;
+  }
+  if (state.screen === "reveal") {
+    return <Reveal version={state.version} answers={state.answers} onContinue={() => setState((p) => ({ ...p, screen: "results" }))} onRestart={() => setState((p) => ({ ...p, screen: "choose" }))} />;
   }
   if (state.screen === "results") {
     return <Results version={state.version} answers={state.answers} onRestart={() => setState((p) => ({ ...p, screen: "choose" }))} onHome={goHome} />;
