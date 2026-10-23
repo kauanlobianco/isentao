@@ -1206,145 +1206,43 @@ async function shareImage(img, fileName, results) {
 }
 
 /* Tela que abre logo ao terminar o teste: a arte vem primeiro, com o compartilhamento em destaque */
-function Reveal({ version, answers, challenge, onContinue, onRestart }) {
-  const results = useMemo(() => computeResults(version, answers), [version, answers]);
-  const [format, setFormat] = useState("story");
-  const [img, setImg] = useState(null);
-  const [status, setStatus] = useState("");
-  const fileName = `isentao-2026-${format}.png`;
-  const canShare = canShareImage(img, fileName);
-  const framed = inIframe();
-  const coverText = { color: "var(--cover-ink)" };
-  const coverMuted = { color: "var(--cover-muted)" };
-
-  useEffect(() => {
-    let alive = true;
-    setImg(null); setStatus("");
-    renderShareCard(results, version, format).then((r) => { if (alive) setImg(r); });
-    return () => { alive = false; };
-  }, [results, version, format]);
-
-  const download = () => {
-    if (!img) return;
-    const a = document.createElement("a");
-    a.href = img.url; a.download = fileName;
-    document.body.appendChild(a); a.click(); a.remove();
-    setStatus("Imagem salva. Agora é só postar.");
-  };
-  const copyImage = async () => {
-    try {
-      if (!img || !window.ClipboardItem) throw new Error("sem suporte");
-      await navigator.clipboard.write([new ClipboardItem({ "image/png": img.blob })]);
-      setStatus("Imagem copiada. Cole no WhatsApp, Instagram ou onde quiser.");
-    } catch (e) { setStatus("Toque e segure a imagem para salvar."); }
-  };
-
-  return (
-    <div style={{ background: "var(--cover-bg)", minHeight: "100dvh" }}>
-      <header className="gutter">
-        <div className="mx-auto flex h-16 max-w-3xl items-center justify-between gap-4 border-b" style={{ borderColor: "var(--cover-line)", ...coverText }}>
-          <Wordmark size={24} />
-          <div className="inline-flex rounded-full border p-1" style={{ borderColor: "var(--cover-line)" }} role="radiogroup" aria-label="Formato da arte">
-            {Object.values(CARD_FORMATS).map((f) => (
-              <button
-                key={f.key}
-                type="button"
-                role="radio"
-                aria-checked={format === f.key}
-                onClick={() => setFormat(f.key)}
-                className="rounded-full px-3 py-1 text-sm font-semibold transition-colors"
-                style={format === f.key ? { background: "var(--cover-ink)", color: "var(--cover-bg)" } : coverMuted}
-              >
-                {f.label}
-              </button>
-            ))}
-          </div>
-        </div>
-      </header>
-      <main className="gutter">
-        <div className="mx-auto flex max-w-3xl flex-col items-center gap-5 pt-5 text-center" style={{ paddingBottom: "calc(230px + env(safe-area-inset-bottom, 0px))" }}>
-          <div className="flex flex-col gap-1">
-            <span className="kicker" style={coverMuted}>Passo 1 de 2 · Sua arte</span>
-            <h1 className="display text-3xl font-semibold sm:text-4xl" style={coverText}>Compartilhe o seu resultado</h1>
-          </div>
-
-          <div className="grid w-full place-items-center" style={{ minHeight: "44vh" }}>
-            {img
-              ? <img src={img.url} alt="Arte com o seu resultado no isentão?" className="fade-in block rounded-xl" style={{ maxHeight: "calc(100dvh - 380px)", minHeight: 260, width: "auto", maxWidth: "100%", boxShadow: "0 30px 60px -24px rgba(0,0,0,.8)" }} />
-              : <span className="text-sm" style={coverMuted}>Criando sua arte…</span>}
-          </div>
-          <p className="text-sm" style={coverMuted} aria-live="polite">
-            {status || (format === "story" ? "No tamanho certo para Stories e Status do WhatsApp." : "No tamanho certo para o feed.")}
-          </p>
-          <button type="button" className="text-sm underline underline-offset-4" style={coverMuted} onClick={onRestart}>Refazer o teste</button>
-        </div>
-      </main>
-
-      {/* Barra fixa: compartilhar e, logo abaixo, a continuação para o resultado completo */}
-      <div
-        className="fixed inset-x-0 bottom-0 z-40 border-t"
-        style={{
-          background: "var(--cover-bg)", borderColor: "var(--cover-line)",
-          paddingTop: 14, paddingBottom: "max(14px, env(safe-area-inset-bottom, 0px))",
-          paddingLeft: "max(16px, env(safe-area-inset-left, 0px))", paddingRight: "max(16px, env(safe-area-inset-right, 0px))",
-          boxShadow: "0 -20px 40px -20px rgba(0,0,0,.7)",
-        }}
-      >
-        <div className="mx-auto flex max-w-md flex-col gap-2.5">
-          <div className="flex gap-2.5">
-            {canShare ? (
-              <button type="button" className="btn btn-light flex-1 py-3.5 text-base" disabled={!img} onClick={() => shareImage(img, fileName, results)}>
-                <Ico n="Share2" size={19} /> Compartilhar
-              </button>
-            ) : (
-              <button type="button" className="btn btn-light flex-1 py-3.5 text-base" disabled={!img} onClick={framed ? copyImage : download}>
-                <Ico n={framed ? "Copy" : "Download"} size={19} /> {framed ? "Copiar imagem" : "Salvar imagem"}
-              </button>
-            )}
-            {canShare && !framed && (
-              <button type="button" className="btn px-4 py-3.5" style={{ border: "1px solid var(--cover-line)", ...coverText }} disabled={!img} onClick={download} aria-label="Salvar imagem">
-                <Ico n="Download" size={19} />
-              </button>
-            )}
-          </div>
-          <button type="button" className="btn group w-full justify-between rounded-2xl px-5 py-3.5 text-left" style={{ background: "var(--violet-deep)", border: "1px solid var(--violet-line)", ...coverText }} onClick={onContinue}>
-            <span className="flex flex-col">
-              <span className="kicker" style={coverMuted}>Passo 2 de 2</span>
-              <span className="text-base font-bold">{challenge && !challenge.stale ? `Ver a comparação com ${challenge.name}` : "Ver meu resultado completo"}</span>
-              <span className="text-xs font-normal" style={coverMuted}>{challenge && !challenge.stale ? "Onde vocês concordam e discordam, tema por tema" : "Placar, os 5 temas e o raio-x de cada resposta"}</span>
-            </span>
-            <Ico n="ArrowRight" size={22} className="flex-none transition-transform group-hover:translate-x-1" />
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function ShareTeaser({ results, version, onOpen }) {
+/* Abertura do resultado: a arte em destaque, integrada à página, com o resto do resultado logo abaixo */
+function ResultHero({ results, version, challenge, heroRef, onShare }) {
   const [thumb, setThumb] = useState(null);
-  const copy = cardCopy(results);
   useEffect(() => {
     let alive = true;
     renderShareCard(results, version, "feed").then((r) => { if (alive) setThumb(r.url); });
     return () => { alive = false; };
   }, [results, version]);
+  const copy = cardCopy(results);
+  const verdict = copy.theme === "meio" ? "Isentão confirmado." : "Isentão nada.";
+  const coverText = { color: "var(--cover-ink)" };
+  const coverMuted = { color: "var(--cover-muted)" };
+  const friend = challenge && !challenge.stale ? challenge.name : "";
   return (
-    <section className="card flex flex-col gap-5 overflow-hidden p-5 sm:flex-row sm:items-center sm:p-6" aria-labelledby="teaser-title">
-      <button type="button" onClick={() => onOpen("feed")} className="mx-auto block w-44 flex-none overflow-hidden rounded-xl shadow-lg transition-transform hover:-rotate-1 hover:scale-[1.02] sm:mx-0" aria-label="Abrir a arte em tamanho grande">
-        {thumb
-          ? <img src={thumb} alt="Prévia da sua arte" className="block w-full" />
-          : <div className="grid aspect-[4/5] w-full place-items-center text-sm text-muted" style={{ background: "var(--surface-2)" }}>…</div>}
-      </button>
-      <div className="flex min-w-0 flex-col gap-3">
-        <span className="eyebrow">Sua arte está pronta</span>
-        <h2 id="teaser-title" className="display text-3xl font-semibold leading-tight">
-          Compartilhe o seu resultado
-        </h2>
-        <p className="text-[0.95rem] text-muted">Um pôster com o seu resultado e os 5 eixos, em tamanho de Stories e de feed.</p>
-        <div className="flex flex-wrap gap-2">
-          <button type="button" className="btn btn-ink" onClick={() => onOpen("story")}><Ico n="Smartphone" size={18} /> Stories</button>
-          <button type="button" className="btn btn-line" onClick={() => onOpen("feed")}><Ico n="Square" size={18} /> Feed</button>
+    <section ref={heroRef} className="gutter" style={{ background: "var(--cover-bg)" }} aria-labelledby="hero-title">
+      <div className="mx-auto grid max-w-4xl items-center gap-6 pb-8 pt-7 md:grid-cols-[minmax(0,.85fr)_minmax(0,1.15fr)] md:gap-12 md:py-12">
+        <button
+          type="button"
+          onClick={onShare}
+          aria-label="Abrir a sua arte para compartilhar"
+          className="mx-auto block w-full max-w-[250px] overflow-hidden rounded-xl transition-transform hover:scale-[1.015] sm:max-w-[300px] md:max-w-[340px]"
+          style={{ aspectRatio: "4 / 5", boxShadow: "0 30px 60px -24px rgba(0,0,0,.85)" }}
+        >
+          {thumb
+            ? <img src={thumb} alt="A sua arte com o resultado no isentão?" className="fade-in block h-full w-full" />
+            : <span className="grid h-full place-items-center text-sm" style={{ background: "rgba(255,255,255,.05)", ...coverMuted }}>Criando sua arte…</span>}
+        </button>
+        <div className="flex flex-col items-center gap-4 text-center md:items-start md:text-left">
+          <span className="kicker" style={coverMuted}>Seu resultado está pronto</span>
+          <h1 id="hero-title" className="display text-4xl font-semibold leading-none sm:text-5xl" style={coverText}>{verdict}</h1>
+          <p className="max-w-[38ch]" style={coverMuted}>Sua arte já está pronta para os Stories e para o WhatsApp.</p>
+          <button type="button" className="btn btn-light px-6 py-3.5 text-base" onClick={onShare}>
+            <Ico n="Share2" size={18} /> Compartilhar minha arte
+          </button>
+          <a href="#placar" className="mt-1 inline-flex items-center gap-2 text-sm font-semibold underline-offset-4 hover:underline" style={coverText}>
+            {friend ? `Veja a comparação com ${friend} e o resultado completo` : "Veja o resultado completo abaixo"} <Ico n="ArrowDown" size={16} />
+          </a>
         </div>
       </div>
     </section>
@@ -1785,6 +1683,15 @@ function Results({ version, answers, onRestart, onHome, challenge, onClearChalle
   const [openAxis, setOpenAxis] = useState(null);
   const [shareOpen, setShareOpen] = useState(false); // false | "story" | "feed"
   const closeShare = useCallback(() => setShareOpen(false), []);
+  // o botão fixo de compartilhar só aparece depois que a faixa com a arte sai da tela
+  const heroRef = useRef(null);
+  const [heroVisible, setHeroVisible] = useState(true);
+  useEffect(() => {
+    if (!heroRef.current || !("IntersectionObserver" in window)) { setHeroVisible(false); return; }
+    const io = new IntersectionObserver(([e]) => setHeroVisible(e.isIntersecting), { threshold: 0.15 });
+    io.observe(heroRef.current);
+    return () => io.disconnect();
+  }, []);
   const [copyState, setCopyState] = useState("idle");
   const [fallbackText, setFallbackText] = useState("");
   const fallbackRef = useRef(null);
@@ -1817,17 +1724,15 @@ function Results({ version, answers, onRestart, onHome, challenge, onClearChalle
           <Ico n="RotateCcw" size={16} /> <span className="hidden sm:inline">Refazer teste</span>
         </button>
       </TopBar>
+      <ResultHero results={results} version={version} challenge={challenge} heroRef={heroRef} onShare={() => setShareOpen("story")} />
       <main className="gutter">
         <div className="mx-auto flex max-w-4xl flex-col gap-8 pb-28 pt-8 sm:pb-8 md:py-12">
           {/* Placar geral */}
-          <section className="card p-5 sm:p-8" aria-labelledby="placar-title">
+          <section id="placar" className="card p-5 sm:p-8" style={{ scrollMarginTop: "4.5rem" }} aria-labelledby="placar-title">
             <div className="flex flex-wrap items-center justify-between gap-2">
-              <span className="eyebrow" id="placar-title">O veredito</span>
+              <span className="eyebrow" id="placar-title">O placar · {verdict}</span>
               <span className="chip">{VERSIONS[version].label} · <span className="mono">{VERSIONS[version].count}</span> afirmações</span>
             </div>
-            <p className="display mt-3 text-5xl font-semibold leading-none sm:text-6xl">
-              {verdict}
-            </p>
             <div className="mt-6 grid grid-cols-2 items-end gap-4">
               <div className="min-w-0">
                 <div className="text-[0.95rem] font-semibold sm:text-lg" style={{ color: "var(--lula-ink)" }}>Lula <span className="font-normal">(PT)</span></div>
@@ -1869,7 +1774,6 @@ function Results({ version, answers, onRestart, onHome, challenge, onClearChalle
             <CompareCard mine={results} mineAnswers={answers} challenge={challenge} onClear={onClearChallenge} />
           )}
 
-          <ShareTeaser results={results} version={version} onOpen={(f) => setShareOpen(f)} />
 
           <InviteCard version={version} answers={answers} results={results} friendName={challenge && !challenge.stale ? challenge.name : ""} />
 
@@ -1931,7 +1835,7 @@ function Results({ version, answers, onRestart, onHome, challenge, onClearChalle
         </div>
       </main>
       {/* Barra fixa no celular: compartilhar a arte sempre à mão */}
-      {!shareOpen && (
+      {!shareOpen && !heroVisible && (
         <div
           className="fixed inset-x-0 bottom-0 z-40 border-t sm:hidden"
           style={{
@@ -2010,10 +1914,10 @@ function App() {
       const answers = { ...prev.answers, [id]: value };
       const next = prev.index + 1;
       if (next >= prev.order.length) {
-        // terminou: salva como resultado, mas mostra primeiro a arte para compartilhar
+        // terminou: vai direto ao resultado, que abre com a arte em destaque
         const done = { ...prev, answers, index: prev.order.length - 1, screen: "results" };
         persist(done); setSaved(done);
-        return { ...done, screen: "reveal" };
+        return done;
       }
       const s = { ...prev, answers, index: next };
       persist(s); setSaved(s);
@@ -2034,9 +1938,6 @@ function App() {
 
   if (state.screen === "quiz") {
     return <Quiz {...state} onAnswer={onAnswer} onBack={onBack} onExit={goHome} />;
-  }
-  if (state.screen === "reveal") {
-    return <Reveal version={state.version} answers={state.answers} challenge={challenge} onContinue={() => setState((p) => ({ ...p, screen: "results" }))} onRestart={() => setState((p) => ({ ...p, screen: "choose" }))} />;
   }
   if (state.screen === "results") {
     return <Results version={state.version} answers={state.answers} challenge={challenge} onClearChallenge={clearChallenge} onRestart={() => setState((p) => ({ ...p, screen: "choose" }))} onHome={goHome} />;
