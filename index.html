@@ -124,6 +124,15 @@
   .tone-sd { background: var(--ans-sd); color: var(--ans-sd-fg); }
   .tone-a .key, .tone-n .key, .tone-d .key { background: rgba(0,0,0,.08); }
 
+  /* escolha única (perguntas de fechamento) */
+  .choice-opt { width: 100%; display: flex; align-items: center; gap: .9rem; padding: .95rem 1.1rem; border-radius: 14px; text-align: left; font-weight: 600; font-size: 1.02rem; background: var(--surface); color: var(--ink); border: 1px solid var(--line); box-shadow: inset 3px 0 0 var(--line); transition: transform .14s, background-color .14s, border-color .14s; }
+  .choice-opt:hover { transform: translateY(-1px); border-color: var(--muted); }
+  .choice-opt[data-on="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); box-shadow: 0 10px 24px -14px rgba(0,0,0,.6); }
+  .choice-letter { flex: none; display: grid; place-items: center; width: 1.75rem; height: 1.75rem; border-radius: 999px; font-size: .8rem; font-weight: 700; border: 1px solid var(--line); background: var(--surface-2); color: var(--ink); }
+  .choice-opt[data-on="true"] .choice-letter { background: transparent; border-color: currentColor; color: inherit; }
+  .choice-radio { flex: none; width: .9rem; height: .9rem; border-radius: 999px; border: 1.5px solid var(--line); }
+  .choice-opt[data-on="true"] .choice-radio { border: 4px solid var(--bg); background: var(--ink); box-shadow: 0 0 0 1.5px var(--bg); }
+
   .bar { position: relative; display: flex; overflow: hidden; border-radius: 999px; background: var(--flavio); }
   .bar-l { background: var(--lula); transition: width .9s cubic-bezier(.2,.7,.2,1); }
   .bar-mid { position: absolute; top: 0; bottom: 0; left: 50%; width: 2px; margin-left: -1px; background: var(--surface); opacity: .85; }
@@ -199,6 +208,10 @@ function loadEdits() {
 }
 const EDITED = loadEdits();
 const QUESTIONS = EDITED || window.AFINIDADE_DATA.QUESTIONS;
+/* Perguntas de fechamento (escolha única): o "score" já vem orientado (+ Lula, − Flávio), por isso direction = 1 */
+const CHOICES = (window.AFINIDADE_DATA.CHOICES || []).map((c) => ({ ...c, type: "choice", direction: 1 }));
+const ALL_ITEMS = [...QUESTIONS, ...CHOICES];
+const itemById = (id) => ALL_ITEMS.find((x) => x.id === id);
 const refsOf = (q) => (Array.isArray(q.refs) ? q.refs : q.ref ? [q.ref] : []).filter((n) => SOURCES[n]);
 
 /* ───────────────────────── Utilidades ───────────────────────── */
@@ -215,7 +228,7 @@ function loadSaved() {
     const raw = localStorage.getItem(STORE_KEY);
     if (!raw) return null;
     const s = JSON.parse(raw);
-    const ids = new Set(QUESTIONS.map((q) => q.id));
+    const ids = new Set(ALL_ITEMS.map((q) => q.id));
     if (!s || !Array.isArray(s.order) || !s.order.every((id) => ids.has(id))) return null;
     return s;
   } catch (e) { return null; }
@@ -248,7 +261,10 @@ const VERSIONS = {
   short: { key: "short", label: "Versão curta", count: questionSet("short").length },
   long: { key: "long", label: "Versão aprofundada", count: questionSet("long").length },
 };
-Object.values(VERSIONS).forEach((v) => { v.minutes = Math.max(1, Math.round(v.count / 7)); });
+Object.values(VERSIONS).forEach((v) => {
+  v.finals = CHOICES.length;
+  v.minutes = Math.max(1, Math.round((v.count + v.finals * 1.5) / 7));
+});
 
 /*
  * Embaralhamento estratificado: blocos de 5 afirmações com exatamente uma de cada eixo,
@@ -286,7 +302,7 @@ function buildOrder(version) {
       want = -q.direction;
     }
   }
-  return seq;
+  return [...seq, ...shuffle(CHOICES).map((c) => c.id)]; // as perguntas de fechamento vêm no fim
 }
 
 /*
@@ -297,7 +313,7 @@ function buildOrder(version) {
 function computeResults(version, answers) {
   const set = questionSet(version);
   const axes = AXES.map((a) => {
-    const qs = set.filter((q) => q.axis === a.id);
+    const qs = [...set.filter((q) => q.axis === a.id), ...CHOICES.filter((c) => c.axis === a.id)];
     let num = 0, den = 0;
     qs.forEach((q) => {
       const v = typeof answers[q.id] === "number" ? answers[q.id] : 0;
@@ -589,9 +605,10 @@ function FormatCard({ v, featured, desc, cta, onPick }) {
           <Ico n="Clock" size={15} /> Cerca de {v.minutes} min
         </span>
       </div>
-      <div className="flex items-baseline gap-3" style={fg}>
+      <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1" style={fg}>
         <span className="numeral text-7xl leading-none">{v.count}</span>
         <span className="display text-2xl">afirmações</span>
+        {v.finals > 0 && <span className="text-sm" style={muted || { color: "var(--muted)" }}>+ {v.finals} perguntas para fechar</span>}
       </div>
       <p className="text-[1rem]" style={muted || { color: "var(--muted)" }}>{desc}</p>
       <button type="button" className={"btn group mt-1 w-full py-3.5 text-base " + (featured ? "btn-light" : "btn-ink")} onClick={onPick}>
@@ -639,8 +656,10 @@ function Choose({ onPick, onBack }) {
 
 function Quiz({ version, order, answers, index, onAnswer, onBack, onExit }) {
   const total = order.length;
-  const q = useMemo(() => QUESTIONS.find((x) => x.id === order[index]), [order, index]);
+  const q = useMemo(() => itemById(order[index]), [order, index]);
   const axis = AXES.find((a) => a.id === q.axis);
+  const isChoice = q.type === "choice";
+  const finalsStart = total - order.filter((id) => itemById(id)?.type === "choice").length;
   const [phase, setPhase] = useState("in");
   const [picked, setPicked] = useState(null);
   const busy = useRef(false);
@@ -659,13 +678,18 @@ function Quiz({ version, order, answers, index, onAnswer, onBack, onExit }) {
   useEffect(() => {
     const onKey = (e) => {
       if (e.metaKey || e.ctrlKey || e.altKey) return;
-      const s = SCALE.find((x) => x.key === e.key);
-      if (s) { e.preventDefault(); choose(s.value); return; }
+      if (isChoice) {
+        const opt = q.options[Number(e.key) - 1];
+        if (opt) { e.preventDefault(); choose(opt.score); return; }
+      } else {
+        const s = SCALE.find((x) => x.key === e.key);
+        if (s) { e.preventDefault(); choose(s.value); return; }
+      }
       if (e.key === "Backspace" || e.key === "ArrowLeft") { e.preventDefault(); if (!busy.current) onBack(); }
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [choose, onBack]);
+  }, [choose, onBack, isChoice, q]);
 
   const current = picked !== null ? picked : answers[q.id];
   const progress = (index / total) * 100;
@@ -694,30 +718,63 @@ function Quiz({ version, order, answers, index, onAnswer, onBack, onExit }) {
       <main className="gutter">
         <div className="mx-auto flex max-w-3xl flex-col gap-8 pb-12 pt-6 md:pt-12">
           <div key={q.id} className={phase === "out" ? "q-out" : "q-in"}>
-            <div className="flex items-center gap-2 text-sm text-muted">
-              <Ico n={axis.icon} size={16} />
-              <span className="font-semibold">{axis.name}</span>
-            </div>
+            {isChoice ? (
+              <div className="flex flex-wrap items-center gap-3">
+                <span className="inline-flex items-center gap-2 rounded-full py-1 pl-1 pr-3 text-xs font-bold uppercase tracking-[.14em]" style={{ background: "var(--surface-2)" }}>
+                  <span className="grid h-7 w-7 place-items-center rounded-full" style={{ background: "var(--ink)", color: "var(--bg)" }}><Ico n={axis.icon} size={14} /></span>
+                  {axis.name}
+                </span>
+                <span className="kicker text-muted">Para fechar · {index - finalsStart + 1} de {total - finalsStart}</span>
+              </div>
+            ) : (
+              <div className="flex items-center gap-2 text-sm text-muted">
+                <Ico n={axis.icon} size={16} />
+                <span className="font-semibold">{axis.name}</span>
+              </div>
+            )}
             <h1 className="display mt-4 text-[1.75rem] font-bold leading-[1.18] sm:text-[2.15rem]" style={{ fontStretch: "92%" }}>
               {q.text}
             </h1>
           </div>
 
-          <div className="flex flex-col gap-2.5" role="group" aria-label="Sua resposta">
-            {SCALE.map((s) => (
-              <button
-                key={s.value}
-                type="button"
-                className={"ans tone-" + s.tone}
-                aria-pressed={current === s.value}
-                onClick={() => choose(s.value)}
-              >
-                <span className="key" aria-hidden="true">{s.key}</span>
-                <span className="flex-1">{s.label}</span>
-                {current === s.value && <Ico n="Check" size={20} />}
-              </button>
-            ))}
-          </div>
+          {isChoice ? (
+            <div className="flex flex-col gap-2.5" role="radiogroup" aria-label="Escolha uma opção">
+              {q.options.map((o, i) => {
+                const on = current === o.score;
+                return (
+                  <button
+                    key={o.score}
+                    type="button"
+                    role="radio"
+                    aria-checked={on}
+                    className="choice-opt"
+                    data-on={on ? "true" : "false"}
+                    onClick={() => choose(o.score)}
+                  >
+                    <span className="choice-letter" aria-hidden="true">{String.fromCharCode(65 + i)}</span>
+                    <span className="flex-1">{o.text}</span>
+                    <span className="choice-radio" aria-hidden="true" />
+                  </button>
+                );
+              })}
+            </div>
+          ) : (
+            <div className="flex flex-col gap-2.5" role="group" aria-label="Sua resposta">
+              {SCALE.map((s) => (
+                <button
+                  key={s.value}
+                  type="button"
+                  className={"ans tone-" + s.tone}
+                  aria-pressed={current === s.value}
+                  onClick={() => choose(s.value)}
+                >
+                  <span className="key" aria-hidden="true">{s.key}</span>
+                  <span className="flex-1">{s.label}</span>
+                  {current === s.value && <Ico n="Check" size={20} />}
+                </button>
+              ))}
+            </div>
+          )}
 
           <p className="hidden items-center gap-2 text-sm text-muted md:flex">
             <Ico n="Keyboard" size={16} /> Teclas <span className="mono">1</span>–<span className="mono">5</span> respondem · <span className="mono">←</span> volta
@@ -1126,6 +1183,58 @@ function AxisRow({ a }) {
 /* ───────────── Raio-X visual ───────────── */
 
 const answerOf = (answers, q) => (typeof answers[q.id] === "number" ? answers[q.id] : 0);
+const answerText = (q, v) => (q.type === "choice"
+  ? (q.options.find((o) => o.score === v) || { text: "sem resposta" }).text
+  : scaleOf(v).label);
+
+/* Cartão do Raio-X para as perguntas de fechamento: mostra a opção escolhida numa régua Lula ↔ Flávio */
+function ChoiceCard({ q, value }) {
+  const [open, setOpen] = useState(false);
+  const effect = value;
+  const refs = refsOf(q);
+  const tint = effect > 0 ? "var(--lula-soft)" : effect < 0 ? "var(--flavio-soft)" : "var(--surface-2)";
+  const ruler = [2, 1, 0, -1, -2];
+  return (
+    <li className="flex min-w-0 flex-col gap-3 rounded-2xl p-4 md:col-span-2" style={{ background: Math.abs(effect) === 2 ? tint : "var(--surface)", border: "1px solid var(--line)" }}>
+      <span className="kicker text-muted">Pergunta de fechamento</span>
+      <p className="min-w-0 font-semibold leading-snug">{q.text}</p>
+      <p className="text-[0.95rem]"><span className="text-muted">Sua escolha: </span><span className="font-semibold">{answerText(q, value)}</span></p>
+      <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-2">
+        <div className="flex items-center gap-2" role="img" aria-label={`Posição da sua escolha entre o polo Lula e o polo Flávio`}>
+          <span className="text-[0.68rem] font-bold uppercase tracking-wider" style={{ color: "var(--lula-ink)" }}>Lula</span>
+          <span className="relative flex items-center gap-2">
+            <span className="absolute left-1 right-1 top-1/2 h-px -translate-y-1/2" style={{ background: "var(--line)" }} aria-hidden="true" />
+            {ruler.map((s) => (
+              s === value
+                ? <span key={s} className="relative grid h-6 w-6 place-items-center rounded-full" style={{ background: s > 0 ? "var(--lula)" : s < 0 ? "var(--flavio)" : "var(--muted)", color: "#fff", boxShadow: "0 0 0 3px var(--surface)" }}><Ico n="Check" size={13} /></span>
+                : <span key={s} className="relative h-2.5 w-2.5 rounded-full" style={{ background: "var(--line)", boxShadow: "0 0 0 3px var(--surface)" }} />
+            ))}
+          </span>
+          <span className="text-[0.68rem] font-bold uppercase tracking-wider" style={{ color: "var(--flavio-ink)" }}>Flávio</span>
+        </div>
+        <LeanTag effect={effect} />
+      </div>
+      <button type="button" className="inline-flex items-center gap-1 self-start text-sm font-semibold text-muted hover:text-ink" aria-expanded={open} onClick={() => setOpen(!open)}>
+        De onde vem <Ico n="ChevronDown" size={15} className={"transition-transform " + (open ? "rotate-180" : "")} />
+      </button>
+      {open && (
+        <div className="fade-in flex flex-col gap-2 border-t hairline pt-3 text-[0.92rem] text-muted">
+          <p>{q.basis}</p>
+          {q.measures && <p><span className="font-semibold text-ink">O que isso diz sobre você:</span> {q.measures}</p>}
+          {refs.length > 0 && (
+            <p className="flex flex-wrap gap-1.5">
+              {refs.map((n) => (
+                <a key={n} href={SOURCES[n].url} target="_blank" rel="noopener noreferrer" title={SOURCES[n].title} className="chip hover:underline">
+                  Fonte {n}<Ico n="ExternalLink" size={12} />
+                </a>
+              ))}
+            </p>
+          )}
+        </div>
+      )}
+    </li>
+  );
+}
 const effectOf = (answers, q) => answerOf(answers, q) * q.direction; // >0 puxa para Lula, <0 para Flávio
 
 function LeanTag({ effect }) {
@@ -1235,7 +1344,9 @@ function AxisAccordion({ a, answers, open, onToggle }) {
             <span className="chip chip-flavio">{nF} pro lado de Flávio</span>
           </div>
           <ul className="grid gap-3 md:grid-cols-2">
-            {qs.map((q) => <StatementCard key={q.id} q={q} value={answerOf(answers, q)} />)}
+            {qs.map((q) => (q.type === "choice"
+              ? <ChoiceCard key={q.id} q={q} value={answerOf(answers, q)} />
+              : <StatementCard key={q.id} q={q} value={answerOf(answers, q)} />))}
           </ul>
           <div>
             <button type="button" className="btn btn-line text-sm" aria-expanded={showPlans} onClick={() => setShowPlans(!showPlans)}>
@@ -1297,7 +1408,7 @@ function Highlights({ results, answers }) {
                 </span>
                 <span className="flex min-w-0 flex-col gap-1">
                   <span className="text-[0.95rem] font-semibold leading-snug">{q.text}</span>
-                  <span className="text-sm text-muted">Você: {scaleOf(v).label.toLowerCase()}</span>
+                  <span className="text-sm text-muted">Você: {answerText(q, v).toLowerCase()}</span>
                 </span>
               </li>
             ))}

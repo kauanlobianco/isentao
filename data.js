@@ -562,6 +562,74 @@ window.AFINIDADE_DATA = {
       prev: "O presidente da República deveria ter direito a um único mandato." },
   ],
 
+  /*
+   * Perguntas de fechamento (escolha única), no fim das duas versões.
+   * score: +2 = polo Lula ... -2 = polo Flávio; 0 = meio-termo. As opções são simétricas,
+   * então escolher ao acaso não favorece nenhum lado. A ordem de exibição alterna o lado inicial.
+   */
+  CHOICES: [
+    { id: "c1", axis: 1, weight: 1.5,
+      text: "Se o governo precisar de mais dinheiro, o que deveria fazer primeiro?",
+      options: [
+        { text: "Cobrar mais imposto dos mais ricos", score: 2 },
+        { text: "Aceitar mais dívida por um tempo para não parar as obras", score: 1 },
+        { text: "Um pouco de cada coisa", score: 0 },
+        { text: "Vender estatais e imóveis do governo", score: -1 },
+        { text: "Cortar gastos e ministérios", score: -2 },
+      ],
+      measures: "Como financiar o governo: tributar, endividar ou enxugar.",
+      basis: "Plano do PT propõe cobrar mais de super-ricos, offshores e fundos exclusivos e mantém os investimentos do Novo PAC. Plano do PL propõe o \"Tesouraço\" de corte de gastos, venda de ativos e imóveis da União e corte de pelo menos 10 ministérios.",
+      refs: [1, 22, 24, 47] },
+    { id: "c2", axis: 2, weight: 1.5,
+      text: "Para que servem programas como o Bolsa Família?",
+      options: [
+        { text: "Existir só em casos extremos, porque o melhor programa é o emprego", score: -2 },
+        { text: "Ser uma ponte rápida para o emprego", score: -1 },
+        { text: "Ajudar por um tempo, com contrapartidas", score: 0 },
+        { text: "Proteger e também abrir portas para a pessoa crescer", score: 1 },
+        { text: "Garantir renda a quem precisa, pelo tempo que precisar", score: 2 },
+      ],
+      measures: "Assistência social como direito permanente ou como transição.",
+      basis: "Plano do PT mantém e amplia o Bolsa Família, o Pé-de-Meia e o Gás do Povo. Plano do PL mantém os programas com pente-fino antifraude e prioriza levar os beneficiários para vagas de emprego.",
+      refs: [22, 4] },
+    { id: "c3", axis: 3, weight: 1.5,
+      text: "Qual é a principal causa da violência no Brasil?",
+      options: [
+        { text: "Desigualdade e falta de oportunidades", score: 2 },
+        { text: "Falta de escola, saúde e emprego nas periferias", score: 1 },
+        { text: "Um pouco de tudo", score: 0 },
+        { text: "Justiça lenta e impunidade", score: -1 },
+        { text: "Leis que protegem mais o bandido do que a vítima", score: -2 },
+      ],
+      measures: "Visão do crime como problema social ou de punição.",
+      basis: "Plano do PT combina urbanização de favelas, policiamento de proximidade e asfixia financeira das facções. Plano do PL aposta no endurecimento penal: fim da progressão em crimes hediondos, maioridade penal menor e mais presídios.",
+      refs: [1, 23, 4] },
+    { id: "c4", axis: 3, weight: 1.5,
+      text: "Para que serve a prisão?",
+      options: [
+        { text: "Tirar o criminoso das ruas pelo maior tempo possível", score: -2 },
+        { text: "Principalmente punir", score: -1 },
+        { text: "Depende do crime", score: 0 },
+        { text: "Punir e recuperar ao mesmo tempo", score: 1 },
+        { text: "Recuperar a pessoa para ela voltar à sociedade", score: 2 },
+      ],
+      measures: "Punição versus ressocialização.",
+      basis: "Plano do PL propõe acabar com a progressão de regime em crimes hediondos e criar 500 mil vagas e 5 presídios de segurança máxima. O plano do PT não propõe mudar a progressão de pena e foca no sistema penitenciário federal e na integração das polícias.",
+      refs: [4, 22, 23] },
+    { id: "c5", axis: 4, weight: 1.5,
+      text: "O que fazer com as cotas em universidades e concursos públicos?",
+      options: [
+        { text: "Ampliar para mais grupos", score: 2 },
+        { text: "Manter como estão", score: 1 },
+        { text: "Revisar de tempos em tempos", score: 0 },
+        { text: "Manter só as cotas sociais, por renda ou escola pública", score: -1 },
+        { text: "Acabar com as cotas e escolher só pela nota", score: -2 },
+      ],
+      measures: "Posição sobre ações afirmativas.",
+      basis: "Plano do PT mantém as cotas na educação e amplia as cotas em concursos públicos. O plano do PL não trata do tema; a opção de manter só cotas sociais reflete uma posição comum na centro-direita.",
+      refs: [22, 35] },
+  ],
+
   // Escala Likert de 5 pontos (ordem de exibição)
   SCALE: [
     { value: 2, label: "Concordo completamente", tone: "sa", key: "1" },
